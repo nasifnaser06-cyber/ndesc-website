@@ -2,7 +2,7 @@ import Link from "next/link";
 import { type Locale, tr, path } from "@/lib/i18n";
 import { ui } from "@/content/ui";
 import { site } from "@/content/site";
-import { ExternalLink } from "./bits";
+import { CollegeCrest, ExternalLink, Logo } from "./bits";
 
 export default function Footer({ lang }: { lang: Locale }) {
   const year = new Date().getFullYear();
@@ -10,6 +10,10 @@ export default function Footer({ lang }: { lang: Locale }) {
     <footer className="site-footer">
       <div className="wrap footer-grid">
         <div className="footer-about">
+          <div className="footer-marks">
+            <Logo size={64} alt={lang === "en" ? "Notre Dame Eco and Space Club logo" : "নটর ডেম ইকো অ্যান্ড স্পেস ক্লাবের লোগো"} />
+            <CollegeCrest alt={lang === "en" ? "Notre Dame College, Dhaka crest" : "নটর ডেম কলেজ, ঢাকার প্রতীক"} />
+          </div>
           <p className="footer-name">{tr(site.name, lang)}</p>
           <p className="small muted">{tr(ui.founded, lang)}</p>
           <p className="small muted">{tr(site.address, lang)}</p>

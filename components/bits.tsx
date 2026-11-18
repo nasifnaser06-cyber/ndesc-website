@@ -25,14 +25,25 @@ export function T({ text, lang }: { text: L; lang: Locale }) {
   return <Txt>{tr(text, lang)}</Txt>;
 }
 
-export function Logo({ size = 40 }: { size?: number }) {
+const bp = () => process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+
+/** The club's own logo (public/brand/). Decorative where the club's name is written beside it. */
+export function Logo({ size = 44, alt = "" }: { size?: number; alt?: string }) {
+  const src = (s: number) => `${bp()}/brand/ndesc-logo-${s}.png`;
+  const one = size <= 48 ? 48 : 144;
   return (
-    <svg width={size} height={size} viewBox="0 0 40 40" aria-hidden="true" className="logo-mark">
-      <ellipse cx="20" cy="20" rx="18" ry="8" fill="none" stroke="#A9B7CC" strokeWidth="1.5" transform="rotate(-20 20 20)" />
-      <circle cx="20" cy="20" r="7" fill="#1F3B63" stroke="#E9EEF6" strokeWidth="1.5" />
-      <path d="M20 25 C20 21 17 18 14 18 C14 21 17 24 20 25 Z M20 25 C20 20 23 17 27 17 C27 21 24 24 20 25 Z" fill="#8FD3A6" />
-      <circle cx="35" cy="12" r="1.8" fill="#E9EEF6" />
-    </svg>
+    // eslint-disable-next-line @next/next/no-img-element
+    <img className="logo-mark" src={src(one)} srcSet={`${src(one)} 1x, ${src(one === 48 ? 96 : 288)} 2x`} width={size} height={size} alt={alt} aria-hidden={alt ? undefined : true} />
+  );
+}
+
+/** Notre Dame College's crest, on a light tile so its black lettering reads on the night background. */
+export function CollegeCrest({ alt }: { alt: string }) {
+  return (
+    <span className="crest-tile">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={`${bp()}/brand/ndc-crest-72.png`} srcSet={`${bp()}/brand/ndc-crest-72.png 1x, ${bp()}/brand/ndc-crest-144.png 2x, ${bp()}/brand/ndc-crest-216.png 3x`} width={69} height={72} alt={alt} loading="lazy" />
+    </span>
   );
 }
 
