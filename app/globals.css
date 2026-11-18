@@ -126,7 +126,6 @@ main:focus { outline: none; }
   .brand-name { display: inline; }
 }
 @media (max-width: 480px) {
-  .join-btn { display: none; }
   .brand-name { display: none; }
 }
 
@@ -136,9 +135,9 @@ main:focus { outline: none; }
 .crest-tile { display: inline-flex; align-items: center; justify-content: center; background: #F6F3EA; border-radius: 12px; padding: 6px 8px; }
 .crest-tile img { display: block; height: 52px; width: auto; }
 .site-footer { margin-top: var(--s9); border-top: 1px solid var(--line); padding: var(--s7) 0 var(--s6); }
-.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: var(--s6); }
+.footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr)); gap: var(--s6); }
 .footer-grid ul { list-style: none; padding: 0; margin-top: var(--s2); display: grid; gap: var(--s1); }
-.footer-grid a { color: var(--starlight); text-decoration: none; }
+.footer-grid a { color: var(--starlight); text-decoration: none; overflow-wrap: anywhere; }
 .footer-grid a:hover { color: var(--sprout); text-decoration: underline; }
 .footer-about { display: grid; gap: var(--s2); align-content: start; }
 .footer-name { font-family: var(--font-head); font-weight: 600; }
@@ -196,12 +195,12 @@ main:focus { outline: none; }
 .facts { display: flex; flex-wrap: wrap; gap: var(--s4) var(--s7); margin: var(--s2) 0 0; }
 .facts dt { font-size: 0.875rem; color: var(--haze); }
 .facts dd { margin: 0; font-weight: 700; }
-.two-worlds { display: grid; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); gap: var(--s7); }
+.two-worlds { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr)); gap: var(--s7); }
 .two-worlds > div { display: flex; flex-direction: column; gap: var(--s4); }
-.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: var(--s6); }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr)); gap: var(--s6); }
 
 /* Timeline: a real sequence */
-.timeline { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: var(--s5); }
+.timeline { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(10rem, 100%), 1fr)); gap: var(--s5); }
 .timeline li { border-top: 2px solid var(--line); padding-top: var(--s4); display: flex; flex-direction: column; gap: var(--s2); }
 .timeline .year { font-family: var(--font-head); font-weight: 600; font-size: 1.5rem; font-variant-numeric: tabular-nums; }
 .timeline-v { list-style: none; padding: 0; }
@@ -241,7 +240,7 @@ th { font-weight: 400; font-size: 0.9375rem; color: var(--haze); }
 .at-a-glance th { width: 12rem; }
 
 /* People */
-.people { display: grid; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); gap: var(--s6); }
+.people { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(12rem, 100%), 1fr)); gap: var(--s6); }
 .person { display: flex; flex-direction: column; gap: var(--s2); }
 .person .photo-slot { aspect-ratio: 4 / 5; min-height: 0; }
 
@@ -294,11 +293,11 @@ details.segment > summary::after { position: absolute; right: 0.25rem; top: 0.1r
 .pass-price { font-family: var(--font-head); font-size: 1.75rem; font-weight: 600; color: var(--sprout); line-height: 1.2; }
 
 /* Lists of steps and programme groups */
-.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: var(--s5); padding-left: 1.2rem; }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr)); gap: var(--s5); padding-left: 1.2rem; }
 .steps li::marker { font-family: var(--font-head); font-weight: 600; color: var(--sprout); }
-.groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); gap: var(--s5) var(--s7); }
+.groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr)); gap: var(--s5) var(--s7); }
 .groups > div { border-top: 1px solid var(--line); padding-top: var(--s4); display: flex; flex-direction: column; gap: var(--s2); }
-.cards-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: var(--s5); }
+.cards-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr)); gap: var(--s5); }
 .cards-3 > div { padding: var(--s5); display: flex; flex-direction: column; gap: var(--s2); }
 
 /* Forms */
