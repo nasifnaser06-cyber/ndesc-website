@@ -86,9 +86,16 @@ export default function Header({ lang }: { lang: Locale }) {
         </nav>
 
         <div className="header-tools">
-          <Link className="btn btn-small join-btn" href={path(lang, "/join")}>
-            {tr(ui.nav.join, lang)}
-          </Link>
+          {site.forms.nessRegister ? (
+            <a className="btn btn-small join-btn" href={site.forms.nessRegister} target="_blank" rel="noopener noreferrer">
+              {lang === "en" ? "Register" : "নিবন্ধন"}
+              <span className="visually-hidden"> {lang === "en" ? "for NESSX" : "NESSX-এ"} {tr(ui.newTab, lang)}</span>
+            </a>
+          ) : (
+            <Link className="btn btn-small join-btn" href={`${path(lang, "/ness")}#register`}>
+              {lang === "en" ? "Register" : "নিবন্ধন"}
+            </Link>
+          )}
           <button
             ref={menuButton}
             type="button"
