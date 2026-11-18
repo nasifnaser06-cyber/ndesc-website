@@ -115,3 +115,27 @@ export function ExternalLink({ href, children, lang, className }: { href: string
     </a>
   );
 }
+
+/** A person's card on the Executives and About pages. Photos only with consent. */
+export function PersonCard({ name, post, department, photo, lang }: { name: L; post: L; department?: L; photo?: string; lang: Locale }) {
+  const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+  return (
+    <div className="person">
+      {photo ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img className="person-photo" src={`${bp}${photo}`} alt={tr(name, lang)} loading="lazy" width={400} height={500} />
+      ) : (
+        <PhotoSlot lang={lang} label={{ en: "photo, with consent", bn: "ছবি, সম্মতিসহ" }} />
+      )}
+      <h3><T text={name} lang={lang} /></h3>
+      <p className="small muted">
+        <T text={post} lang={lang} />
+        {department && (
+          <>
+            , <T text={department} lang={lang} />
+          </>
+        )}
+      </p>
+    </div>
+  );
+}

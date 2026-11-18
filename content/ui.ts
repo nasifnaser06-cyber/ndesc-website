@@ -9,7 +9,7 @@ export const ui = {
     resources: { en: "Resources", bn: "রিসোর্স" },
     news: { en: "News", bn: "খবর" },
     gallery: { en: "Gallery", bn: "গ্যালারি" },
-    panel: { en: "Panel", bn: "প্যানেল" },
+    executives: { en: "Executives", bn: "কার্যনির্বাহী" },
     join: { en: "Join the club", bn: "ক্লাবে যোগ দিন" },
     contact: { en: "Contact", bn: "যোগাযোগ" },
     privacy: { en: "Privacy", bn: "গোপনীয়তা" },

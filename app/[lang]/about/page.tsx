@@ -59,14 +59,14 @@ export default async function About({ params }: Props) {
         <section aria-labelledby="mods">
           <div className="section-head">
             <h2 id="mods">{en ? "Moderators" : "মডারেটর"}</h2>
-            <Link href={path(lang, "/panel")}>{en ? "Meet the panel" : "প্যানেলের সঙ্গে পরিচিত হোন"}</Link>
+            <Link href={path(lang, "/executives")}>{en ? "Meet the executives" : "কার্যনির্বাহীদের সঙ্গে পরিচিত হোন"}</Link>
           </div>
           <div className="people">
             {moderators.map((m, i) => (
               <div className="person" key={i}>
                 <PhotoSlot lang={lang} label={{ en: "photo", bn: "ছবি" }} />
                 <h3><T text={m.name} lang={lang} /></h3>
-                <p className="small muted"><T text={m.role} lang={lang} /></p>
+                <p className="small muted"><T text={m.post} lang={lang} /></p>
               </div>
             ))}
           </div>
