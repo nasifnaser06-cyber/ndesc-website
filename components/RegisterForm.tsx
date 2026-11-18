@@ -82,7 +82,8 @@ export default function RegisterForm({
       wallet: pass === "online" ? "" : wallet,
       trxId: pass === "online" ? "" : normTrx(v("trxId")),
       sender: pass === "online" ? "" : normPhone(v("sender")),
-      consent: f.get("consent") === "on",
+      // Registering is the agreement; the privacy note sits by the button. Kept for the sheet script.
+      consent: true,
     };
 
     const errs: string[] = [];
@@ -97,7 +98,6 @@ export default function RegisterForm({
       if (!TRX.test(body.trxId)) errs.push("Enter the TrxID from your payment SMS. It has 8 to 12 letters and numbers, like DK481HDVPG.");
       if (!PHONE.test(body.sender)) errs.push("Enter the number you paid from.");
     }
-    if (!body.consent) errs.push("Tick the box to agree to how your details are used.");
     setErrors(errs);
     if (errs.length) { errorBox.current?.focus(); return; }
 
@@ -262,13 +262,6 @@ export default function RegisterForm({
           </fieldset>
         )}
 
-        <div className="reg-consent">
-          <label className="reg-seg">
-            <input type="checkbox" name="consent" />
-            <span>The club may use these details to run NESSX and contact me about it. (<a href={privacyHref}>Privacy</a>)</span>
-          </label>
-        </div>
-
         <div ref={errorBox} tabIndex={-1} aria-live="assertive" className={errors.length ? "reg-errors" : ""}>
           {errors.length > 0 && (
             <>
@@ -281,6 +274,7 @@ export default function RegisterForm({
         <div className="actions">
           <button className="btn" type="submit" disabled={busy || !live.open}>{busy ? "Sending..." : pass === "online" ? "Register" : "Register and confirm payment"}</button>
         </div>
+        <p className="small muted reg-privacy">We use these details only to run NESSX. <a href={privacyHref}>Privacy</a></p>
       </form>
 
       <StatusCheck endpoint={endpoint} />

@@ -28,6 +28,7 @@ check('trx clean', L.normTrx(' dk481hdvpg ') === 'DK481HDVPG');
 const good = { pass: 'solo', name: 'A B', email: 'a@b.com', phone: '01712345678', institution: 'X School', category: 'S', segments: ['Star Mapping'], wallet: 'bKash', trxId: 'DK481HDVPG', sender: '01712345678', consent: true };
 check('valid solo', L.validateRegistration(good).length === 0, L.validateRegistration(good));
 check('junior needs no parent details', L.validateRegistration({ ...good, category: 'J' }).length === 0);
+check('no consent box needed', L.validateRegistration({ ...good, consent: false }).length === 0);
 check('no segment choice needed', L.validateRegistration({ ...good, segments: [] }).length === 0);
 check('solo includes all solo segments', /solo segments/.test(L.passIncludes('solo')));
 check('team includes every segment', /All segments.*solo and team/.test(L.passIncludes('team')));

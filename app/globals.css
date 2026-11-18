@@ -493,3 +493,72 @@ details[open] > summary::after { transform: rotate(45deg); }
   html.motion main section > *, html.motion main section > * > * { opacity: 1 !important; transform: none !important; }
   .sky-inner, .stars { animation: none !important; }
 }
+
+/* Register for NESSX: ice forms on the button (rion-motion: one orchestrated moment, transform/opacity/stroke only) */
+.ice-btn {
+  position: relative; overflow: hidden; isolation: isolate; white-space: nowrap; padding-inline: 2.1rem;
+  background: linear-gradient(135deg, #b4e8c9 0%, var(--sprout) 46%, #c4ecf2 100%);
+  border-color: #d6f3f6;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+  transition: box-shadow 0.3s ease, transform 0.1s ease-out;
+}
+.ice-btn:hover { background: linear-gradient(135deg, #c3eed4 0%, var(--sprout-light) 46%, #d3f2f6 100%); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55), 0 0 18px 0 rgba(196, 236, 242, 0.35); }
+.ice-label { position: relative; z-index: 2; }
+.ice { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; overflow: visible; }
+.ice .crystal, .ice .crystal-hover { transform-box: fill-box; transform-origin: center; }
+.ice .crystal { opacity: 0.95; }
+.ice .crystal path { fill: none; stroke: #ffffff; stroke-width: 1.3; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 0; }
+/* A thin cold-blue edge so white ice reads on the pale button */
+.ice { filter: drop-shadow(0 0 0.6px #2f7f9e) drop-shadow(0 0 2px rgba(47, 127, 158, 0.35)); }
+/* Frost sheens: ::after once on load, ::before on hover */
+.ice-btn::before, .ice-btn::after {
+  content: ""; position: absolute; inset: -2px; z-index: 1; pointer-events: none;
+  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, 0.55) 48%, rgba(255, 255, 255, 0.1) 56%, transparent 70%);
+  transform: translateX(-120%);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Forms once on page load, after the page's own arrival, then a faint slow twinkle */
+  .ice .crystal { opacity: 0; animation: ice-grow 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards, ice-twinkle 7s ease-in-out infinite; }
+  .ice .crystal path { stroke-dashoffset: 1; animation: ice-draw 1s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+  .ice .c1 { animation-delay: 0.55s, 3.4s; } .ice .c1 path { animation-delay: 0.55s; }
+  .ice .c2 { animation-delay: 0.64s, 4.6s; } .ice .c2 path { animation-delay: 0.64s; }
+  .ice .c3 { animation-delay: 0.71s, 5.5s; } .ice .c3 path { animation-delay: 0.71s; }
+  .ice .c4 { animation-delay: 0.77s, 6.1s; } .ice .c4 path { animation-delay: 0.77s; }
+  .ice-btn::after { animation: ice-sheen 0.95s cubic-bezier(0.33, 1, 0.68, 1) 1.25s both; }
+
+  /* Hover and keyboard focus: the ice re-forms with a small pop, and frost sweeps across */
+  .ice-btn:is(:hover, :focus-visible) .crystal-hover { animation: ice-pop 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .ice-btn:is(:hover, :focus-visible) .c2 .crystal-hover { animation-delay: 0.05s; }
+  .ice-btn:is(:hover, :focus-visible) .c3 .crystal-hover { animation-delay: 0.09s; }
+  .ice-btn:is(:hover, :focus-visible) .c4 .crystal-hover { animation-delay: 0.12s; }
+  .ice-btn:is(:hover, :focus-visible)::before { animation: ice-sheen 0.7s cubic-bezier(0.33, 1, 0.68, 1) 0.1s both; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ice .crystal { opacity: 0.75; }
+}
+
+@keyframes ice-draw { to { stroke-dashoffset: 0; } }
+@keyframes ice-grow {
+  from { opacity: 0; transform: scale(0.35) rotate(var(--spin, -20deg)); }
+  to { opacity: 0.95; transform: scale(1) rotate(0deg); }
+}
+@keyframes ice-pop {
+  0% { opacity: 0.25; transform: scale(0.55) rotate(var(--spin, -20deg)); }
+  70% { opacity: 1; transform: scale(1.08) rotate(0deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+@keyframes ice-twinkle { 0%, 88%, 100% { opacity: 0.95; } 94% { opacity: 0.5; } }
+@keyframes ice-sheen { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
+
+.reg-privacy { margin-top: var(--s3); }
+
+/* Narrow phones: keep the longer label from crowding the logo */
+@media (max-width: 420px) {
+  .ice-btn { padding-inline: 1.65rem; font-size: 0.8125rem; }
+}
+@media (max-width: 340px) {
+  .header-row { gap: var(--s3); }
+  .ice-btn { padding-inline: 1.3rem; font-size: 0.75rem; }
+  .ice .c3, .ice .c4 { display: none; }
+}
