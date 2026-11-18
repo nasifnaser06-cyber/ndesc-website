@@ -1,0 +1,95 @@
+import type { L } from "@/lib/i18n";
+
+// History, NESS programme, panel and other club content.
+// Square-bracket text marks something the club still has to supply or confirm.
+
+export const timeline: { year: string; text: L }[] = [
+  { year: "1992", text: { en: "Founded on 28 October as the Notre Dame Environmental Promotion Club.", bn: "২৮ অক্টোবর নটর ডেম এনভায়রনমেন্টাল প্রমোশন ক্লাব নামে প্রতিষ্ঠা।" } },
+  { year: "2017", text: { en: "First Earth and Space Carnival, and the first inter-college space camp in Bangladesh.", bn: "প্রথম আর্থ অ্যান্ড স্পেস কার্নিভাল, আর দেশের প্রথম আন্তঃকলেজ স্পেস ক্যাম্প।" } },
+  { year: "2018", text: { en: "Renamed the Notre Dame Eco and Space Club [confirm date].", bn: "নাম বদলে নটর ডেম ইকো অ্যান্ড স্পেস ক্লাব [তারিখ নিশ্চিত করুন]।" } },
+  { year: "2022", text: { en: "The 5th summit returns to campus after an online year.", bn: "অনলাইনে এক বছরের পর ৫ম সামিট আবার ক্যাম্পাসে।" } },
+  { year: "2025", text: { en: "8th summit: nearly 2,000 participants from more than 60 institutions.", bn: "৮ম সামিট: ৬০টির বেশি প্রতিষ্ঠানের প্রায় ২,০০০ অংশগ্রহণকারী।" } },
+  { year: "2027", text: { en: "Next summit, 28–30 January.", bn: "পরের সামিট, ২৮–৩০ জানুয়ারি।" } },
+];
+
+export const nessGroups: { title: L; items: L }[] = [
+  { title: { en: "Olympiads", bn: "অলিম্পিয়াড" }, items: { en: "Astronomy, Earth Science, Biology, Climate Science", bn: "জ্যোতির্বিজ্ঞান, ভূবিজ্ঞান, জীববিজ্ঞান, জলবায়ু বিজ্ঞান" } },
+  { title: { en: "Quizzes", bn: "কুইজ" }, items: { en: "Eco and Space Buzz, One Shot One Kill, Astro Movie Quiz", bn: "ইকো অ্যান্ড স্পেস বাজ, ওয়ান শট ওয়ান কিল, অ্যাস্ট্রো মুভি কুইজ" } },
+  { title: { en: "Team contests", bn: "দলীয় প্রতিযোগিতা" }, items: { en: "Astral Hunt, Astro and Eco Ideation, presentations, wall magazine, project display", bn: "অ্যাস্ট্রাল হান্ট, অ্যাস্ট্রো অ্যান্ড ইকো আইডিয়েশন, প্রেজেন্টেশন, দেয়াল পত্রিকা, প্রকল্প প্রদর্শনী" } },
+  { title: { en: "Creative", bn: "সৃজনশীল" }, items: { en: "Sci-fi story writing, star mapping, scrapbook, children's craft", bn: "সায়েন্স ফিকশন গল্প, তারার মানচিত্র, স্ক্র্যাপবুক, শিশুদের হাতের কাজ" } },
+  { title: { en: "Talks and workshops", bn: "আলোচনা ও কর্মশালা" }, items: { en: "Astro Talks, seminars on Earth and astronomy", bn: "অ্যাস্ট্রো টক, পৃথিবী ও জ্যোতির্বিজ্ঞান বিষয়ে সেমিনার" } },
+  { title: { en: "Exhibitions, free to visit", bn: "প্রদর্শনী, বিনা নিবন্ধনে" }, items: { en: "Photosphere (astrophotography) and Stellarscapes (student projects)", bn: "ফটোস্ফিয়ার (অ্যাস্ট্রোফটোগ্রাফি) ও স্টেলারস্কেপস (শিক্ষার্থীদের প্রকল্প)" } },
+];
+
+export const nessCategories: { name: L; classes: L }[] = [
+  { name: { en: "Primary", bn: "প্রাথমিক" }, classes: { en: "[Nursery to class 5]", bn: "[নার্সারি থেকে ৫ম শ্রেণি]" } },
+  { name: { en: "Junior", bn: "জুনিয়র" }, classes: { en: "[Classes 6 to 8]", bn: "[৬ষ্ঠ থেকে ৮ম শ্রেণি]" } },
+  { name: { en: "Secondary", bn: "মাধ্যমিক" }, classes: { en: "[Classes 9 to 10, O Levels]", bn: "[৯ম থেকে ১০ম শ্রেণি, ও লেভেল]" } },
+  { name: { en: "Higher Secondary", bn: "উচ্চমাধ্যমিক" }, classes: { en: "[Classes 11 to 12, A Levels]", bn: "[একাদশ থেকে দ্বাদশ শ্রেণি, এ লেভেল]" } },
+];
+
+export const nessSchedule: { day: L; plan: L }[] = [
+  { day: { en: "Day 1, 28 January", bn: "১ম দিন, ২৮ জানুয়ারি" }, plan: { en: "[Opening, olympiads, exhibitions open]", bn: "[উদ্বোধন, অলিম্পিয়াড, প্রদর্শনী শুরু]" } },
+  { day: { en: "Day 2, 29 January", bn: "২য় দিন, ২৯ জানুয়ারি" }, plan: { en: "[Team contests and talks]", bn: "[দলীয় প্রতিযোগিতা ও আলোচনা]" } },
+  { day: { en: "Day 3, 30 January", bn: "৩য় দিন, ৩০ জানুয়ারি" }, plan: { en: "[Finals and prize-giving]", bn: "[ফাইনাল ও পুরস্কার বিতরণ]" } },
+];
+
+export const nessPast: { edition: L; year: string; slug?: string; note: L }[] = [
+  { edition: { en: "8th", bn: "৮ম" }, year: "2025", slug: "ness-2025", note: { en: "Nearly 2,000 participants from 60+ institutions. Formula IUT car unveiled.", bn: "৬০টির বেশি প্রতিষ্ঠানের প্রায় ২,০০০ অংশগ্রহণকারী। ফর্মুলা আইইউটি গাড়ি উন্মোচন।" } },
+  { edition: { en: "7th", bn: "৭ম" }, year: "2024", slug: "ness-2024", note: { en: "About 2,500 participants and 6,000 visitors. Hybrid rocket engine test.", bn: "প্রায় ২,৫০০ অংশগ্রহণকারী ও ৬,০০০ দর্শনার্থী। হাইব্রিড রকেট ইঞ্জিন পরীক্ষা।" } },
+  { edition: { en: "6th", bn: "৬ষ্ঠ" }, year: "[2023?]", note: { en: "[Details to add]", bn: "[তথ্য যোগ করতে হবে]" } },
+  { edition: { en: "5th", bn: "৫ম" }, year: "2022", slug: "ness-2022", note: { en: "Back on campus after an online year.", bn: "অনলাইনে এক বছরের পর আবার ক্যাম্পাসে।" } },
+  { edition: { en: "4th", bn: "৪র্থ" }, year: "2020", note: { en: "[Details to add]", bn: "[তথ্য যোগ করতে হবে]" } },
+  { edition: { en: "3rd", bn: "৩য়" }, year: "2019", slug: "ness-2019", note: { en: "15 events across three age groups.", bn: "তিনটি বয়সভিত্তিক বিভাগে ১৫টি ইভেন্ট।" } },
+  { edition: { en: "2nd", bn: "২য়" }, year: "2018", note: { en: "[Details to add]", bn: "[তথ্য যোগ করতে হবে]" } },
+  { edition: { en: "1st", bn: "১ম" }, year: "2017", note: { en: "The first Earth and Space Carnival.", bn: "প্রথম আর্থ অ্যান্ড স্পেস কার্নিভাল।" } },
+];
+
+export const nessFaq: { q: L; a: L }[] = [
+  { q: { en: "Who can take part?", bn: "কারা অংশ নিতে পারবে?" }, a: { en: "Students from primary to higher secondary level, from any school or college in Bangladesh. [Confirm]", bn: "দেশের যেকোনো স্কুল-কলেজের প্রাথমিক থেকে উচ্চমাধ্যমিক পর্যায়ের শিক্ষার্থীরা। [নিশ্চিত করুন]" } },
+  { q: { en: "Do visitors need to register?", bn: "দর্শনার্থীদের কি নিবন্ধন লাগবে?" }, a: { en: "Not for the Photosphere and Stellarscapes exhibitions. [Confirm other areas]", bn: "ফটোস্ফিয়ার ও স্টেলারস্কেপস প্রদর্শনীর জন্য লাগবে না। [অন্যান্য অংশের তথ্য নিশ্চিত করুন]" } },
+  { q: { en: "How do teams work?", bn: "দল কীভাবে গঠন করতে হবে?" }, a: { en: "[Team size, and whether members must be from the same institution]", bn: "[দলের সদস্যসংখ্যা, সবাইকে একই প্রতিষ্ঠানের হতে হবে কি না]" } },
+  { q: { en: "Do participants get certificates?", bn: "অংশগ্রহণকারীরা কি সনদ পাবে?" }, a: { en: "Yes, participants receive certificates. [Confirm how they are handed out]", bn: "হ্যাঁ, অংশগ্রহণকারীরা সনদ পায়। [কীভাবে দেওয়া হবে নিশ্চিত করুন]" } },
+];
+
+export const partnersPast =
+  "Western Engineering, Bata, JR Recycling, Bangladesh Olympiad on Astronomy and Astrophysics, National Earth Olympiad, MICB Scientific Society, GPH Ispat, Shamsul Alamin Real Estate, The Daily Star";
+
+export const moderators: { name: L; role: L }[] = [
+  { name: { en: "Md Nazmul Hassan", bn: "মো. নাজমুল হাসান" }, role: { en: "Moderator [since year]", bn: "মডারেটর [কবে থেকে]" } },
+  { name: { en: "[Name]", bn: "[নাম]" }, role: { en: "[Co-moderator or founding moderator]", bn: "[সহ-মডারেটর বা প্রতিষ্ঠাতা মডারেটর]" } },
+];
+
+/** The panel for each session. Add names only with each student's consent. */
+export const panels: { session: string; current: boolean; members: { name: L; post: L }[] }[] = [
+  {
+    session: "2026–27",
+    current: true,
+    members: [
+      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "President", bn: "সভাপতি" } },
+      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "General Secretary", bn: "সাধারণ সম্পাদক" } },
+      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" } },
+      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" } },
+      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" } },
+      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" } },
+    ],
+  },
+];
+
+export type ResourceKind = "papers" | "handouts" | "magazines" | "astrophotography" | "sky-guides";
+export const resourceKinds: Record<ResourceKind, L> = {
+  papers: { en: "Olympiad papers", bn: "অলিম্পিয়াডের প্রশ্ন" },
+  handouts: { en: "Workshop handouts", bn: "কর্মশালার হ্যান্ডআউট" },
+  magazines: { en: "Wall magazines", bn: "দেয়াল পত্রিকা" },
+  astrophotography: { en: "Astrophotography", bn: "অ্যাস্ট্রোফটোগ্রাফি" },
+  "sky-guides": { en: "Sky guides", bn: "আকাশ পরিচিতি" },
+};
+/** Add files to /public/resources and list them here. */
+export const resources: { kind: ResourceKind; title: L; year: string; url: string; format: string }[] = [];
+
+export const galleryAlbums: { title: L; date: string; photos: string[] }[] = [
+  { title: { en: "8th NESS", bn: "৮ম NESS" }, date: "2025-02", photos: [] },
+  { title: { en: "7th NESS", bn: "৭ম NESS" }, date: "2024-05", photos: [] },
+  { title: { en: "Cosmoterrium 2026", bn: "কসমোটেরিয়াম ২০২৬" }, date: "2026-01", photos: [] },
+  { title: { en: "5th NESS", bn: "৫ম NESS" }, date: "2022-05", photos: [] },
+];
