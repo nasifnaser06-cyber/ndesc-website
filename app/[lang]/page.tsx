@@ -2,10 +2,10 @@ import Link from "next/link";
 import { type Locale, tr, path, formatDateRange, num } from "@/lib/i18n";
 import { meta, eventRow, eventLabels } from "@/lib/view";
 import { ui } from "@/content/ui";
-import { sortedEvents, getEvent } from "@/content/events";
+import { sortedEvents, getEvent, ness2027Banner } from "@/content/events";
 import { timeline, partnersPast } from "@/content/club";
 import { posts, newsCategories } from "@/content/news";
-import { PhotoSlot, SectionHead, Stars, T } from "@/components/bits";
+import { Banner, PhotoSlot, SectionHead, Stars, T } from "@/components/bits";
 import { EventRows } from "@/components/EventList";
 
 type Props = { params: Promise<{ lang: Locale }> };
@@ -53,7 +53,10 @@ export default async function Home({ params }: Props) {
       </section>
 
       <section className="wrap section" aria-labelledby="ness-title">
-        <div className="surface panel-band">
+        <div className="surface panel-band has-banner">
+          <Link href={path(lang, "/ness")} className="band-banner" tabIndex={-1} aria-hidden="true">
+            <Banner lang={lang} {...ness2027Banner} alt={{ en: "", bn: "" }} sizes="(min-width: 1280px) 1216px, 100vw" />
+          </Link>
           <div>
             <p className="label">{en ? "Next on the calendar" : "পরবর্তী আয়োজন"}</p>
             <h2 id="ness-title">{tr(ness.title, lang)}</h2>

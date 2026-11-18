@@ -4,7 +4,7 @@ import { type Locale, locales, tr, path, formatDateRange } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { events, getEvent, eventTypes, isUpcoming } from "@/content/events";
 import { ui } from "@/content/ui";
-import { PageHead, PhotoSlot, T } from "@/components/bits";
+import { Banner, PageHead, PhotoSlot, T } from "@/components/bits";
 
 type Props = { params: Promise<{ lang: Locale; slug: string }> };
 
@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props) {
   const { lang, slug } = await params;
   const e = getEvent(slug);
   if (!e) return {};
-  return meta(lang, `/events/${slug}`, e.title, e.summary);
+  return meta(lang, `/events/${slug}`, e.title, e.summary, e.poster?.social ? { src: e.poster.social, alt: e.poster.alt } : undefined);
 }
 
 export default async function EventPage({ params }: Props) {
@@ -32,7 +32,11 @@ export default async function EventPage({ params }: Props) {
       <PageHead lang={lang} title={e.title} crumbs={[{ label: ui.nav.events, to: "/events" }]} />
       <div className="wrap" style={{ display: "flex", flexDirection: "column", gap: "var(--s8)" }}>
         <div className="split">
-          <PhotoSlot tall lang={lang} label={{ en: "event poster", bn: "ইভেন্টের পোস্টার" }} />
+          {e.poster ? (
+            <Banner lang={lang} {...e.poster} sizes="(min-width: 900px) 600px, 100vw" className="poster" />
+          ) : (
+            <PhotoSlot tall lang={lang} label={{ en: "event poster", bn: "ইভেন্টের পোস্টার" }} />
+          )}
           <div className="stack" style={{ gap: "var(--s5)" }}>
             <p style={{ display: "flex", gap: "var(--s2)" }}>
               <span className={`tag ${upcoming ? "tag-up" : ""}`}>{tr(upcoming ? ui.upcoming : ui.past, lang)}</span>

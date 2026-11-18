@@ -3,9 +3,9 @@ import { type Locale, tr, path, formatDateRange, num } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { site } from "@/content/site";
 import { ui } from "@/content/ui";
-import { getEvent } from "@/content/events";
+import { getEvent, ness2027Banner } from "@/content/events";
 import { nessGroups, nessCategories, nessSchedule, nessPast, nessFaq } from "@/content/club";
-import { FormButton, Stars, T } from "@/components/bits";
+import { Banner, FormButton, Stars, T } from "@/components/bits";
 
 type Props = { params: Promise<{ lang: Locale }> };
 const title = { en: "NESS 2027", bn: "NESS ২০২৭" };
@@ -16,7 +16,7 @@ const description = {
 
 export async function generateMetadata({ params }: Props) {
   const { lang } = await params;
-  return meta(lang, "/ness", title, description);
+  return meta(lang, "/ness", title, description, { src: ness2027Banner.social, alt: ness2027Banner.alt });
 }
 
 export default async function Ness({ params }: Props) {
@@ -48,6 +48,9 @@ export default async function Ness({ params }: Props) {
       </section>
 
       <div className="wrap" style={{ display: "flex", flexDirection: "column", gap: "var(--s9)", paddingTop: "var(--s8)" }}>
+        <figure className="banner-figure">
+          <Banner lang={lang} {...ness2027Banner} />
+        </figure>
         <section aria-labelledby="programme">
           <h2 id="programme" style={{ marginBottom: "var(--s6)" }}>{en ? "What happens over three days" : "তিন দিনে যা থাকছে"}</h2>
           <div className="groups">

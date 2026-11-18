@@ -139,3 +139,24 @@ export function PersonCard({ name, post, department, photo, lang }: { name: L; p
     </div>
   );
 }
+
+/** A responsive banner or poster image (16:9 WebP files at several widths in public/). */
+export function Banner({ name, widths, alt, lang, sizes = "(min-width: 1280px) 1216px, 100vw", priority = false, className = "" }: { name: string; widths: number[]; alt: L; lang: Locale; sizes?: string; priority?: boolean; className?: string }) {
+  const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+  const largest = Math.max(...widths);
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      className={`banner ${className}`}
+      src={`${bp}${name}-${largest}.webp`}
+      srcSet={widths.map((w) => `${bp}${name}-${w}.webp ${w}w`).join(", ")}
+      sizes={sizes}
+      alt={tr(alt, lang)}
+      width={1920}
+      height={1080}
+      loading={priority ? "eager" : "lazy"}
+      fetchPriority={priority ? "high" : "auto"}
+      decoding="async"
+    />
+  );
+}
