@@ -2,7 +2,7 @@ import Link from "next/link";
 import { type Locale, tr, path } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { site } from "@/content/site";
-import { PageHead, T } from "@/components/bits";
+import { PageHead, T, ExternalLink } from "@/components/bits";
 
 type Props = { params: Promise<{ lang: Locale }> };
 const title = { en: "Contact", bn: "যোগাযোগ" };
@@ -30,8 +30,8 @@ export default async function Contact({ params }: Props) {
           </div>
           <div>
             <p className="label">{en ? "Social" : "সোশ্যাল মিডিয়া"}</p>
-            <p><a href={site.social.facebook} rel="noopener">Facebook: ndesc.official</a></p>
-            <p><a href={site.social.instagram} rel="noopener">Instagram: @ndesc.official</a></p>
+            <p><ExternalLink href={site.social.facebook} lang={lang}>Facebook: ndesc.official</ExternalLink></p>
+            <p><ExternalLink href={site.social.instagram} lang={lang}>Instagram: @ndesc.official</ExternalLink></p>
           </div>
           <div>
             <p className="label">{en ? "Address" : "ঠিকানা"}</p>
@@ -55,7 +55,7 @@ export default async function Contact({ params }: Props) {
             <p className="muted">
               {en ? "The online form opens once the club sets up its inbox. Until then, message the club on Facebook. " : "ক্লাবের ইনবক্স চালু হলে অনলাইন ফর্ম খুলবে। ততদিন ফেসবুকে ক্লাবকে বার্তা পাঠান। "}
             </p>
-            <p style={{ marginTop: "var(--s4)" }}><a className="btn btn-secondary" href={site.social.facebook} rel="noopener">{en ? "Message us on Facebook" : "ফেসবুকে বার্তা পাঠান"}</a></p>
+            <p style={{ marginTop: "var(--s4)" }}><ExternalLink className="btn btn-secondary" href={site.social.facebook} lang={lang}>{en ? "Message us on Facebook" : "ফেসবুকে বার্তা পাঠান"}</ExternalLink></p>
           </div>
         )}
       </div>

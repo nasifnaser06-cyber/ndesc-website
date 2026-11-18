@@ -105,3 +105,13 @@ export function SectionHead({ title, link, lang }: { title: L; link?: { label: L
     </div>
   );
 }
+
+/** A link to another site (Facebook, Instagram) that opens in a new tab, and says so to screen readers. */
+export function ExternalLink({ href, children, lang, className }: { href: string; children: ReactNode; lang: Locale; className?: string }) {
+  return (
+    <a href={href} className={className} target="_blank" rel="noopener noreferrer">
+      {children}
+      <span className="visually-hidden"> {tr(ui.newTab, lang)}</span>
+    </a>
+  );
+}
