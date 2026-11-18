@@ -29,6 +29,20 @@ export const site = {
     contactEndpoint: null as string | null,
   },
 
+  /**
+   * NESSX automatic registration (registration/README.md explains the setup).
+   * endpoint: the Apps Script web app address. While it is null the Register page is a draft:
+   * people can see it, but it sends them to the Google Form instead.
+   * The payment numbers and prices shown on the page come live from the sheet's Settings tab once
+   * connected; these are only the fallback.
+   */
+  registration: {
+    endpoint: null as string | null,
+    bkash: "[club bKash number]",
+    nagad: null as string | null,
+    prices: { solo: 200, team: 300, online: 0 },
+  },
+
   /** Shows the "draft" ribbon across the top until the club signs off the content. */
   draft: true,
 };
