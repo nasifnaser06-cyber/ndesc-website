@@ -10,7 +10,7 @@ The club's own app for the payment phone. When a bKash payment SMS arrives, it s
 
 ## Install on the payment phone
 
-1. Copy `NESSX-Payments-1.0.apk` to the phone (WhatsApp to yourself, Google Drive or a USB cable) and tap it.
+1. Copy `NESSX-Payments-1.1.apk` to the phone (WhatsApp to yourself, Google Drive or a USB cable) and tap it.
 2. Android asks to allow installs from that app (Files, Drive, WhatsApp). Allow it. If Play Protect warns, tap **More details > Install anyway**. It warns because the app is not from the Play Store and reads SMS.
 3. Open **NESSX Payments**:
    - Tap **Allow** for SMS.

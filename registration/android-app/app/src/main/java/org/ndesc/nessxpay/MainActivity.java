@@ -38,6 +38,8 @@ public class MainActivity extends Activity {
     private static final int GREEN = Color.rgb(46, 160, 67), AMBER = Color.rgb(214, 140, 20), RED = Color.rgb(207, 34, 46);
 
     private Store store;
+    /** True while "Save and check" waits for the sheet. */
+    private volatile boolean checking;
     private TextView status, checkResult;
     private EditText url, key;
     private Switch onOff;
@@ -122,11 +124,13 @@ public class MainActivity extends Activity {
     private void saveAndCheck() {
         String u = url.getText().toString().trim(), k = key.getText().toString().trim();
         store.save(u, k);
-        checkResult.setText("Checking…");
+        checking = true;
+        refresh();
         new Thread(() -> {
             Sender.Result r = Sender.check(u, k);
             String msg = (r.ok ? "✓ " : "✗ ") + r.message + "  (" + when.format(new Date()) + ")";
             store.setLastCheck(msg);
+            checking = false;
             runOnUiThread(this::refresh);
         }).start();
     }
@@ -139,7 +143,7 @@ public class MainActivity extends Activity {
             ForwardWorker.enqueue(this, id, o.optString("from"), o.optString("text"));
             n++;
         }
-        checkResult.setText(n == 0 ? "Nothing failed." : "Sending " + n + " again.");
+        store.setLastCheck(n == 0 ? "Nothing failed." : "Sending " + n + " again.");
         refresh();
     }
 
@@ -156,7 +160,7 @@ public class MainActivity extends Activity {
         else if (!sms) setStatus("Off: this app can't read SMS yet", RED);
         else if (!store.enabled()) setStatus("Off: switched off", AMBER);
         else setStatus("On: payment SMS go to the sheet", GREEN);
-        if (!checkResult.getText().toString().startsWith("Checking")) checkResult.setText(store.lastCheck());
+        checkResult.setText(checking ? "Checking…" : store.lastCheck());
 
         resend.setVisibility(store.withStatus(Store.FAILED).isEmpty() ? View.GONE : View.VISIBLE);
         list.removeAllViews();
