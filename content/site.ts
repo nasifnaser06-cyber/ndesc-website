@@ -39,7 +39,7 @@ export const site = {
    * search engines and shows a "Trial" notice. Set false only with the club's real sheet.
    */
   registration: {
-    endpoint: "https://script.google.com/macros/s/AKfycby3yB5j63X8mhkT4IEiPn_b058nqc5_zzc70K7Q0iTk96rhVnu4k0-6Ll7P2BKYGPzs/exec" as string | null,
+    endpoint: "https://script.google.com/macros/s/AKfycby5E_2gLVJd30XMD5YUu3iQ_eyZdWfl3UXnWXrpU6yVcGMa8G_pszExSbXE8TAP-KuW/exec" as string | null,
     trial: true,
     bkash: "[club bKash number]",
     nagad: null as string | null,
