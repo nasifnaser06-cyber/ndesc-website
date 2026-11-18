@@ -30,9 +30,10 @@ async function call(endpoint: string, body: object) {
 }
 
 export default function RegisterForm({
-  endpoint, fallback, googleForm, categories, segments, privacyHref, nessHref,
+  endpoint, trial = false, fallback, googleForm, categories, segments, privacyHref, nessHref,
 }: {
   endpoint: string | null;
+  trial?: boolean;
   fallback: { bkash: string; nagad: string | null; prices: Record<Pass, number> };
   googleForm: string | null;
   categories: { code: string; name: string; who: string }[];
@@ -159,6 +160,12 @@ export default function RegisterForm({
         <div className="reg-draft" role="note">
           <strong>Draft page.</strong> This form isn't connected yet, so it can't take registrations.
           {googleForm && <> To register now, use the <a href={googleForm} target="_blank" rel="noopener noreferrer">registration form</a>.</>}
+        </div>
+      )}
+      {!draft && trial && (
+        <div className="reg-draft" role="note">
+          <strong>Trial.</strong> This page is being tested by the organisers with small test payments. Please don't register here yet.
+          {googleForm && <> To register, use the <a href={googleForm} target="_blank" rel="noopener noreferrer">registration form</a>.</>}
         </div>
       )}
       {!live.open && <div className="reg-draft" role="note"><strong>Registration is closed.</strong></div>}
