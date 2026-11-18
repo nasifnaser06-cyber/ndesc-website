@@ -180,6 +180,15 @@ main:focus { outline: none; }
 .panel-band { padding: var(--s7); display: flex; flex-wrap: wrap; gap: var(--s6); align-items: flex-end; justify-content: space-between; }
 .panel-band > div:first-child { flex: 1 1 28rem; display: flex; flex-direction: column; gap: var(--s3); }
 @media (max-width: 640px) { .panel-band { padding: var(--s5); } }
+/* Banners and posters (NESS 2027) */
+.banner { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 16px; background: var(--deep); border: 1px solid var(--line); }
+.banner-figure { margin: 0; }
+.panel-band.has-banner { padding-top: var(--s5); }
+.band-banner { flex: 1 1 100%; display: block; border-radius: 12px; overflow: hidden; border: 1px solid var(--line); }
+.band-banner .banner { border-radius: 0; border: 0; }
+@media (hover: hover) { .band-banner .banner { transition: transform 0.4s var(--ease, ease), opacity 0.2s ease; } .band-banner:hover .banner { transform: scale(1.02); } }
+@media (prefers-reduced-motion: reduce) { .band-banner:hover .banner { transform: none; } }
+.split > .poster { align-self: start; }
 .facts { display: flex; flex-wrap: wrap; gap: var(--s4) var(--s7); margin: var(--s2) 0 0; }
 .facts dt { font-size: 0.875rem; color: var(--haze); }
 .facts dd { margin: 0; font-weight: 700; }

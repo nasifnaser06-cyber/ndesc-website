@@ -19,6 +19,19 @@ export type ClubEvent = {
   highlights?: L[];
   partners?: string;
   sources?: { title: string; url: string }[];
+  /** Poster or banner. Files go in public/, e.g. public/ness/. `name` is the file name without the width and extension. */
+  poster?: { name: string; widths: number[]; alt: L; social?: string };
+};
+
+/** The official NESS 2027 banner, used on the home page, the NESS page and the event page. */
+export const ness2027Banner = {
+  name: "/ness/ness-2027",
+  widths: [768, 1280, 1920],
+  social: "/ness/ness-2027-og.jpg",
+  alt: {
+    en: "NESS, 10th National Earth and Space Summit 2027: two polar bears on melting ice reach towards each other under a pastel sky, with the Notre Dame College and club logos.",
+    bn: "NESS, ১০ম ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট ২০২৭: গলতে থাকা বরফের ওপর দুটি মেরু ভালুক একে অপরের দিকে হাত বাড়িয়েছে, সঙ্গে নটর ডেম কলেজ ও ক্লাবের লোগো।",
+  },
 };
 
 const ndc: L = { en: "Notre Dame College, Dhaka", bn: "নটর ডেম কলেজ, ঢাকা" };
@@ -44,6 +57,7 @@ export const events: ClubEvent[] = [
       bn: "১০ম আসর: সারা দেশের শিক্ষার্থীদের জন্য তিন দিনের অলিম্পিয়াড, কুইজ, দলীয় প্রতিযোগিতা, আলোচনা আর প্রদর্শনী।",
     },
     todo: { en: "programme and fees", bn: "অনুষ্ঠানসূচি ও ফি" },
+    poster: ness2027Banner,
   },
   {
     slug: "cosmoterrium-2026",
