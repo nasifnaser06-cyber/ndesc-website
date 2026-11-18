@@ -10,6 +10,7 @@ import { Logo } from "./bits";
 
 const navItems = [
   { key: "about", to: "/about" },
+  { key: "executives", to: "/executives" },
   { key: "ness", to: "/ness" },
   { key: "events", to: "/events" },
   { key: "resources", to: "/resources" },
@@ -57,7 +58,7 @@ export default function Header({ lang }: { lang: Locale }) {
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
-  const isActive = (to: string) => sub === to || sub.startsWith(`${to}/`) || (to === "/about" && sub.startsWith("/panel"));
+  const isActive = (to: string) => sub === to || sub.startsWith(`${to}/`);
 
   return (
     <header className="site-header">

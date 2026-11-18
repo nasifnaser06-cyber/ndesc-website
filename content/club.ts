@@ -55,23 +55,45 @@ export const nessFaq: { q: L; a: L }[] = [
 export const partnersPast =
   "Western Engineering, Bata, JR Recycling, Bangladesh Olympiad on Astronomy and Astrophysics, National Earth Olympiad, MICB Scientific Society, GPH Ispat, Shamsul Alamin Real Estate, The Daily Star";
 
-export const moderators: { name: L; role: L }[] = [
-  { name: { en: "Md Nazmul Hassan", bn: "মো. নাজমুল হাসান" }, role: { en: "Moderator [since year]", bn: "মডারেটর [কবে থেকে]" } },
-  { name: { en: "[Name]", bn: "[নাম]" }, role: { en: "[Co-moderator or founding moderator]", bn: "[সহ-মডারেটর বা প্রতিষ্ঠাতা মডারেটর]" } },
+// ---------------------------------------------------------------------------
+// Executives page (like the Math Club's): three tabs, Officers, Current, Former.
+// Add a name or photo only with that student's consent. Photos go in
+// public/executives/ and are referenced as "/executives/file.jpg".
+// ---------------------------------------------------------------------------
+
+export type Person = { name: L; post: L; department?: L; photo?: string };
+
+/** Teachers and college officers who guide the club. */
+export const officers: Person[] = [
+  { name: { en: "Dr Fr Hemanto Pius Rozario", bn: "ড. ফা. হেমন্ত পিউস রোজারিও" }, post: { en: "Principal, Notre Dame College", bn: "অধ্যক্ষ, নটর ডেম কলেজ" } },
+  { name: { en: "Md Nazmul Hassan", bn: "মো. নাজমুল হাসান" }, post: { en: "Moderator [since year]", bn: "মডারেটর [কবে থেকে]" } },
+  { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Founding moderator, 1992]", bn: "[প্রতিষ্ঠাতা মডারেটর, ১৯৯২]" } },
 ];
 
-/** The panel for each session. Add names only with each student's consent. */
-export const panels: { session: string; current: boolean; members: { name: L; post: L }[] }[] = [
+/** Moderators shown on the About page. */
+export const moderators = officers.slice(1);
+
+/** One entry per session, newest first. The first one marked current shows on the Current tab. */
+export const executiveSessions: { session: string; current?: boolean; members: Person[] }[] = [
   {
     session: "2026–27",
     current: true,
     members: [
       { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "President", bn: "সভাপতি" } },
       { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "General Secretary", bn: "সাধারণ সম্পাদক" } },
-      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" } },
-      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" } },
-      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" } },
-      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" } },
+      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" }, department: { en: "[Department]", bn: "[বিভাগ]" } },
+      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" }, department: { en: "[Department]", bn: "[বিভাগ]" } },
+      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" }, department: { en: "[Department]", bn: "[বিভাগ]" } },
+      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" }, department: { en: "[Department]", bn: "[বিভাগ]" } },
+      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" }, department: { en: "[Department]", bn: "[বিভাগ]" } },
+      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" }, department: { en: "[Department]", bn: "[বিভাগ]" } },
+    ],
+  },
+  {
+    session: "[2025–26]",
+    members: [
+      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "President", bn: "সভাপতি" } },
+      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "General Secretary", bn: "সাধারণ সম্পাদক" } },
     ],
   },
 ];

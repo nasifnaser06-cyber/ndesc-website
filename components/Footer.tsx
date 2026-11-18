@@ -18,7 +18,7 @@ export default function Footer({ lang }: { lang: Locale }) {
           <p className="label">{tr(ui.explore, lang)}</p>
           <ul>
             <li><Link href={path(lang, "/about")}>{tr(ui.nav.about, lang)}</Link></li>
-            <li><Link href={path(lang, "/panel")}>{tr(ui.nav.panel, lang)}</Link></li>
+            <li><Link href={path(lang, "/executives")}>{tr(ui.nav.executives, lang)}</Link></li>
             <li><Link href={path(lang, "/events")}>{tr(ui.nav.events, lang)}</Link></li>
             <li><Link href={path(lang, "/resources")}>{tr(ui.nav.resources, lang)}</Link></li>
           </ul>
