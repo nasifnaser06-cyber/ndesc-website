@@ -2,10 +2,11 @@ import Link from "next/link";
 import { type Locale, tr, path, formatDateRange, num } from "@/lib/i18n";
 import { meta, eventRow, eventLabels } from "@/lib/view";
 import { ui } from "@/content/ui";
+import { site } from "@/content/site";
 import { sortedEvents, getEvent, ness2027Banner } from "@/content/events";
 import { timeline, partnersPast } from "@/content/club";
 import { posts, newsCategories } from "@/content/news";
-import { Banner, PhotoSlot, SectionHead, Stars, T } from "@/components/bits";
+import { Banner, FormButton, PhotoSlot, SectionHead, Stars, T } from "@/components/bits";
 import { EventRows } from "@/components/EventList";
 
 type Props = { params: Promise<{ lang: Locale }> };
@@ -58,7 +59,7 @@ export default async function Home({ params }: Props) {
             <Banner lang={lang} {...ness2027Banner} alt={{ en: "", bn: "" }} sizes="(min-width: 1280px) 1216px, 100vw" />
           </Link>
           <div>
-            <p className="label">{en ? "Next on the calendar" : "পরবর্তী আয়োজন"}</p>
+            <p className="label">{en ? "Registration open" : "নিবন্ধন চলছে"}</p>
             <h2 id="ness-title">{tr(ness.title, lang)}</h2>
             <p className="muted">{tr(ness.summary, lang)}</p>
             <dl className="facts">
@@ -68,8 +69,8 @@ export default async function Home({ params }: Props) {
             </dl>
           </div>
           <div className="actions">
-            <Link className="btn" href={path(lang, "/ness")}>{en ? "Programme and registration" : "অনুষ্ঠানসূচি ও নিবন্ধন"}</Link>
-            <Link className="btn btn-secondary" href={`${path(lang, "/ness")}#exhibit`}>{tr(ui.exhibit, lang)}</Link>
+            <FormButton href={site.forms.nessRegister} lang={lang}>{en ? "Register now" : "এখনই নিবন্ধন করুন"}</FormButton>
+            <Link className="btn btn-secondary" href={path(lang, "/ness")}>{en ? "Segments and passes" : "সেগমেন্ট ও পাস"}</Link>
           </div>
         </div>
       </section>

@@ -75,8 +75,9 @@ export function FormButton({ href, children, lang, secondary = false }: { href: 
     );
   }
   return (
-    <a className={`btn ${secondary ? "btn-secondary" : ""}`} href={href} rel="noopener">
+    <a className={`btn ${secondary ? "btn-secondary" : ""}`} href={href} target="_blank" rel="noopener noreferrer">
       {children}
+      <span className="visually-hidden"> {tr(ui.newTab, lang)}</span>
     </a>
   );
 }

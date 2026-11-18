@@ -1,6 +1,7 @@
 import { type Locale, tr } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { ui } from "@/content/ui";
+import { site } from "@/content/site";
 import { PageHead, T } from "@/components/bits";
 
 type Props = { params: Promise<{ lang: Locale }> };
@@ -22,7 +23,11 @@ export default async function Privacy({ params }: Props) {
         <p>{en ? "This website does not use cookies, tracking or advertising." : "এই ওয়েবসাইট কুকি, ট্র্যাকিং বা বিজ্ঞাপন ব্যবহার করে না।"}</p>
         <p>{en ? "If you send a message or register through a linked form, your details go only to the club and are used only to reply or to run the event you signed up for." : "লিংক করা ফর্মে বার্তা পাঠালে বা নিবন্ধন করলে আপনার তথ্য শুধু ক্লাবের কাছে যায়, আর শুধু উত্তর দেওয়া বা সংশ্লিষ্ট আয়োজন পরিচালনায় ব্যবহার হয়।"}</p>
         <p>{tr(ui.consentNote, lang)}</p>
-        <p><T lang={lang} text={{ en: "[Club contact for privacy requests, and how long form data is kept]", bn: "[গোপনীয়তা বিষয়ে যোগাযোগের ঠিকানা, আর ফর্মের তথ্য কতদিন রাখা হয়]" }} /></p>
+        <p>
+          {en ? "For any privacy request, email " : "গোপনীয়তা বিষয়ে যেকোনো অনুরোধে ইমেইল করুন "}
+          <a href={`mailto:${site.email}`}>{site.email}</a>.{" "}
+          <T lang={lang} text={{ en: "[How long form answers are kept]", bn: "[ফর্মের তথ্য কতদিন রাখা হয়]" }} />
+        </p>
       </article>
     </>
   );

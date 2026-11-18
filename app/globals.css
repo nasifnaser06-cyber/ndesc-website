@@ -277,6 +277,19 @@ details { border-top: 1px solid var(--line); padding: var(--s4) 0; }
 summary { cursor: pointer; font-weight: 700; min-height: 32px; }
 details p { margin-top: var(--s2); color: var(--haze); }
 
+/* NESSX segments, passes, organizers */
+.segment-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(22rem, 100%), 1fr)); gap: var(--s5) var(--s8); margin-top: var(--s5); }
+.segment-groups h3 { margin-bottom: var(--s2); }
+details.segment > summary { justify-content: flex-start; flex-wrap: wrap; gap: var(--s2) var(--s3); padding-right: 2rem; position: relative; }
+details.segment > summary::after { position: absolute; right: 0.25rem; top: 0.1rem; }
+.segment-name { font-weight: 700; }
+.segment-tags { display: inline-flex; flex-wrap: wrap; gap: var(--s1); }
+.segment-tags .tag { font-size: 0.75rem; }
+.segment-parts { margin: var(--s3) 0 0; padding-left: 1.2rem; color: var(--haze); display: grid; gap: var(--s2); }
+.segment-parts strong { color: var(--starlight); }
+.pass, .organizer { padding: var(--s5); display: flex; flex-direction: column; gap: var(--s2); }
+.pass-price { font-family: var(--font-head); font-size: 1.75rem; font-weight: 600; color: var(--sprout); line-height: 1.2; }
+
 /* Lists of steps and programme groups */
 .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: var(--s5); padding-left: 1.2rem; }
 .steps li::marker { font-family: var(--font-head); font-weight: 600; color: var(--sprout); }

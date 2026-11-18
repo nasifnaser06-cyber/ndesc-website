@@ -13,7 +13,7 @@ export const site = {
   mapUrl: "https://maps.app.goo.gl/N4N3Rvg5j3EB2ua16",
 
   /** Club email, monitored by the moderator. Never a student's personal address. */
-  email: null as string | null,
+  email: "ndesc.organizers.2027@gmail.com" as string | null,
 
   social: {
     facebook: "https://www.facebook.com/ndesc.official",
@@ -22,7 +22,7 @@ export const site = {
 
   /** Links to the club's forms (Google Forms or similar). */
   forms: {
-    nessRegister: null as string | null,
+    nessRegister: "https://forms.gle/QAYuy9RbyRtvFyzC7" as string | null,
     nessExhibit: null as string | null,
     join: null as string | null,
     /** A form endpoint that accepts POST (e.g. Formspree). Leave null to hide the form. */
