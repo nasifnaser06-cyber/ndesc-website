@@ -1,0 +1,332 @@
+"use client";
+
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+
+export type SegOption = { name: string; cats: string[]; online: boolean; team: boolean };
+type Pass = "solo" | "team" | "online";
+type Live = { open: boolean; bkash: string; nagad: string; prices: Record<Pass, number> };
+type Result = { regId: string; status: string; teamCode?: string; newTeam?: boolean };
+
+const PHONE = /^01[3-9]\d{8}$/;
+const TRX = /^[A-Z0-9]{8,12}$/;
+const normPhone = (s: string) => {
+  let d = s.replace(/\D/g, "");
+  if (d.startsWith("880")) d = d.slice(2);
+  if (d.length === 10 && d.startsWith("1")) d = "0" + d;
+  return d;
+};
+const normTrx = (s: string) => s.toUpperCase().replace(/[^A-Z0-9]/g, "");
+
+/** Which segments a person can choose with this category and pass. */
+function allowed(seg: SegOption, category: string, pass: Pass) {
+  if (pass === "online" && !seg.online) return false;
+  if (pass === "solo" && seg.team && !seg.online) return false;
+  return seg.cats.some((c) => c === category || c === "C" || c.startsWith("PS"));
+}
+
+async function call(endpoint: string, body: object) {
+  const res = await fetch(endpoint, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify(body) });
+  return res.json();
+}
+
+export default function RegisterForm({
+  endpoint, fallback, googleForm, categories, segments, privacyHref, nessHref,
+}: {
+  endpoint: string | null;
+  fallback: { bkash: string; nagad: string | null; prices: Record<Pass, number> };
+  googleForm: string | null;
+  categories: { code: string; name: string; who: string }[];
+  segments: SegOption[];
+  privacyHref: string;
+  nessHref: string;
+}) {
+  const [live, setLive] = useState<Live>({ open: true, bkash: fallback.bkash, nagad: fallback.nagad ?? "", prices: fallback.prices });
+  const [pass, setPass] = useState<Pass>("solo");
+  const [category, setCategory] = useState("");
+  const [chosen, setChosen] = useState<string[]>([]);
+  const [wallet, setWallet] = useState("bKash");
+  const [errors, setErrors] = useState<string[]>([]);
+  const [busy, setBusy] = useState(false);
+  const [done, setDone] = useState<Result | null>(null);
+  const errorBox = useRef<HTMLDivElement>(null);
+  const draft = !endpoint;
+
+  // Live numbers, prices and open/closed from the sheet's Settings tab.
+  useEffect(() => {
+    if (!endpoint) return;
+    fetch(endpoint).then((r) => r.json()).then((d) => {
+      if (d && d.ok) setLive({ open: d.open, bkash: d.bkash || fallback.bkash, nagad: d.nagad || "", prices: d.prices || fallback.prices });
+    }).catch(() => {});
+  }, [endpoint, fallback.bkash, fallback.prices]);
+
+  const options = useMemo(() => (category ? segments.filter((s) => allowed(s, category, pass)) : []), [segments, category, pass]);
+  // Drop choices that no longer fit after the pass or category changes.
+  useEffect(() => setChosen((c) => c.filter((n) => options.some((o) => o.name === n))), [options]);
+
+  const price = live.prices[pass];
+  const needsParent = category === "P" || category === "J";
+  const payNumber = wallet === "Nagad" ? live.nagad : live.bkash;
+
+  function toggle(name: string) {
+    setChosen((c) => (c.includes(name) ? c.filter((x) => x !== name) : [...c, name]));
+  }
+
+  async function submit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    const v = (k: string) => String(f.get(k) || "").trim();
+    const body = {
+      action: "register",
+      pass,
+      name: v("name"),
+      email: v("email"),
+      phone: normPhone(v("phone")),
+      institution: v("institution"),
+      className: v("className"),
+      category,
+      segments: chosen,
+      teamCode: normTrx(v("teamCode")),
+      parentName: v("parentName"),
+      parentPhone: normPhone(v("parentPhone")),
+      wallet: pass === "online" ? "" : wallet,
+      trxId: pass === "online" ? "" : normTrx(v("trxId")),
+      sender: pass === "online" ? "" : normPhone(v("sender")),
+      consent: f.get("consent") === "on",
+    };
+
+    const errs: string[] = [];
+    if (!body.name) errs.push("Enter your full name.");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) errs.push("Enter a valid email address. Your pass is sent there.");
+    if (body.email !== v("email2")) errs.push("The two email addresses don't match.");
+    if (!PHONE.test(body.phone)) errs.push("Enter a Bangladeshi mobile number, like 01712345678.");
+    if (!body.institution) errs.push("Enter your school or college.");
+    if (!category) errs.push("Choose your category.");
+    if (!chosen.length) errs.push("Choose at least one segment.");
+    if (needsParent && (!body.parentName || !PHONE.test(body.parentPhone))) errs.push("For Primary and Junior, enter a parent's name and mobile number.");
+    if (body.teamCode && !/^[A-Z0-9]{6}$/.test(body.teamCode)) errs.push("A team code has 6 letters and numbers.");
+    if (pass !== "online") {
+      if (!TRX.test(body.trxId)) errs.push("Enter the TrxID from your payment SMS. It has 8 to 12 letters and numbers, like DK481HDVPG.");
+      if (!PHONE.test(body.sender)) errs.push("Enter the number you paid from.");
+    }
+    if (!body.consent) errs.push("Tick the box to agree to how your details are used.");
+    setErrors(errs);
+    if (errs.length) { errorBox.current?.focus(); return; }
+
+    if (draft) {
+      setErrors(["This page is a draft and is not taking registrations yet. Please use the registration form for now."]);
+      errorBox.current?.focus();
+      return;
+    }
+    setBusy(true);
+    try {
+      const d = await call(endpoint!, body);
+      if (d.ok) setDone({ regId: d.regId, status: d.status, teamCode: d.teamCode, newTeam: d.newTeam });
+      else { setErrors(d.errors || [d.error || "Something went wrong. Please try again."]); errorBox.current?.focus(); }
+    } catch {
+      setErrors(["We couldn't reach the registration system. Check your internet and try again. You have not been charged twice: your payment is safe."]);
+      errorBox.current?.focus();
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  if (done) {
+    return (
+      <div className="surface reg-done" role="status" aria-live="polite">
+        <h2>{done.status === "Verified" ? "You're registered" : "Registration received"}</h2>
+        <p>Registration <strong>{done.regId}</strong>.</p>
+        {done.status === "Verified" ? (
+          <p>Your pass is on its way to your email. Check your spam folder if you don't see it in a few minutes.</p>
+        ) : done.status === "Needs review" ? (
+          <p>We couldn't match your payment automatically, so our team will check it by hand, usually within a day. You don't need to pay again.</p>
+        ) : (
+          <p>We're matching your payment now. Your pass usually arrives by email within a few minutes. Please don't pay again.</p>
+        )}
+        {done.teamCode && (
+          <p className="reg-code">
+            Team code: <strong>{done.teamCode}</strong>
+            {done.newTeam && <span className="small muted"> Share this with your teammates. They type it in when they register.</span>}
+          </p>
+        )}
+        <p><a href={nessHref}>Back to NESSX</a></p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="reg">
+      {draft && (
+        <div className="reg-draft" role="note">
+          <strong>Draft page.</strong> This form isn't connected yet, so it can't take registrations.
+          {googleForm && <> To register now, use the <a href={googleForm} target="_blank" rel="noopener noreferrer">registration form</a>.</>}
+        </div>
+      )}
+      {!live.open && <div className="reg-draft" role="note"><strong>Registration is closed.</strong></div>}
+
+      <form className="form reg-form" onSubmit={submit} noValidate>
+        <fieldset>
+          <legend><span className="reg-step">1</span> Choose your pass</legend>
+          <div className="reg-passes">
+            {([
+              ["solo", "Solo pass", `${live.prices.solo} Tk`, "All solo segments in your category"],
+              ["team", "Team pass", `${live.prices.team} Tk per person`, "Solo and team segments. Up to 3 per team, each registers"],
+              ["online", "Online only", "Free", "Online submission segments"],
+            ] as const).map(([val, name, cost, note]) => (
+              <label key={val} className="reg-pass" data-on={pass === val}>
+                <input type="radio" name="pass" value={val} checked={pass === val} onChange={() => setPass(val)} />
+                <span className="reg-pass-name">{name}</span>
+                <span className="reg-pass-price">{cost}</span>
+                <span className="small muted">{note}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend><span className="reg-step">2</span> Your details</legend>
+          <div className="reg-grid">
+            <div><label htmlFor="name">Full name</label><input id="name" name="name" autoComplete="name" required /></div>
+            <div><label htmlFor="phone">Mobile number</label><input id="phone" name="phone" inputMode="tel" autoComplete="tel" placeholder="01712345678" required /></div>
+            <div><label htmlFor="email">Email (your pass is sent here)</label><input id="email" name="email" type="email" autoComplete="email" required /></div>
+            <div><label htmlFor="email2">Email again</label><input id="email2" name="email2" type="email" autoComplete="off" required /></div>
+            <div><label htmlFor="institution">School or college</label><input id="institution" name="institution" autoComplete="organization" required /></div>
+            <div><label htmlFor="className">Class</label><input id="className" name="className" placeholder="e.g. 9, HSC-27, A Level" /></div>
+            <div className="reg-wide">
+              <label htmlFor="category">Category</label>
+              <select id="category" value={category} onChange={(e) => setCategory(e.target.value)} required>
+                <option value="">Choose your category</option>
+                {categories.map((c) => <option key={c.code} value={c.code}>{c.name} ({c.code}): {c.who}</option>)}
+              </select>
+            </div>
+            {needsParent && (
+              <>
+                <div><label htmlFor="parentName">Parent's name</label><input id="parentName" name="parentName" required /></div>
+                <div><label htmlFor="parentPhone">Parent's mobile number</label><input id="parentPhone" name="parentPhone" inputMode="tel" required /></div>
+              </>
+            )}
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend><span className="reg-step">3</span> Segments</legend>
+          {!category ? (
+            <p className="muted">Choose your category first to see the segments you can enter.</p>
+          ) : (
+            <div className="reg-segs">
+              {options.map((s) => (
+                <label key={s.name} className="reg-seg">
+                  <input type="checkbox" checked={chosen.includes(s.name)} onChange={() => toggle(s.name)} />
+                  <span>{s.name}</span>
+                  {s.team && <span className="tag">Team</span>}
+                  {s.online && <span className="tag tag-up">Online</span>}
+                </label>
+              ))}
+            </div>
+          )}
+          <p className="small muted" style={{ marginTop: "var(--s3)" }}>The UNOOSA special committee has its own registration form. Full rules for each segment are on the <a href={nessHref}>NESSX page</a>.</p>
+        </fieldset>
+
+        {pass === "team" && (
+          <fieldset>
+            <legend><span className="reg-step">4</span> Your team</legend>
+            <div className="reg-grid">
+              <div className="reg-wide">
+                <label htmlFor="teamCode">Team code (leave blank if you are the first in your team)</label>
+                <input id="teamCode" name="teamCode" maxLength={6} placeholder="e.g. K7Q2MD" style={{ textTransform: "uppercase" }} />
+                <p className="small muted" style={{ marginTop: "var(--s2)" }}>The first teammate gets a code after registering. The other two type it here.</p>
+              </div>
+            </div>
+          </fieldset>
+        )}
+
+        {pass !== "online" && (
+          <fieldset>
+            <legend><span className="reg-step">{pass === "team" ? 5 : 4}</span> Pay, then enter your TrxID</legend>
+            <div className="reg-pay surface">
+              <p className="reg-pay-amount">Send <strong>{price} Tk</strong> to <strong>{payNumber || "[club number]"}</strong> ({wallet})</p>
+              <ol className="small">
+                <li>Open your {wallet} app (or dial {wallet === "Nagad" ? "*167#" : "*247#"}) and choose <strong>Send Money</strong>.</li>
+                <li>Enter the number above and exactly {price} Tk.</li>
+                <li>You'll get an SMS with a <strong>TrxID</strong>, like DK481HDVPG. Type it below.</li>
+              </ol>
+              <p className="small muted">No screenshots needed. One teammate can pay for the whole team ({live.prices.team * 2} Tk for two, {live.prices.team * 3} Tk for three): everyone then enters the same TrxID and team code.</p>
+            </div>
+            <div className="reg-grid">
+              <div>
+                <label htmlFor="wallet">Paid with</label>
+                <select id="wallet" value={wallet} onChange={(e) => setWallet(e.target.value)}>
+                  <option value="bKash">bKash</option>
+                  {live.nagad && <option value="Nagad">Nagad</option>}
+                </select>
+              </div>
+              <div><label htmlFor="trxId">TrxID</label><input id="trxId" name="trxId" autoComplete="off" placeholder="DK481HDVPG" style={{ textTransform: "uppercase" }} required /></div>
+              <div className="reg-wide"><label htmlFor="sender">Number you paid from</label><input id="sender" name="sender" inputMode="tel" placeholder="01712345678" required /></div>
+            </div>
+          </fieldset>
+        )}
+
+        <div className="reg-consent">
+          <label className="reg-seg">
+            <input type="checkbox" name="consent" />
+            <span>The club may use these details to run NESSX and contact me about it. (<a href={privacyHref}>Privacy</a>)</span>
+          </label>
+        </div>
+
+        <div ref={errorBox} tabIndex={-1} aria-live="assertive" className={errors.length ? "reg-errors" : ""}>
+          {errors.length > 0 && (
+            <>
+              <p><strong>Please fix {errors.length === 1 ? "this" : "these"}:</strong></p>
+              <ul>{errors.map((x) => <li key={x}>{x}</li>)}</ul>
+            </>
+          )}
+        </div>
+
+        <div className="actions">
+          <button className="btn" type="submit" disabled={busy || !live.open}>{busy ? "Sending..." : pass === "online" ? "Register" : "Register and confirm payment"}</button>
+        </div>
+      </form>
+
+      <StatusCheck endpoint={endpoint} />
+    </div>
+  );
+}
+
+function StatusCheck({ endpoint }: { endpoint: string | null }) {
+  const [msg, setMsg] = useState("");
+  const [busy, setBusy] = useState(false);
+  async function check(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const f = new FormData(e.currentTarget);
+    const resend = f.get("resend") === "on";
+    if (!endpoint) { setMsg("This page is a draft, so there is nothing to check yet."); return; }
+    setBusy(true);
+    try {
+      const d = await call(endpoint, { action: "status", phone: normPhone(String(f.get("sphone") || "")), trxId: normTrx(String(f.get("strx") || "")), email: String(f.get("semail") || ""), resend });
+      if (!d.ok) setMsg(d.error || "Not found.");
+      else if (d.status === "Verified") setMsg(`Verified. Participant ID ${d.participantId}.${d.resent ? " We've emailed your pass again." : ""}`);
+      else if (d.status === "Needs review") setMsg("Our team is checking your payment by hand. You don't need to pay again.");
+      else setMsg("Waiting for your payment to be matched. This usually takes a few minutes after paying.");
+    } catch {
+      setMsg("We couldn't reach the registration system. Try again in a minute.");
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <section className="reg-status" aria-labelledby="status-h">
+      <h2 id="status-h">Check my registration</h2>
+      <form className="form" onSubmit={(e) => check(e)}>
+        <div className="reg-grid">
+          <div><label htmlFor="sphone">Mobile number</label><input id="sphone" name="sphone" inputMode="tel" /></div>
+          <div><label htmlFor="strx">TrxID (or leave blank and use email)</label><input id="strx" name="strx" style={{ textTransform: "uppercase" }} /></div>
+          <div className="reg-wide"><label htmlFor="semail">Email (for free online registrations)</label><input id="semail" name="semail" type="email" /></div>
+        </div>
+        <label className="reg-seg"><input type="checkbox" name="resend" /><span>Email my pass again if I'm verified</span></label>
+        <div className="actions">
+          <button className="btn btn-secondary" type="submit" disabled={busy}>Check status</button>
+        </div>
+        <p aria-live="polite" className="reg-status-msg">{msg}</p>
+      </form>
+    </section>
+  );
+}

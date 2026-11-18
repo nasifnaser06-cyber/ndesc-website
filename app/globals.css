@@ -292,6 +292,36 @@ details.segment > summary::after { position: absolute; right: 0.25rem; top: 0.1r
 .pass, .organizer { padding: var(--s5); display: flex; flex-direction: column; gap: var(--s2); }
 .pass-price { font-family: var(--font-head); font-size: 1.75rem; font-weight: 600; color: var(--sprout); line-height: 1.2; }
 
+/* NESSX Register page */
+.reg { display: flex; flex-direction: column; gap: var(--s8); max-width: 52rem; }
+.reg-draft { border: 1.5px solid #f2c27b; border-radius: 12px; padding: var(--s4) var(--s5); color: var(--starlight); background: rgba(242, 194, 123, 0.08); }
+.reg-form fieldset { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--s4); }
+.reg-form legend { font-family: var(--font-head); font-size: 1.375rem; font-weight: 600; margin-bottom: var(--s4); display: flex; align-items: center; gap: var(--s3); }
+.reg-step { display: inline-grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--sprout); color: var(--night); font-size: 1rem; font-family: var(--font-body); font-weight: 700; flex: none; }
+.reg-passes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr)); gap: var(--s4); }
+.form .reg-pass { position: relative; display: flex; margin: 0; flex-direction: column; gap: var(--s1); padding: var(--s4) var(--s5); border: 1.5px solid var(--edge); border-radius: 14px; background: var(--deep); cursor: pointer; }
+.reg-pass[data-on="true"] { border-color: var(--sprout); box-shadow: inset 0 0 0 1px var(--sprout); }
+.reg-pass input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+.reg-pass:has(input:focus-visible) { outline: 3px solid var(--sprout); outline-offset: 3px; }
+.reg-pass-name { font-weight: 700; font-size: 1.0625rem; }
+.reg-pass-price { font-family: var(--font-head); font-size: 1.375rem; color: var(--sprout); }
+.reg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr)); gap: var(--s4) var(--s5); }
+.reg-wide { grid-column: 1 / -1; }
+.reg-segs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(17rem, 100%), 1fr)); gap: var(--s2) var(--s5); }
+.form .reg-seg { display: flex; align-items: center; gap: var(--s3); min-height: 44px; margin: 0; font-size: 1rem; cursor: pointer; }
+.form .reg-seg input { width: 1.25rem; height: 1.25rem; min-height: 0; flex: none; accent-color: var(--sprout); padding: 0; }
+.reg-seg .tag { font-size: 0.75rem; }
+.reg-pay { padding: var(--s5); display: flex; flex-direction: column; gap: var(--s3); }
+.reg-pay ol { margin: 0; padding-left: 1.25rem; display: grid; gap: var(--s2); }
+.reg-pay-amount { font-size: 1.125rem; }
+.reg-errors { border: 1.5px solid #ff8f7a; border-radius: 12px; padding: var(--s4) var(--s5); background: rgba(255, 117, 86, 0.08); }
+.reg-errors ul { margin: var(--s2) 0 0; padding-left: 1.25rem; }
+.reg-done { padding: var(--s7); display: flex; flex-direction: column; gap: var(--s3); max-width: 44rem; }
+.reg-code strong { font-family: ui-monospace, monospace; font-size: 1.5rem; letter-spacing: 0.1em; color: var(--sprout); }
+.reg-status { border-top: 1px solid var(--line); padding-top: var(--s7); }
+.reg-status h2 { margin-bottom: var(--s4); font-size: 1.5rem; }
+.reg-status-msg { min-height: 1.5em; color: var(--sprout); }
+
 /* Lists of steps and programme groups */
 .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr)); gap: var(--s5); padding-left: 1.2rem; }
 .steps li::marker { font-family: var(--font-head); font-weight: 600; color: var(--sprout); }
