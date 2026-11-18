@@ -131,6 +131,10 @@ main:focus { outline: none; }
 }
 
 /* Footer */
+.logo-mark { display: block; flex: none; border-radius: 50%; }
+.footer-marks { display: flex; align-items: center; gap: var(--s4); margin-bottom: var(--s2); }
+.crest-tile { display: inline-flex; align-items: center; justify-content: center; background: #F6F3EA; border-radius: 12px; padding: 6px 8px; }
+.crest-tile img { display: block; height: 52px; width: auto; }
 .site-footer { margin-top: var(--s9); border-top: 1px solid var(--line); padding: var(--s7) 0 var(--s6); }
 .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: var(--s6); }
 .footer-grid ul { list-style: none; padding: 0; margin-top: var(--s2); display: grid; gap: var(--s1); }
