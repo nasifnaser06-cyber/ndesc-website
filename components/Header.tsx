@@ -44,10 +44,34 @@ export default function Header({ lang }: { lang: Locale }) {
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
+  // Slide the header away while scrolling down, bring it back on any scroll up.
+  const header = useRef<HTMLElement>(null);
+  const [hidden, setHidden] = useState(false);
+  useEffect(() => {
+    let lastY = window.scrollY;
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const y = Math.max(0, window.scrollY);
+      const h = header.current?.offsetHeight ?? 80;
+      const dy = y - lastY;
+      if (y <= h) setHidden(false);
+      else if (dy > 6) setHidden(true);
+      else if (dy < -6) setHidden(false);
+      if (Math.abs(dy) > 6 || y <= h) lastY = y;
+    };
+    const onScroll = () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  useEffect(() => setHidden(false), [sub]);
+
   const isActive = (to: string) => sub === to || sub.startsWith(`${to}/`);
 
   return (
-    <header className="site-header">
+    <header className="site-header" ref={header} data-hidden={hidden && !open}>
       <div className="wrap header-row">
         <Link href={path(lang)} className="brand">
           <Logo />
