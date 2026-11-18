@@ -35,7 +35,7 @@ export const posts: Post[] = [
         bn: "১০ম ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট হবে নটর ডেম কলেজ, ঢাকায়, ২৮ থেকে ৩০ জানুয়ারি ২০২৭। প্রাথমিক থেকে উচ্চমাধ্যমিক পর্যায়ের শিক্ষার্থীরা পরিবেশ, ভূবিজ্ঞান ও জ্যোতির্বিজ্ঞান বিষয়ে অলিম্পিয়াড, কুইজ, দলীয় ও সৃজনশীল প্রতিযোগিতায় অংশ নিতে পারবে।",
       },
       {
-        en: "Universities, research teams, clubs and companies can take a stall to show their projects. Registration details and fees will be posted on the NESS 2027 page. [Add the registration date]",
+        en: "Registration is open now. A solo pass is 200 BDT, a team pass is 300 BDT per person, and online submission segments are free for everyone. The NESS 2027 page has every segment, the categories and how to register. Universities, research teams, clubs and companies can also take a stall to show their projects.",
         bn: "বিশ্ববিদ্যালয়, গবেষণা দল, ক্লাব ও প্রতিষ্ঠান স্টল নিয়ে তাদের প্রকল্প দেখাতে পারবে। নিবন্ধনের তথ্য ও ফি NESS ২০২৭ পাতায় জানানো হবে। [নিবন্ধনের তারিখ যোগ করুন]",
       },
     ],

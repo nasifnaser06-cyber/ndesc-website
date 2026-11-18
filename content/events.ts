@@ -53,10 +53,14 @@ export const events: ClubEvent[] = [
     title: { en: "National Earth and Space Summit 2027", bn: "ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট ২০২৭" },
     venue: ndc,
     summary: {
-      en: "The 10th summit: three days of olympiads, quizzes, team contests, talks and exhibitions for students from across Bangladesh.",
+      en: "NESSX, the 10th summit: three days of olympiads, quizzes, team contests, exhibitions and talks for students from Nursery to Class 12.",
       bn: "১০ম আসর: সারা দেশের শিক্ষার্থীদের জন্য তিন দিনের অলিম্পিয়াড, কুইজ, দলীয় প্রতিযোগিতা, আলোচনা আর প্রদর্শনী।",
     },
-    todo: { en: "programme and fees", bn: "অনুষ্ঠানসূচি ও ফি" },
+    todo: { en: "day-by-day schedule", bn: "দিনভিত্তিক সময়সূচি" },
+    facts: [
+      { label: { en: "Passes", bn: "Passes" }, value: { en: "Solo 200 BDT, team 300 BDT per person. Online submission segments are free.", bn: "Solo 200 BDT, team 300 BDT per person. Online submission segments are free." } },
+      { label: { en: "Registration", bn: "Registration" }, value: { en: "Open now, online or at registration booths", bn: "Open now, online or at registration booths" } },
+    ],
     poster: ness2027Banner,
   },
   {

@@ -4,19 +4,46 @@ import { meta } from "@/lib/view";
 import { site } from "@/content/site";
 import { ui } from "@/content/ui";
 import { getEvent, ness2027Banner } from "@/content/events";
-import { nessGroups, nessCategories, nessSchedule, nessPast, nessFaq } from "@/content/club";
-import { Banner, FormButton, Stars, T } from "@/components/bits";
+import { nessSchedule, nessPast, nessFaq } from "@/content/club";
+import { nessx, passes, passNote, registerWays, categories, categoryNote, winnersNote, soloSegments, teamSegments, specialSegments, programmes, organizers, type Segment } from "@/content/ness2027";
+import { Banner, ExternalLink, FormButton, Stars, T } from "@/components/bits";
 
 type Props = { params: Promise<{ lang: Locale }> };
 const title = { en: "NESS 2027", bn: "NESS ২০২৭" };
 const description = {
-  en: "National Earth and Space Summit 2027, 28–30 January at Notre Dame College, Dhaka. Olympiads, quizzes, team contests, talks and exhibitions.",
+  en: "NESSX, the 10th National Earth and Space Summit: 28–30 January 2027 at Notre Dame College, Dhaka. Olympiads, quizzes, team contests, exhibitions and talks. Register now.",
   bn: "ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট ২০২৭, ২৮–৩০ জানুয়ারি, নটর ডেম কলেজ, ঢাকা। অলিম্পিয়াড, কুইজ, দলীয় প্রতিযোগিতা, আলোচনা ও প্রদর্শনী।",
 };
 
 export async function generateMetadata({ params }: Props) {
   const { lang } = await params;
   return meta(lang, "/ness", title, description, { src: ness2027Banner.social, alt: ness2027Banner.alt });
+}
+
+function SegmentList({ items, lang }: { items: Segment[]; lang: Locale }) {
+  return (
+    <div className="segments">
+      {items.map((g) => (
+        <details key={g.name} className="segment">
+          <summary>
+            <span className="segment-name">{g.name}</span>
+            <span className="segment-tags">
+              {g.cats.map((c) => <span key={c} className="tag">{c}</span>)}
+              {g.online && <span className="tag tag-up">{lang === "en" ? "Online" : "অনলাইন"}</span>}
+            </span>
+          </summary>
+          {g.desc.map((d) => <p key={d}>{d}</p>)}
+          {g.parts && (
+            <ul className="segment-parts">
+              {g.parts.map((p) => (
+                <li key={p.name}><strong>{p.name}</strong> <span className="small">({p.cats.join(", ")})</span>: {p.desc}</li>
+              ))}
+            </ul>
+          )}
+        </details>
+      ))}
+    </div>
+  );
 }
 
 export default async function Ness({ params }: Props) {
@@ -30,19 +57,19 @@ export default async function Ness({ params }: Props) {
         <Stars />
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>
           <div className="sky-copy">
-            <p className="label"><T lang={lang} text={{ en: "10th National Earth and Space Summit", bn: "১০ম ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট" }} /></p>
-            <h1 id="ness-h1">{tr(title, lang)}</h1>
-            <p>{en ? "Three days of olympiads, quizzes, team contests, talks and exhibitions on ecology, earth science and astronomy." : "পরিবেশ, ভূবিজ্ঞান ও জ্যোতির্বিজ্ঞান নিয়ে তিন দিনের অলিম্পিয়াড, কুইজ, দলীয় প্রতিযোগিতা, আলোচনা ও প্রদর্শনী।"}</p>
+            <p className="label">{nessx.fullName}, 2027</p>
+            <h1 id="ness-h1">{nessx.name}</h1>
+            <p>{nessx.intro}</p>
             <dl className="facts">
               <div><dt>{tr(ui.dates, lang)}</dt><dd>{formatDateRange(ness.start, ness.end, lang, "long")}</dd></div>
               <div><dt>{tr(ui.venue, lang)}</dt><dd>{en ? "Notre Dame College, Motijheel, Dhaka" : "নটর ডেম কলেজ, মতিঝিল, ঢাকা"}</dd></div>
-              <div><dt>{tr(ui.for, lang)}</dt><dd>{en ? "Primary to higher secondary students" : "প্রাথমিক থেকে উচ্চমাধ্যমিক শিক্ষার্থী"}</dd></div>
+              <div><dt>{en ? "Passes" : "পাস"}</dt><dd>{en ? "From 200 BDT" : "২০০ টাকা থেকে"}</dd></div>
             </dl>
             <div className="actions">
-              <FormButton href={site.forms.nessRegister} lang={lang}>{tr(ui.register, lang)}</FormButton>
-              <a className="btn btn-secondary" href="#exhibit">{tr(ui.exhibit, lang)}</a>
+              <FormButton href={site.forms.nessRegister} lang={lang}>{en ? "Register now" : "এখনই নিবন্ধন করুন"}</FormButton>
+              <a className="btn btn-secondary" href="#segments">{en ? "See all segments" : "সব সেগমেন্ট দেখুন"}</a>
             </div>
-            <p className="small">{en ? "The Photosphere and Stellarscapes exhibitions are free to visit without registering." : "ফটোস্ফিয়ার ও স্টেলারস্কেপস প্রদর্শনী দেখতে নিবন্ধন লাগে না।"}</p>
+            <p className="small">{en ? "Online submission segments are free for everyone." : "অনলাইন সাবমিশন সেগমেন্টে অংশ নেওয়া সবার জন্য বিনামূল্যে।"}</p>
           </div>
         </div>
       </section>
@@ -51,29 +78,79 @@ export default async function Ness({ params }: Props) {
         <figure className="banner-figure">
           <Banner lang={lang} {...ness2027Banner} />
         </figure>
-        <section aria-labelledby="programme">
-          <h2 id="programme" style={{ marginBottom: "var(--s6)" }}>{en ? "What happens over three days" : "তিন দিনে যা থাকছে"}</h2>
-          <div className="groups">
-            {nessGroups.map((g) => (
-              <div key={g.title.en}>
-                <h3>{tr(g.title, lang)}</h3>
-                <p className="muted small">{tr(g.items, lang)}</p>
+        <section aria-labelledby="passes-h">
+          <h2 id="passes-h" style={{ marginBottom: "var(--s5)" }}>{en ? "Passes" : "পাস"}</h2>
+          <div className="cards-3">
+            {passes.map((p) => (
+              <div className="surface pass" key={p.name}>
+                <h3>{p.name}</h3>
+                <p className="pass-price">{p.price}</p>
+                <p className="muted small">{p.detail}</p>
               </div>
             ))}
           </div>
+          <p className="small muted" style={{ marginTop: "var(--s3)" }}>{passNote}</p>
+        </section>
+
+        <section id="register" aria-labelledby="reg">
+          <h2 id="reg" style={{ marginBottom: "var(--s5)" }}>{en ? "How to register" : "যেভাবে নিবন্ধন করবেন"}</h2>
+          <ol className="steps">
+            {registerWays.map((w) => (
+              <li key={w.who}><p><strong>{w.who}</strong></p><p className="muted small">{w.how}</p></li>
+            ))}
+          </ol>
+          <div className="actions" style={{ marginTop: "var(--s5)" }}>
+            <FormButton href={site.forms.nessRegister} lang={lang}>{en ? "Open the registration form" : "নিবন্ধন ফর্ম খুলুন"}</FormButton>
+          </div>
+          <p className="small muted" style={{ marginTop: "var(--s3)" }}><T lang={lang} text={{ en: "[How to pay, and how you get your confirmation]", bn: "[ফি জমার নিয়ম ও নিশ্চিতকরণ]" }} /></p>
         </section>
 
         <section aria-labelledby="cats">
           <h2 id="cats" style={{ marginBottom: "var(--s4)" }}>{en ? "Categories" : "বিভাগ"}</h2>
+          <p className="muted" style={{ marginBottom: "var(--s4)", maxWidth: "70ch" }}>{categoryNote}</p>
           <div className="table-scroll">
             <table>
-              <thead><tr><th scope="col">{en ? "Category" : "বিভাগ"}</th><th scope="col">{en ? "Classes" : "শ্রেণি"}</th></tr></thead>
+              <thead><tr><th scope="col">{en ? "Code" : "কোড"}</th><th scope="col">{en ? "Category" : "বিভাগ"}</th><th scope="col">{en ? "Who" : "কারা"}</th></tr></thead>
               <tbody>
-                {nessCategories.map((c) => (
-                  <tr key={c.name.en}><td>{tr(c.name, lang)}</td><td><T text={c.classes} lang={lang} /></td></tr>
+                {categories.map((c) => (
+                  <tr key={c.code}><td style={{ fontFamily: "var(--font-head)", fontWeight: 600 }}>{c.code}</td><td>{c.name}</td><td>{c.who}</td></tr>
                 ))}
               </tbody>
             </table>
+          </div>
+          <p className="small muted" style={{ marginTop: "var(--s4)", maxWidth: "70ch" }}><strong>{en ? "Winners. " : "বিজয়ী। "}</strong>{winnersNote}</p>
+        </section>
+
+        <section id="segments" aria-labelledby="seg-h">
+          <h2 id="seg-h" style={{ marginBottom: "var(--s3)" }}>{en ? "Segments" : "সেগমেন্ট"}</h2>
+          <p className="muted" style={{ maxWidth: "70ch" }}>
+            {en ? "Open a segment to read what it involves. The letters show which categories can enter. Full rules for each segment come in its own post on " : "প্রতিটি সেগমেন্টের বিস্তারিত দেখতে খুলুন। "}
+            <ExternalLink href={site.social.facebook} lang={lang}>{en ? "the club's Facebook page" : "ফেসবুক পেজ"}</ExternalLink>.
+          </p>
+          <div className="segment-groups">
+            <div>
+              <h3>{en ? "Solo" : "একক"}</h3>
+              <SegmentList items={soloSegments} lang={lang} />
+            </div>
+            <div>
+              <h3>{en ? "Team (up to 3 members)" : "দলীয় (সর্বোচ্চ ৩ জন)"}</h3>
+              <SegmentList items={teamSegments} lang={lang} />
+              <h3 style={{ marginTop: "var(--s6)" }}>{en ? "Special" : "বিশেষ"}</h3>
+              <SegmentList items={specialSegments} lang={lang} />
+            </div>
+          </div>
+        </section>
+
+        <section aria-labelledby="prog-h">
+          <h2 id="prog-h" style={{ marginBottom: "var(--s3)" }}>{en ? "Exhibitions and programmes" : "প্রদর্শনী ও অনুষ্ঠান"}</h2>
+          <p className="muted" style={{ marginBottom: "var(--s5)" }}>{en ? "Open to everyone with a solo or team pass." : "একক বা দলীয় পাস থাকলেই সবার জন্য খোলা।"}</p>
+          <div className="groups">
+            {programmes.map((g) => (
+              <div key={g.name}>
+                <h3>{g.name}</h3>
+                <p className="muted small">{g.desc}</p>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -86,19 +163,6 @@ export default async function Ness({ params }: Props) {
                 <p className="muted small"><T text={d.plan} lang={lang} /></p>
               </div>
             ))}
-          </div>
-        </section>
-
-        <section id="register" aria-labelledby="reg">
-          <h2 id="reg" style={{ marginBottom: "var(--s5)" }}>{en ? "How to register" : "যেভাবে নিবন্ধন করবেন"}</h2>
-          <ol className="steps">
-            <li><p><strong>{en ? "Pick your events" : "ইভেন্ট বেছে নিন"}</strong></p><p className="muted small"><T lang={lang} text={{ en: "Solo pass, team pass or both. [Pass prices]", bn: "একক পাস, দলীয় পাস বা দুটোই। [পাসের দাম]" }} /></p></li>
-            <li><p><strong>{en ? "Register online" : "অনলাইনে নিবন্ধন"}</strong></p><p className="muted small">{en ? "Use the form below. Your school's campus ambassador can help." : "নিচের ফর্ম ব্যবহার করুন। আপনার প্রতিষ্ঠানের ক্যাম্পাস অ্যাম্বাসেডর সাহায্য করতে পারবেন।"}</p></li>
-            <li><p><strong>{en ? "Pay" : "ফি জমা দিন"}</strong></p><p className="muted small"><T lang={lang} text={{ en: "[Payment details]", bn: "[ফি জমার নিয়ম]" }} /></p></li>
-            <li><p><strong>{en ? "Get your confirmation" : "নিশ্চিতকরণ পান"}</strong></p><p className="muted small"><T lang={lang} text={{ en: "[By email or SMS, with your participant ID]", bn: "[ইমেইল বা এসএমএসে, অংশগ্রহণকারী আইডিসহ]" }} /></p></li>
-          </ol>
-          <div className="actions" style={{ marginTop: "var(--s5)" }}>
-            <FormButton href={site.forms.nessRegister} lang={lang}>{en ? "Register for NESS 2027" : "NESS ২০২৭-এ নিবন্ধন করুন"}</FormButton>
           </div>
         </section>
 
@@ -117,6 +181,23 @@ export default async function Ness({ params }: Props) {
             <FormButton href={site.forms.nessExhibit} lang={lang}>{en ? "Apply to exhibit" : "প্রদর্শনের আবেদন"}</FormButton>
             <Link className="btn btn-secondary" href={path(lang, "/contact")}>{en ? "Ask the NESS team" : "NESS টিমকে জিজ্ঞেস করুন"}</Link>
           </div>
+        </section>
+
+        <section id="contacts" aria-labelledby="contacts-h">
+          <h2 id="contacts-h" style={{ marginBottom: "var(--s5)" }}>{en ? "Questions? Contact the organizers" : "প্রশ্ন? আয়োজকদের সঙ্গে যোগাযোগ করুন"}</h2>
+          <div className="cards-3">
+            {organizers.map((o) => (
+              <div className="surface organizer" key={o.name}>
+                <h3>{o.name}</h3>
+                <p className="muted small">{o.role}</p>
+                <p><a href={`tel:${o.phone.replace(/[^+\d]/g, "")}`}>{o.phone}</a></p>
+                <p><ExternalLink href={o.facebook} lang={lang}>Facebook</ExternalLink></p>
+              </div>
+            ))}
+          </div>
+          <p className="small muted" style={{ marginTop: "var(--s4)" }}>
+            {en ? "Or email the club at " : "অথবা ক্লাবকে ইমেইল করুন "}<a href={`mailto:${site.email}`}>{site.email}</a>.
+          </p>
         </section>
 
         <section aria-labelledby="past">

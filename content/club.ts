@@ -12,22 +12,6 @@ export const timeline: { year: string; text: L }[] = [
   { year: "2027", text: { en: "10th summit, 28–30 January.", bn: "১০ম সামিট, ২৮–৩০ জানুয়ারি।" } },
 ];
 
-export const nessGroups: { title: L; items: L }[] = [
-  { title: { en: "Olympiads", bn: "অলিম্পিয়াড" }, items: { en: "Astronomy, Earth Science, Biology, Climate Science", bn: "জ্যোতির্বিজ্ঞান, ভূবিজ্ঞান, জীববিজ্ঞান, জলবায়ু বিজ্ঞান" } },
-  { title: { en: "Quizzes", bn: "কুইজ" }, items: { en: "Eco and Space Buzz, One Shot One Kill, Astro Movie Quiz", bn: "ইকো অ্যান্ড স্পেস বাজ, ওয়ান শট ওয়ান কিল, অ্যাস্ট্রো মুভি কুইজ" } },
-  { title: { en: "Team contests", bn: "দলীয় প্রতিযোগিতা" }, items: { en: "Astral Hunt, Astro and Eco Ideation, presentations, wall magazine, project display", bn: "অ্যাস্ট্রাল হান্ট, অ্যাস্ট্রো অ্যান্ড ইকো আইডিয়েশন, প্রেজেন্টেশন, দেয়াল পত্রিকা, প্রকল্প প্রদর্শনী" } },
-  { title: { en: "Creative", bn: "সৃজনশীল" }, items: { en: "Sci-fi story writing, star mapping, scrapbook, children's craft", bn: "সায়েন্স ফিকশন গল্প, তারার মানচিত্র, স্ক্র্যাপবুক, শিশুদের হাতের কাজ" } },
-  { title: { en: "Talks and workshops", bn: "আলোচনা ও কর্মশালা" }, items: { en: "Astro Talks, seminars on Earth and astronomy", bn: "অ্যাস্ট্রো টক, পৃথিবী ও জ্যোতির্বিজ্ঞান বিষয়ে সেমিনার" } },
-  { title: { en: "Exhibitions, free to visit", bn: "প্রদর্শনী, বিনা নিবন্ধনে" }, items: { en: "Photosphere (astrophotography) and Stellarscapes (student projects)", bn: "ফটোস্ফিয়ার (অ্যাস্ট্রোফটোগ্রাফি) ও স্টেলারস্কেপস (শিক্ষার্থীদের প্রকল্প)" } },
-];
-
-export const nessCategories: { name: L; classes: L }[] = [
-  { name: { en: "Primary", bn: "প্রাথমিক" }, classes: { en: "[Nursery to class 5]", bn: "[নার্সারি থেকে ৫ম শ্রেণি]" } },
-  { name: { en: "Junior", bn: "জুনিয়র" }, classes: { en: "[Classes 6 to 8]", bn: "[৬ষ্ঠ থেকে ৮ম শ্রেণি]" } },
-  { name: { en: "Secondary", bn: "মাধ্যমিক" }, classes: { en: "[Classes 9 to 10, O Levels]", bn: "[৯ম থেকে ১০ম শ্রেণি, ও লেভেল]" } },
-  { name: { en: "Higher Secondary", bn: "উচ্চমাধ্যমিক" }, classes: { en: "[Classes 11 to 12, A Levels]", bn: "[একাদশ থেকে দ্বাদশ শ্রেণি, এ লেভেল]" } },
-];
-
 export const nessSchedule: { day: L; plan: L }[] = [
   { day: { en: "Day 1, 28 January", bn: "১ম দিন, ২৮ জানুয়ারি" }, plan: { en: "[Opening, olympiads, exhibitions open]", bn: "[উদ্বোধন, অলিম্পিয়াড, প্রদর্শনী শুরু]" } },
   { day: { en: "Day 2, 29 January", bn: "২য় দিন, ২৯ জানুয়ারি" }, plan: { en: "[Team contests and talks]", bn: "[দলীয় প্রতিযোগিতা ও আলোচনা]" } },
@@ -47,10 +31,11 @@ export const nessPast: { edition: L; year: string; slug?: string; note: L }[] = 
 ];
 
 export const nessFaq: { q: L; a: L }[] = [
-  { q: { en: "Who can take part?", bn: "কারা অংশ নিতে পারবে?" }, a: { en: "Students from primary to higher secondary level, from any school or college in Bangladesh. [Confirm]", bn: "দেশের যেকোনো স্কুল-কলেজের প্রাথমিক থেকে উচ্চমাধ্যমিক পর্যায়ের শিক্ষার্থীরা। [নিশ্চিত করুন]" } },
-  { q: { en: "Do visitors need to register?", bn: "দর্শনার্থীদের কি নিবন্ধন লাগবে?" }, a: { en: "Not for the Photosphere and Stellarscapes exhibitions. [Confirm other areas]", bn: "ফটোস্ফিয়ার ও স্টেলারস্কেপস প্রদর্শনীর জন্য লাগবে না। [অন্যান্য অংশের তথ্য নিশ্চিত করুন]" } },
-  { q: { en: "How do teams work?", bn: "দল কীভাবে গঠন করতে হবে?" }, a: { en: "[Team size, and whether members must be from the same institution]", bn: "[দলের সদস্যসংখ্যা, সবাইকে একই প্রতিষ্ঠানের হতে হবে কি না]" } },
-  { q: { en: "Do participants get certificates?", bn: "অংশগ্রহণকারীরা কি সনদ পাবে?" }, a: { en: "Yes, participants receive certificates. [Confirm how they are handed out]", bn: "হ্যাঁ, অংশগ্রহণকারীরা সনদ পায়। [কীভাবে দেওয়া হবে নিশ্চিত করুন]" } },
+  { q: { en: "Who can take part?", bn: "Who can take part?" }, a: { en: "Students from Nursery to Class 12, including O and A Levels, from Notre Dame College and other institutions. University students can also enter Photosphere 7.0.", bn: "Students from Nursery to Class 12, including O and A Levels, from Notre Dame College and other institutions. University students can also enter Photosphere 7.0." } },
+  { q: { en: "Do visitors need a pass?", bn: "Do visitors need a pass?" }, a: { en: "Yes. The exhibitions and programmes are open with either a solo pass or a team pass.", bn: "Yes. The exhibitions and programmes are open with either a solo pass or a team pass." } },
+  { q: { en: "How do teams work?", bn: "How do teams work?" }, a: { en: "A team has up to 3 members. Each member buys a team pass (300 BDT) and registers separately. [Whether members must be from the same institution]", bn: "A team has up to 3 members. Each member buys a team pass (300 BDT) and registers separately. [Whether members must be from the same institution]" } },
+  { q: { en: "What do winners get?", bn: "What do winners get?" }, a: { en: "A certificate and a crest. In team segments, every member of a winning team gets their own. [Whether every participant gets a certificate]", bn: "A certificate and a crest. In team segments, every member of a winning team gets their own. [Whether every participant gets a certificate]" } },
+  { q: { en: "Where are the full rules for each segment?", bn: "Where are the full rules for each segment?" }, a: { en: "Each segment gets its own post with full details on the club's Facebook page.", bn: "Each segment gets its own post with full details on the club's Facebook page." } },
 ];
 
 export const partnersPast =
