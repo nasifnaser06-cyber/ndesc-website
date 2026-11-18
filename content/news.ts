@@ -31,8 +31,8 @@ export const posts: Post[] = [
     },
     body: [
       {
-        en: "The next National Earth and Space Summit takes place at Notre Dame College, Dhaka, from 28 to 30 January 2027. Students from primary to higher secondary level can compete in olympiads, quizzes, team contests and creative events on ecology, earth science and astronomy.",
-        bn: "পরবর্তী ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট হবে নটর ডেম কলেজ, ঢাকায়, ২৮ থেকে ৩০ জানুয়ারি ২০২৭। প্রাথমিক থেকে উচ্চমাধ্যমিক পর্যায়ের শিক্ষার্থীরা পরিবেশ, ভূবিজ্ঞান ও জ্যোতির্বিজ্ঞান বিষয়ে অলিম্পিয়াড, কুইজ, দলীয় ও সৃজনশীল প্রতিযোগিতায় অংশ নিতে পারবে।",
+        en: "The 10th National Earth and Space Summit takes place at Notre Dame College, Dhaka, from 28 to 30 January 2027. Students from primary to higher secondary level can compete in olympiads, quizzes, team contests and creative events on ecology, earth science and astronomy.",
+        bn: "১০ম ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট হবে নটর ডেম কলেজ, ঢাকায়, ২৮ থেকে ৩০ জানুয়ারি ২০২৭। প্রাথমিক থেকে উচ্চমাধ্যমিক পর্যায়ের শিক্ষার্থীরা পরিবেশ, ভূবিজ্ঞান ও জ্যোতির্বিজ্ঞান বিষয়ে অলিম্পিয়াড, কুইজ, দলীয় ও সৃজনশীল প্রতিযোগিতায় অংশ নিতে পারবে।",
       },
       {
         en: "Universities, research teams, clubs and companies can take a stall to show their projects. Registration details and fees will be posted on the NESS 2027 page. [Add the registration date]",

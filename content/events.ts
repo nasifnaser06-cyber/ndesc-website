@@ -40,10 +40,10 @@ export const events: ClubEvent[] = [
     title: { en: "National Earth and Space Summit 2027", bn: "ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট ২০২৭" },
     venue: ndc,
     summary: {
-      en: "Three days of olympiads, quizzes, team contests, talks and exhibitions for students from across Bangladesh.",
-      bn: "সারা দেশের শিক্ষার্থীদের জন্য তিন দিনের অলিম্পিয়াড, কুইজ, দলীয় প্রতিযোগিতা, আলোচনা আর প্রদর্শনী।",
+      en: "The 10th summit: three days of olympiads, quizzes, team contests, talks and exhibitions for students from across Bangladesh.",
+      bn: "১০ম আসর: সারা দেশের শিক্ষার্থীদের জন্য তিন দিনের অলিম্পিয়াড, কুইজ, দলীয় প্রতিযোগিতা, আলোচনা আর প্রদর্শনী।",
     },
-    todo: { en: "edition number, programme and fees", bn: "আসর নম্বর, অনুষ্ঠানসূচি ও ফি" },
+    todo: { en: "programme and fees", bn: "অনুষ্ঠানসূচি ও ফি" },
   },
   {
     slug: "cosmoterrium-2026",

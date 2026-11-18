@@ -61,7 +61,7 @@ export default async function Home({ params }: Props) {
             <dl className="facts">
               <div><dt>{tr(ui.dates, lang)}</dt><dd>{formatDateRange(ness.start, ness.end, lang, "long")}</dd></div>
               <div><dt>{tr(ui.venue, lang)}</dt><dd>{en ? "Notre Dame College, Motijheel" : "নটর ডেম কলেজ, মতিঝিল"}</dd></div>
-              <div><dt>{tr(ui.edition, lang)}</dt><dd><T lang={lang} text={{ en: "[9th? confirm]", bn: "[৯ম? নিশ্চিত করুন]" }} /></dd></div>
+              <div><dt>{tr(ui.edition, lang)}</dt><dd><T lang={lang} text={{ en: "10th", bn: "১০ম" }} /></dd></div>
             </dl>
           </div>
           <div className="actions">
