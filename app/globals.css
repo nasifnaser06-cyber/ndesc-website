@@ -148,6 +148,11 @@ main:focus { outline: none; }
 .footer-grid ul { list-style: none; padding: 0; margin-top: var(--s2); display: grid; gap: var(--s1); }
 .footer-grid a { color: var(--starlight); text-decoration: none; overflow-wrap: anywhere; }
 .footer-grid a:hover { color: var(--sprout); text-decoration: underline; }
+.footer-email { overflow-wrap: normal; }
+/* Footer columns: one on phones, two on tablets, four on desktop with a wider last column for the email */
+@media (min-width: 600px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1000px) { .footer-grid { grid-template-columns: 1fr 1fr 1fr 1.45fr; } }
+.footer-email span { white-space: nowrap; }
 .footer-about { display: grid; gap: var(--s2); align-content: start; }
 .footer-name { font-family: var(--font-head); font-weight: 600; }
 .footer-base { margin-top: var(--s6); display: flex; flex-wrap: wrap; gap: var(--s4); justify-content: space-between; }
