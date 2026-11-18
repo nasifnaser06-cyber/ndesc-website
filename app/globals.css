@@ -307,28 +307,52 @@ details p { margin-top: var(--s2); color: var(--haze); }
   .stars { animation: stars-lag linear both; animation-timeline: scroll(root); animation-range: 0 100vh; }
 }
 
-/* 3. Section intros on scroll: one entrance per section, plays once.
-      Hidden only once JavaScript has set html.motion (a failsafe removes it). */
-html.motion main section:not(.sky) > * { opacity: 0; transform: translateY(var(--rise, 10px)); }
-html.motion main section:not(.sky) > :first-child { --rise: 18px; }
+/* 3. Section intros on scroll (Mahmud, 18 Nov 2026: more noticeable, items cascade, replays
+      every time). Sections rise from below when scrolling down and drop from above when
+      scrolling back up (direction set by components/Motion.tsx as a section leaves). */
+:root { --reveal-item: 0.9s; }
+html.motion main section:not(.sky) > * {
+  opacity: 0;
+  transform: translateY(calc(var(--rise, 28px) * var(--dir, 1)));
+}
+html.motion main section[data-from="top"] { --dir: -1; }
+html.motion main section:not(.sky) > :first-child { --rise: 40px; }
 html.motion main section.is-in > * {
   opacity: 1; transform: none;
-  transition: opacity 0.8s var(--ease-reveal), transform 0.7s var(--ease-reveal);
+  transition: opacity 1s var(--ease-reveal), transform 0.9s var(--ease-reveal);
   transition-delay: var(--d, 0ms);
 }
-html.motion main section > :nth-child(2) { --d: 100ms; }
-html.motion main section > :nth-child(3) { --d: 170ms; }
-html.motion main section > :nth-child(4) { --d: 220ms; }
-html.motion main section > :nth-child(n + 5) { --d: 250ms; }
+html.motion main section > :nth-child(2) { --d: 120ms; }
+html.motion main section > :nth-child(3) { --d: 210ms; }
+html.motion main section > :nth-child(4) { --d: 280ms; }
+html.motion main section > :nth-child(n + 5) { --d: 330ms; }
+
+/* Item cascade: the container stays put and its items come in one after another,
+   gaps shrinking (0, 110, 200, 275, 335, 385, then together). */
+html.motion main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps),
+html.motion main section.is-in > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) {
+  opacity: 1; transform: none;
+}
+html.motion main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > * {
+  opacity: 0;
+  transform: translateY(calc(24px * var(--dir, 1)));
+}
+html.motion main section.is-in > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > * {
+  opacity: 1; transform: none;
+  transition: opacity var(--reveal-item) var(--ease-reveal), transform var(--reveal-item) var(--ease-reveal);
+  transition-delay: calc(var(--d, 0ms) + var(--gap, 0ms));
+}
+main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > :nth-child(2) { --gap: 110ms; }
+main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > :nth-child(3) { --gap: 200ms; }
+main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > :nth-child(4) { --gap: 275ms; }
+main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > :nth-child(5) { --gap: 335ms; }
+main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > :nth-child(n + 6) { --gap: 385ms; }
 
 /* Timeline: each year's line draws in order, a real sequence. */
 .timeline li { border-top: 0; position: relative; }
 .timeline li::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--line); transform-origin: left center; }
 html.motion main section .timeline li::before { transform: scaleX(0); }
-html.motion main section.is-in .timeline li::before { transform: none; transition: transform 0.6s var(--ease); transition-delay: calc(250ms + var(--td, 0ms)); }
-.timeline li:nth-child(2) { --td: 80ms; } .timeline li:nth-child(3) { --td: 150ms; }
-.timeline li:nth-child(4) { --td: 210ms; } .timeline li:nth-child(5) { --td: 260ms; }
-.timeline li:nth-child(n + 6) { --td: 300ms; }
+html.motion main section.is-in .timeline li::before { transform: none; transition: transform 0.7s var(--ease); transition-delay: calc(var(--d, 0ms) + var(--gap, 0ms) + 150ms); }
 
 /* 4. Phone menu opens as one piece (menus are used often: no stagger). */
 .js .main-nav[data-open="true"] { animation: rise 0.22s var(--ease) both; --rise: -6px; }
@@ -357,8 +381,10 @@ details[open] > summary::after { transform: rotate(45deg); }
 @media (prefers-reduced-motion: reduce) {
   .page-head > *, .sky-copy > *, .sky-media { animation-name: fade-in; animation-duration: 0.3s; animation-delay: 0ms; }
   .sky::before, .sky-inner, .stars { animation: none; }
-  html.motion main section:not(.sky) > * { transform: none; }
-  html.motion main section.is-in > * { transition: opacity 0.3s ease; transition-delay: 0ms; }
+  html.motion main section:not(.sky) > *,
+  html.motion main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > * { transform: none; }
+  html.motion main section.is-in > *,
+  html.motion main section.is-in > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > * { transition: opacity 0.3s ease; transition-delay: 0ms; }
   html.motion main section .timeline li::before { transform: none; }
   .js .main-nav[data-open="true"] { animation-name: fade-in; }
   details::details-content { transition: none; }
@@ -367,6 +393,6 @@ details[open] > summary::after { transform: rotate(45deg); }
   .btn, .chip { transition: background-color 0.2s ease, color 0.2s ease; }
 }
 @media print {
-  html.motion main section > * { opacity: 1 !important; transform: none !important; }
+  html.motion main section > *, html.motion main section > * > * { opacity: 1 !important; transform: none !important; }
   .sky-inner, .stars { animation: none !important; }
 }
