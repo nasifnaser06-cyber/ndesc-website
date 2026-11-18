@@ -30,7 +30,7 @@ export default async function Ness({ params }: Props) {
         <Stars />
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>
           <div className="sky-copy">
-            <p className="label"><T lang={lang} text={{ en: "[9th] National Earth and Space Summit", bn: "[৯ম] ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট" }} /></p>
+            <p className="label"><T lang={lang} text={{ en: "10th National Earth and Space Summit", bn: "১০ম ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট" }} /></p>
             <h1 id="ness-h1">{tr(title, lang)}</h1>
             <p>{en ? "Three days of olympiads, quizzes, team contests, talks and exhibitions on ecology, earth science and astronomy." : "পরিবেশ, ভূবিজ্ঞান ও জ্যোতির্বিজ্ঞান নিয়ে তিন দিনের অলিম্পিয়াড, কুইজ, দলীয় প্রতিযোগিতা, আলোচনা ও প্রদর্শনী।"}</p>
             <dl className="facts">
