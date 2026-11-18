@@ -54,4 +54,5 @@ export const ui = {
     bn: "শিক্ষার্থীদের সম্মতি ছাড়া তাদের নাম বা ছবি এই সাইটে দেখানো হয় না। কোনো ছবি বা নাম সরাতে চাইলে আমাদের সঙ্গে যোগাযোগ করুন।",
   },
   photoSoon: { en: "Photo coming soon", bn: "ছবি শিগগিরই" },
+  newTab: { en: "(opens in a new tab)", bn: "(নতুন ট্যাবে খুলবে)" },
 } satisfies Record<string, L | Record<string, L>>;

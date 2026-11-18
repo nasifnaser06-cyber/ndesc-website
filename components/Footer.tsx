@@ -2,6 +2,7 @@ import Link from "next/link";
 import { type Locale, tr, path } from "@/lib/i18n";
 import { ui } from "@/content/ui";
 import { site } from "@/content/site";
+import { ExternalLink } from "./bits";
 
 export default function Footer({ lang }: { lang: Locale }) {
   const year = new Date().getFullYear();
@@ -33,8 +34,8 @@ export default function Footer({ lang }: { lang: Locale }) {
         <div>
           <p className="label">{tr(ui.follow, lang)}</p>
           <ul>
-            <li><a href={site.social.facebook} rel="noopener">Facebook</a></li>
-            <li><a href={site.social.instagram} rel="noopener">Instagram</a></li>
+            <li><ExternalLink href={site.social.facebook} lang={lang}>Facebook</ExternalLink></li>
+            <li><ExternalLink href={site.social.instagram} lang={lang}>Instagram</ExternalLink></li>
             {site.email && (
               <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
             )}
