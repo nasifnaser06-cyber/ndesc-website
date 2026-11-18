@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
     private Store store;
     /** True while "Save and check" waits for the sheet. */
     private volatile boolean checking;
-    private TextView status, checkResult;
+    private TextView status, checkResult, scanLine;
     private EditText url, key;
     private Switch onOff;
     private Button allowSms, allowNotes, allowBattery, resend;
@@ -69,15 +69,22 @@ public class MainActivity extends Activity {
         col.addView(status);
         checkResult = text("", 14, false);
         col.addView(checkResult);
+        scanLine = text("", 13, false);
+        col.addView(scanLine);
 
         onOff = new Switch(this);
         onOff.setText("Send payment SMS to the sheet");
         onOff.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         onOff.setPadding(0, dp(12), 0, dp(12));
-        onOff.setOnCheckedChangeListener((v, on) -> { store.setEnabled(on); refresh(); });
+        onOff.setOnCheckedChangeListener((v, on) -> {
+            if (on == store.enabled()) return;
+            store.setEnabled(on);
+            if (on) startWatching(); else ListenerService.stop(this);
+            refresh();
+        });
         col.addView(onOff);
 
-        allowSms = button("Allow reading SMS", v -> requestPermissions(new String[]{Manifest.permission.RECEIVE_SMS}, 1));
+        allowSms = button("Allow reading SMS", v -> requestPermissions(SMS_PERMS, 1));
         col.addView(allowSms);
         allowNotes = button("Allow notifications", v -> {
             if (Build.VERSION.SDK_INT >= 33) requestPermissions(new String[]{Manifest.permission.POST_NOTIFICATIONS}, 2);
@@ -104,6 +111,7 @@ public class MainActivity extends Activity {
         col.addView(button("Save and check", v -> saveAndCheck()));
 
         col.addView(heading("Recent payment SMS"));
+        col.addView(button("Check inbox now", v -> checkInbox()));
         resend = button("Send the failed ones again", v -> resendFailed());
         col.addView(resend);
         list = new LinearLayout(this);
@@ -114,12 +122,33 @@ public class MainActivity extends Activity {
         sv.addView(col);
         setContentView(sv);
 
-        if (!hasSms()) requestPermissions(new String[]{Manifest.permission.RECEIVE_SMS}, 1);
+        if (!hasSms()) requestPermissions(SMS_PERMS, 1);
+        startWatching();
     }
 
     @Override protected void onResume() { super.onResume(); handler.post(tick); }
     @Override protected void onPause() { super.onPause(); handler.removeCallbacks(tick); }
-    @Override public void onRequestPermissionsResult(int c, String[] p, int[] r) { refresh(); }
+    @Override public void onRequestPermissionsResult(int c, String[] p, int[] r) { startWatching(); refresh(); }
+
+    private static final String[] SMS_PERMS = {Manifest.permission.RECEIVE_SMS, Manifest.permission.READ_SMS};
+
+    /** The permanent notification, the minute-by-minute inbox check and the 15-minute backup. */
+    private void startWatching() {
+        if (!store.configured() || !store.enabled() || !hasSms()) return;
+        ListenerService.start(this);
+        ScanWorker.schedule(this);
+    }
+
+    private void checkInbox() {
+        store.setLastCheck("Checking the inbox…");
+        refresh();
+        new Thread(() -> {
+            int n = InboxScanner.scan(this);
+            store.setLastCheck(n == 0 ? "Inbox checked: nothing new (" + when.format(new Date()) + ")"
+                    : "Inbox checked: found " + n + " new payment SMS, sending now (" + when.format(new Date()) + ")");
+            runOnUiThread(this::refresh);
+        }).start();
+    }
 
     private void saveAndCheck() {
         String u = url.getText().toString().trim(), k = key.getText().toString().trim();
@@ -131,7 +160,8 @@ public class MainActivity extends Activity {
             String msg = (r.ok ? "✓ " : "✗ ") + r.message + "  (" + when.format(new Date()) + ")";
             store.setLastCheck(msg);
             checking = false;
-            runOnUiThread(this::refresh);
+            if (r.ok) runOnUiThread(() -> { startWatching(); checkInbox(); });
+            else runOnUiThread(this::refresh);
         }).start();
     }
 
@@ -160,6 +190,8 @@ public class MainActivity extends Activity {
         else if (!sms) setStatus("Off: this app can't read SMS yet", RED);
         else if (!store.enabled()) setStatus("Off: switched off", AMBER);
         else setStatus("On: payment SMS go to the sheet", GREEN);
+        long ls = store.lastScan();
+        scanLine.setText(ls == 0 ? "" : "Inbox last checked " + when.format(new Date(ls)) + ". The app checks every minute.");
         checkResult.setText(checking ? "Checking…" : store.lastCheck());
 
         resend.setVisibility(store.withStatus(Store.FAILED).isEmpty() ? View.GONE : View.VISIBLE);
@@ -182,7 +214,10 @@ public class MainActivity extends Activity {
         }
     }
 
-    private boolean hasSms() { return checkSelfPermission(Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED; }
+    private boolean hasSms() {
+        return checkSelfPermission(Manifest.permission.RECEIVE_SMS) == PackageManager.PERMISSION_GRANTED
+                && checkSelfPermission(Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED;
+    }
 
     private void setStatus(String s, int color) { status.setText(s); status.setTextColor(color); }
 

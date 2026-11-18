@@ -32,8 +32,8 @@ public class SmsReceiver extends BroadcastReceiver {
         for (Map.Entry<String, StringBuilder> e : bySender.entrySet()) {
             String text = e.getValue().toString();
             if (!SmsFilter.isPayment(e.getKey(), text)) continue;
-            long id = store.add(e.getKey(), text);
-            ForwardWorker.enqueue(c, id, e.getKey(), text);
+            long id = store.addIfNew(e.getKey(), text);
+            if (id > 0) ForwardWorker.enqueue(c, id, e.getKey(), text);
         }
     }
 }
