@@ -50,6 +50,7 @@ export function EventRows({ items, labels }: { items: EventRowData[]; labels: La
 export function FilteredEvents({ items, labels, types }: { items: EventRowData[]; labels: Labels; types: { key: string; label: string }[] }) {
   const [when, setWhen] = useState<"all" | "upcoming" | "past">("all");
   const [kind, setKind] = useState<string>("all");
+  const [changed, setChanged] = useState(false); // crossfade only after the first filter change
   const shown = items.filter(
     (e) => (when === "all" || (when === "upcoming") === e.upcoming) && (kind === "all" || e.type === kind),
   );
@@ -63,17 +64,17 @@ export function FilteredEvents({ items, labels, types }: { items: EventRowData[]
       <div className="filters">
         <div className="chips" role="group" aria-label={labels.when}>
           {whenOpts.map((o) => (
-            <button key={o.key} type="button" className="chip" aria-pressed={when === o.key} onClick={() => setWhen(o.key)}>
+            <button key={o.key} type="button" className="chip" aria-pressed={when === o.key} onClick={() => { setWhen(o.key); setChanged(true); }}>
               {o.label}
             </button>
           ))}
         </div>
         <div className="chips" role="group" aria-label={labels.kind}>
-          <button type="button" className="chip" aria-pressed={kind === "all"} onClick={() => setKind("all")}>
+          <button type="button" className="chip" aria-pressed={kind === "all"} onClick={() => { setKind("all"); setChanged(true); }}>
             {labels.allTypes}
           </button>
           {types.map((t) => (
-            <button key={t.key} type="button" className="chip" aria-pressed={kind === t.key} onClick={() => setKind(t.key)}>
+            <button key={t.key} type="button" className="chip" aria-pressed={kind === t.key} onClick={() => { setKind(t.key); setChanged(true); }}>
               {t.label}
             </button>
           ))}
@@ -85,7 +86,7 @@ export function FilteredEvents({ items, labels, types }: { items: EventRowData[]
       {shown.length === 0 ? (
         <p className="empty">{labels.empty}</p>
       ) : (
-        <ul className="event-list">
+        <ul className={`event-list ${changed ? "list-swap" : ""}`} key={`${when}-${kind}`}>
           {shown.map((e) => (
             <Row key={e.slug} e={e} labels={labels} />
           ))}

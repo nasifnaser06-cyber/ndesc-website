@@ -142,7 +142,8 @@ main:focus { outline: none; }
 
 /* Sky hero with ground strip */
 .sky { position: relative; overflow: hidden; background: linear-gradient(180deg, var(--night) 0%, #142847 60%, var(--horizon) 100%); }
-.sky::after { content: ""; display: block; height: 64px; background: var(--ground); border-top: 2px solid var(--sprout); position: relative; }
+.sky::after { content: ""; display: block; height: 64px; background: var(--ground); position: relative; }
+.sky::before { content: ""; position: absolute; left: 0; right: 0; bottom: 64px; height: 2px; background: var(--sprout); transform-origin: left center; z-index: 2; }
 .sky-inner { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: var(--s7); align-items: center; padding-block: var(--s9) var(--s8); }
 .sky-copy { flex: 1 1 30rem; display: flex; flex-direction: column; gap: var(--s5); }
 .sky-copy p:not(.label) { font-size: 1.25rem; max-width: 52ch; }
@@ -263,11 +264,109 @@ details p { margin-top: var(--s2); color: var(--haze); }
 .redirect-note { padding-block: var(--s9); display: grid; gap: var(--s4); }
 .callout { border-top: 2px solid var(--sprout); padding-top: var(--s6); display: flex; flex-wrap: wrap; gap: var(--s5); justify-content: space-between; align-items: center; }
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { transition-duration: 0.01ms !important; animation: none !important; }
-  .btn:active { transform: none; }
-}
 @media print {
   .site-header, .site-footer, .skip-link { display: none; }
   body { background: #fff; color: #000; }
+}
+
+/* ------------------------------------------------------------------
+   Motion (rion-motion-core + rion-motion-web, 18 Nov 2026)
+   Mode: quiet, with Apple-style section intros. Personality: calm
+   (Premium/Corporate mix). One orchestrated moment per page: the page
+   head or sky hero arriving, with the horizon line drawing itself.
+   Uneven, shrinking gaps (Part 9). Reduced motion keeps short fades.
+   ------------------------------------------------------------------ */
+:root {
+  --ease-reveal: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-ui: cubic-bezier(0.4, 0, 0.6, 1);
+}
+@keyframes rise { from { opacity: 0; transform: translateY(var(--rise, 12px)); } }
+@keyframes fade-in { from { opacity: 0; } }
+@keyframes draw-x { from { transform: scaleX(0); } }
+
+/* 1. Page arrival: lead travels furthest, support less, labels only fade.
+      Gaps shrink: 0, 90, 160, 220, 270ms. Replays on every page change (template.tsx). */
+.page-head > *, .sky-copy > * { animation: rise 0.7s var(--ease) both; animation-delay: var(--d, 0ms); }
+.page-head > :nth-child(2), .sky-copy > :nth-child(2) { --d: 90ms; }
+.page-head > :nth-child(3), .sky-copy > :nth-child(3) { --d: 160ms; }
+.page-head > :nth-child(4), .sky-copy > :nth-child(4) { --d: 220ms; }
+.page-head > :nth-child(n + 5), .sky-copy > :nth-child(n + 5) { --d: 270ms; }
+.page-head > h1, .sky-copy > h1 { --rise: 18px; }
+.page-head > .label, .sky-copy > .label, .page-head > .crumbs { animation-name: fade-in; animation-duration: 0.5s; }
+.sky-media { animation: fade-in 0.9s var(--ease) 0.2s both; }
+.sky::before { animation: draw-x 1.1s var(--ease) 0.25s both; }
+
+/* 2. Scroll-linked sky: hero content drifts up and dims as it leaves; stars lag behind for depth. */
+/* Wide screens only: on phones the hero is taller than the screen, so dimming it would hide the photo. */
+@supports (animation-timeline: scroll()) {
+  @keyframes sky-out { to { opacity: 0.25; transform: translateY(-40px); } }
+  @keyframes stars-lag { to { transform: translateY(70px); } }
+  @media (min-width: 900px) {
+    .sky-inner { animation: sky-out linear both; animation-timeline: scroll(root); animation-range: 0 75vh; }
+  }
+  .stars { animation: stars-lag linear both; animation-timeline: scroll(root); animation-range: 0 100vh; }
+}
+
+/* 3. Section intros on scroll: one entrance per section, plays once.
+      Hidden only once JavaScript has set html.motion (a failsafe removes it). */
+html.motion main section:not(.sky) > * { opacity: 0; transform: translateY(var(--rise, 10px)); }
+html.motion main section:not(.sky) > :first-child { --rise: 18px; }
+html.motion main section.is-in > * {
+  opacity: 1; transform: none;
+  transition: opacity 0.8s var(--ease-reveal), transform 0.7s var(--ease-reveal);
+  transition-delay: var(--d, 0ms);
+}
+html.motion main section > :nth-child(2) { --d: 100ms; }
+html.motion main section > :nth-child(3) { --d: 170ms; }
+html.motion main section > :nth-child(4) { --d: 220ms; }
+html.motion main section > :nth-child(n + 5) { --d: 250ms; }
+
+/* Timeline: each year's line draws in order, a real sequence. */
+.timeline li { border-top: 0; position: relative; }
+.timeline li::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--line); transform-origin: left center; }
+html.motion main section .timeline li::before { transform: scaleX(0); }
+html.motion main section.is-in .timeline li::before { transform: none; transition: transform 0.6s var(--ease); transition-delay: calc(250ms + var(--td, 0ms)); }
+.timeline li:nth-child(2) { --td: 80ms; } .timeline li:nth-child(3) { --td: 150ms; }
+.timeline li:nth-child(4) { --td: 210ms; } .timeline li:nth-child(5) { --td: 260ms; }
+.timeline li:nth-child(n + 6) { --td: 300ms; }
+
+/* 4. Phone menu opens as one piece (menus are used often: no stagger). */
+.js .main-nav[data-open="true"] { animation: rise 0.22s var(--ease) both; --rise: -6px; }
+
+/* 5. Questions open smoothly where the browser can animate to height: auto. */
+summary { list-style: none; display: flex; justify-content: space-between; gap: var(--s4); align-items: center; }
+summary::-webkit-details-marker { display: none; }
+summary::after { content: "+"; font-size: 1.5rem; line-height: 1; color: var(--sprout); transition: transform 0.2s var(--ease); }
+details[open] > summary::after { transform: rotate(45deg); }
+@supports (interpolate-size: allow-keywords) {
+  :root { interpolate-size: allow-keywords; }
+  details::details-content { height: 0; overflow: clip; transition: height 0.28s var(--ease), content-visibility 0.28s allow-discrete; }
+  details[open]::details-content { height: auto; }
+}
+
+/* 6. Event filter: the list crossfades when the filter changes (not on first load). */
+.list-swap { animation: fade-in 0.18s var(--ease-ui) both; }
+
+/* Hover only on real pointers */
+@media (hover: hover) and (pointer: fine) {
+  .card-link h3 { transition: color 0.2s var(--ease-ui); }
+  .event-main h3 a, .footer-grid a, .main-nav a { transition: color 0.2s var(--ease-ui); }
+}
+
+/* Reduced motion: fewer and gentler, not zero. Movement goes, short fades stay. */
+@media (prefers-reduced-motion: reduce) {
+  .page-head > *, .sky-copy > *, .sky-media { animation-name: fade-in; animation-duration: 0.3s; animation-delay: 0ms; }
+  .sky::before, .sky-inner, .stars { animation: none; }
+  html.motion main section:not(.sky) > * { transform: none; }
+  html.motion main section.is-in > * { transition: opacity 0.3s ease; transition-delay: 0ms; }
+  html.motion main section .timeline li::before { transform: none; }
+  .js .main-nav[data-open="true"] { animation-name: fade-in; }
+  details::details-content { transition: none; }
+  summary::after { transition: none; }
+  .btn:active { transform: none; }
+  .btn, .chip { transition: background-color 0.2s ease, color 0.2s ease; }
+}
+@media print {
+  html.motion main section > * { opacity: 1 !important; transform: none !important; }
+  .sky-inner, .stars { animation: none !important; }
 }

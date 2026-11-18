@@ -10,11 +10,18 @@ import "@fontsource/noto-serif-bengali/600.css";
 import "../globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Motion from "@/components/Motion";
 import { isLocale, locales, tr } from "@/lib/i18n";
 import { site } from "@/content/site";
 import { ui } from "@/content/ui";
 
 export const dynamicParams = false;
+
+// Runs before the first paint. `js` lets the phone menu hide; `motion` lets sections wait for
+// their scroll intro. If the site's script has not started within 2.5s, show everything.
+const motionBoot =
+  "(function(){var d=document.documentElement;d.classList.add('js','motion');" +
+  "setTimeout(function(){if(!window.__ndescMotion)d.classList.remove('motion')},2500)})()";
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -41,7 +48,7 @@ export default async function LangLayout({ children, params }: { children: React
     <html lang={lang === "bn" ? "bn" : "en"} data-lang={lang}>
       <head>
         {/* Lets the CSS hide the phone menu only when the menu button can work. */}
-        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+        <script dangerouslySetInnerHTML={{ __html: motionBoot }} />
       </head>
       <body>
         <a className="skip-link" href="#main">
@@ -52,6 +59,7 @@ export default async function LangLayout({ children, params }: { children: React
           {children}
         </main>
         <Footer lang={lang} />
+        <Motion />
       </body>
     </html>
   );
