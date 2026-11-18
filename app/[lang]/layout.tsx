@@ -4,14 +4,11 @@ import "@fontsource/bitter/500.css";
 import "@fontsource/bitter/600.css";
 import "@fontsource/atkinson-hyperlegible/400.css";
 import "@fontsource/atkinson-hyperlegible/700.css";
-import "@fontsource/noto-sans-bengali/400.css";
-import "@fontsource/noto-sans-bengali/600.css";
-import "@fontsource/noto-serif-bengali/600.css";
 import "../globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Motion from "@/components/Motion";
-import { isLocale, locales, tr } from "@/lib/i18n";
+import { isLocale, publishedLocales, tr } from "@/lib/i18n";
 import { site } from "@/content/site";
 import { ui } from "@/content/ui";
 
@@ -24,7 +21,7 @@ const motionBoot =
   "setTimeout(function(){if(!window.__ndescMotion)d.classList.remove('motion')},2500)})()";
 
 export function generateStaticParams() {
-  return locales.map((lang) => ({ lang }));
+  return publishedLocales.map((lang) => ({ lang }));
 }
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_ORIGIN ?? "http://localhost:3000";

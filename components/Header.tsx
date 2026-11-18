@@ -25,20 +25,6 @@ function useSubPath(lang: Locale) {
   return withoutLang.replace(/\/+$/, "") || "/";
 }
 
-function LangSwitch({ lang }: { lang: Locale }) {
-  const sub = useSubPath(lang);
-  return (
-    <div className="lang" role="group" aria-label={tr(ui.language, lang)}>
-      <Link href={path("en", sub)} hrefLang="en" lang="en" aria-current={lang === "en" ? "true" : undefined} className={lang === "en" ? "on" : ""}>
-        EN
-      </Link>
-      <Link href={path("bn", sub)} hrefLang="bn" lang="bn" aria-current={lang === "bn" ? "true" : undefined} className={lang === "bn" ? "on" : ""}>
-        বাংলা
-      </Link>
-    </div>
-  );
-}
-
 export default function Header({ lang }: { lang: Locale }) {
   const sub = useSubPath(lang);
   const [open, setOpen] = useState(false);
@@ -100,7 +86,6 @@ export default function Header({ lang }: { lang: Locale }) {
         </nav>
 
         <div className="header-tools">
-          <LangSwitch lang={lang} />
           <Link className="btn btn-small join-btn" href={path(lang, "/join")}>
             {tr(ui.nav.join, lang)}
           </Link>
