@@ -47,7 +47,24 @@ export const partnersPast =
 // public/executives/ and are referenced as "/executives/file.jpg".
 // ---------------------------------------------------------------------------
 
-export type Person = { name: L; post: L; department?: L; photo?: string };
+export type Person = {
+  name: L;
+  post: L;
+  /** The wing or department, e.g. Fieldwork. Members of the current panel are grouped by it. */
+  department?: L;
+  /** A portrait photo, e.g. "/executives/name.jpg". */
+  photo?: string;
+  /** A square poster made by the club, as "/executives/2026-27/name" with -480.webp and -960.webp files beside it. */
+  poster?: string;
+};
+
+const t = (s: string): L => ({ en: s, bn: s });
+const ec = (name: string, post: string, wing: string | null, slug: string): Person => ({
+  name: t(name),
+  post: t(post),
+  ...(wing ? { department: t(wing) } : {}),
+  poster: `/executives/2026-27/${slug}`,
+});
 
 /** Teachers and college officers who guide the club. */
 export const officers: Person[] = [
@@ -62,17 +79,35 @@ export const moderators = officers.slice(1);
 /** One entry per session, newest first. The first one marked current shows on the Current tab. */
 export const executiveSessions: { session: string; current?: boolean; members: Person[] }[] = [
   {
+    // Executive Committee 2026–27, from the club's EC 26-27 posters (shared by Mahmud, 18 Nov 2026).
     session: "2026–27",
     current: true,
     members: [
-      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "President", bn: "সভাপতি" } },
-      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "General Secretary", bn: "সাধারণ সম্পাদক" } },
-      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" }, department: { en: "[Department]", bn: "[বিভাগ]" } },
-      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" }, department: { en: "[Department]", bn: "[বিভাগ]" } },
-      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" }, department: { en: "[Department]", bn: "[বিভাগ]" } },
-      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" }, department: { en: "[Department]", bn: "[বিভাগ]" } },
-      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" }, department: { en: "[Department]", bn: "[বিভাগ]" } },
-      { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Post]", bn: "[পদ]" }, department: { en: "[Department]", bn: "[বিভাগ]" } },
+      ec("Hameem Muktadir", "Secretary General", null, "hameem-muktadir"),
+      ec("Junaed Labeeb Al Waasi", "President", "Administration", "junaed-labeeb-al-waasi"),
+      ec("Mushfiq Al Rafi", "Vice President", "Administration", "mushfiq-al-rafi"),
+      ec("Sidratul Muntaha Masud", "Vice President", "Administration", "sidratul-muntaha-masud"),
+      ec("Nabhan Uddin", "Secretary", "Administration", "nabhan-uddin"),
+      ec("Mahir Abid Akkho", "President", "Festival", "mahir-abid-akkho"),
+      ec("Tasirul Omar", "Vice President", "Festival", "tasirul-omar"),
+      ec("Arad Farzin Hasnat", "Secretary", "Festival", "arad-farzin-hasnat"),
+      ec("Prithish Ranjon Das", "President", "Fieldwork", "prithish-ranjon-das"),
+      ec("Farhan Ferdous", "Vice President", "Fieldwork", "farhan-ferdous"),
+      ec("Rubayet Bin Zaman", "Secretary", "Fieldwork", "rubayet-bin-zaman"),
+      ec("Abdullah Islam Sabiq", "President", "IT and Aesthetics", "abdullah-islam-sabiq"),
+      ec("Kauser Mahmud", "Vice President", "IT and Aesthetics", "kauser-mahmud"),
+      ec("Towkir Mahmud Tripto", "Secretary", "IT and Aesthetics", "towkir-mahmud-tripto"),
+      ec("Tashrif Arefin", "President", "Outreach", "tashrif-arefin"),
+      ec("Zubair Zarif", "Vice President", "Outreach", "zubair-zarif"),
+      ec("Mahir Shahriar Rahman", "Secretary", "Outreach", "mahir-shahriar-rahman"),
+      ec("Nirban Bin Shahjhan", "President", "Record and Publication", "nirban-bin-shahjhan"),
+      ec("Fahad Haque", "Vice President", "Record and Publication", "fahad-haque"),
+      ec("F.M. Tamim Hasan", "Secretary", "Record and Publication", "fm-tamim-hasan"),
+      ec("Shahriar Kabir", "President", "Research and Academics", "shahriar-kabir"),
+      ec("Shaikh Taassuk Ahmed", "Vice President", "Research and Academics", "shaikh-taassuk-ahmed"),
+      ec("Tasdik Ahmed Tonmay", "Vice President", "Research and Academics", "tasdik-ahmed-tonmay"),
+      ec("Muhit Rahman", "Secretary", "Research and Academics", "muhit-rahman"),
+      ec("Rafid Raiyan", "Director", "Visual Creatives", "rafid-raiyan"),
     ],
   },
   {
