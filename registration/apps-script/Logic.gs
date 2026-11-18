@@ -88,7 +88,6 @@ function validateRegistration(r) {
     if (!normPhone(r.sender)) errors.push('Enter the number you paid from.');
   }
   if (r.teamCode && !/^[A-Z0-9]{6}$/.test(String(r.teamCode).toUpperCase())) errors.push('A team code has 6 letters and numbers.');
-  if (!r.consent) errors.push('Tick the box to agree to how your details are used.');
   return errors;
 }
 

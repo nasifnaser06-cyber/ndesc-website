@@ -7,6 +7,7 @@ import { type Locale, tr, path } from "@/lib/i18n";
 import { ui } from "@/content/ui";
 import { site } from "@/content/site";
 import { Logo } from "./bits";
+import IceButton from "./IceButton";
 
 const navItems = [
   { key: "about", to: "/about" },
@@ -110,16 +111,13 @@ export default function Header({ lang }: { lang: Locale }) {
         </nav>
 
         <div className="header-tools">
-          {site.forms.nessRegister ? (
-            <a className="btn btn-small join-btn" href={site.forms.nessRegister} target="_blank" rel="noopener noreferrer">
-              {lang === "en" ? "Register" : "নিবন্ধন"}
-              <span className="visually-hidden"> {lang === "en" ? "for NESSX" : "NESSX-এ"} {tr(ui.newTab, lang)}</span>
-            </a>
-          ) : (
-            <Link className="btn btn-small join-btn" href={`${path(lang, "/ness")}#register`}>
-              {lang === "en" ? "Register" : "নিবন্ধন"}
-            </Link>
-          )}
+          {/* No Register button on the Register page itself. */}
+          {sub !== "/ness/register" &&
+            (site.forms.nessRegister ? (
+              <IceButton href={site.forms.nessRegister} external note={tr(ui.newTab, lang)} />
+            ) : (
+              <IceButton href={`${path(lang, "/ness")}#register`} />
+            ))}
           <button
             ref={menuButton}
             type="button"
