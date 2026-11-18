@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { type L, type Locale, tr, path, formatDateRange, locales } from "@/lib/i18n";
+import { type L, type Locale, tr, path, formatDateRange, publishedLocales } from "@/lib/i18n";
 import { type ClubEvent, eventTypes, isUpcoming } from "@/content/events";
 import type { EventRowData } from "@/components/EventList";
 import { ui } from "@/content/ui";
@@ -36,7 +36,7 @@ const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const full = (lang: Locale, to: string) => `${bp}${path(lang, to)}`;
 
 export function meta(lang: Locale, to: string, title: L | null, description: L, image?: { src: string; alt: L }): Metadata {
-  const languages = Object.fromEntries(locales.map((l) => [l === "bn" ? "bn-BD" : "en", full(l, to)]));
+  const languages = Object.fromEntries(publishedLocales.map((l) => [l === "bn" ? "bn-BD" : "en", full(l, to)]));
   const t = title ? tr(title, lang) : undefined;
   return {
     title: t ? t : { absolute: tr(site.name, lang) },

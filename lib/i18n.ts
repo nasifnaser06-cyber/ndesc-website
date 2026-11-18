@@ -1,6 +1,13 @@
 export const locales = ["en", "bn"] as const;
 export type Locale = (typeof locales)[number];
 
+/**
+ * Languages the site is published in. Bangla was taken off on 18 Nov 2026 (Mahmud's call);
+ * the Bangla text is kept in content/ so it can come back by adding "bn" here
+ * and putting the language switch back in components/Header.tsx.
+ */
+export const publishedLocales: readonly Locale[] = ["en"];
+
 /** A piece of text in both site languages. */
 export type L = { en: string; bn: string };
 

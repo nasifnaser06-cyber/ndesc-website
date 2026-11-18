@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { type Locale, locales, tr, formatDateRange } from "@/lib/i18n";
+import { type Locale, publishedLocales, tr, formatDateRange } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { posts, getPost, newsCategories } from "@/content/news";
 import { ui } from "@/content/ui";
@@ -9,7 +9,7 @@ type Props = { params: Promise<{ lang: Locale; slug: string }> };
 
 export const dynamicParams = false;
 export function generateStaticParams() {
-  return locales.flatMap((lang) => posts.map((p) => ({ lang, slug: p.slug })));
+  return publishedLocales.flatMap((lang) => posts.map((p) => ({ lang, slug: p.slug })));
 }
 
 export async function generateMetadata({ params }: Props) {

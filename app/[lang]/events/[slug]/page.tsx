@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { type Locale, locales, tr, path, formatDateRange } from "@/lib/i18n";
+import { type Locale, publishedLocales, tr, path, formatDateRange } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { events, getEvent, eventTypes, isUpcoming } from "@/content/events";
 import { ui } from "@/content/ui";
@@ -10,7 +10,7 @@ type Props = { params: Promise<{ lang: Locale; slug: string }> };
 
 export const dynamicParams = false;
 export function generateStaticParams() {
-  return locales.flatMap((lang) => events.map((e) => ({ lang, slug: e.slug })));
+  return publishedLocales.flatMap((lang) => events.map((e) => ({ lang, slug: e.slug })));
 }
 
 export async function generateMetadata({ params }: Props) {

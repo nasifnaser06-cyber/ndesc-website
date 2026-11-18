@@ -1,6 +1,6 @@
 # Notre Dame Eco and Space Club website
 
-The website of the Notre Dame Eco and Space Club (NDESC), Notre Dame College, Dhaka. It is in English and Bangla.
+The website of the Notre Dame Eco and Space Club (NDESC), Notre Dame College, Dhaka. It is in English. (A Bangla version was built and then taken off on 18 Nov 2026; the Bangla text is still in `content/`.)
 
 **Live site:** https://nasifnaser06-cyber.github.io/ndesc-website/
 
@@ -18,7 +18,7 @@ You do not need to touch the page code to update the site. All the words and dat
 | `content/news.ts` | News posts |
 | `content/ui.ts` | Menu labels, button words and other short interface text |
 
-Every piece of text has an English (`en`) and a Bangla (`bn`) version. The Bangla is a draft translation, so please have someone check it.
+Every piece of text has an English (`en`) and a Bangla (`bn`) version. Only the English is published. Keep the `bn` lines in place (copy the English if you like): the site checks that both exist. To bring Bangla back, add `"bn"` to `publishedLocales` in `lib/i18n.ts` and put the language switch back in `components/Header.tsx`.
 
 You can edit these files right on GitHub: open the file, click the pencil icon, make the change and click **Commit changes**. The site rebuilds and goes live by itself in about two minutes.
 
@@ -59,4 +59,4 @@ The site is built with Next.js as plain static pages (`output: "export"`), so se
 
 ## Design
 
-Night-sky look: night `#0F1E36`, starlight text `#E9EEF6`, haze `#A9B7CC`, one sprout-green accent `#8FD3A6`. Headings in Bitter, body text in Atkinson Hyperlegible, Bangla in Noto Serif Bengali and Noto Sans Bengali. All fonts are self-hosted. Every text colour pair passes WCAG AA contrast.
+Night-sky look: night `#0F1E36`, starlight text `#E9EEF6`, haze `#A9B7CC`, one sprout-green accent `#8FD3A6`. Headings in Bitter, body text in Atkinson Hyperlegible. All fonts are self-hosted. Every text colour pair passes WCAG AA contrast.

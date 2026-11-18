@@ -8,20 +8,16 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-// GitHub Pages serves static files only, so the root page sends visitors on to a language.
-// Bangla-language browsers go to /bn/, everyone else to /en/.
+// GitHub Pages serves static files only, so the root page sends visitors on to the English site.
 export default function RootRedirect() {
-  const script = `(function(){var b=${JSON.stringify(bp)};var l=(navigator.languages||[navigator.language||""]).join(",").toLowerCase();location.replace(b+(/(^|,)bn/.test(l)?"/bn/":"/en/"));})();`;
+  const script = `location.replace(${JSON.stringify(bp + "/en/")});`;
   return (
     <>
-      <meta httpEquiv="refresh" content={`2; url=${bp}/en/`} />
+      <meta httpEquiv="refresh" content={`0; url=${bp}/en/`} />
       <script dangerouslySetInnerHTML={{ __html: script }} />
       <div className="wrap redirect-note">
         <p>
-          <a href={`${bp}/en/`}>Notre Dame Eco and Space Club: English</a>
-        </p>
-        <p lang="bn">
-          <a href={`${bp}/bn/`}>নটর ডেম ইকো অ্যান্ড স্পেস ক্লাব: বাংলা</a>
+          <a href={`${bp}/en/`}>Notre Dame Eco and Space Club</a>
         </p>
       </div>
     </>
