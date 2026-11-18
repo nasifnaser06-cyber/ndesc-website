@@ -129,11 +129,25 @@ export function ExternalLink({ href, children, lang, className }: { href: string
 }
 
 /** A person's card on the Executives and About pages. Photos only with consent. */
-export function PersonCard({ name, post, department, photo, lang }: { name: L; post: L; department?: L; photo?: string; lang: Locale }) {
+export function PersonCard({ name, post, department, photo, poster, lang }: { name: L; post: L; department?: L; photo?: string; poster?: string; lang: Locale }) {
   const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+  const role = department ? `${tr(post, lang)}, ${tr(department, lang)}` : tr(post, lang);
   return (
     <div className="person">
-      {photo ? (
+      {poster ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          className="person-poster"
+          src={`${bp}${poster}-480.webp`}
+          srcSet={`${bp}${poster}-480.webp 480w, ${bp}${poster}-960.webp 960w`}
+          sizes="(min-width: 1280px) 290px, (min-width: 600px) 30vw, 46vw"
+          alt={`${lang === "en" ? "Poster" : "পোস্টার"}: ${tr(name, lang)}, ${role}`}
+          loading="lazy"
+          decoding="async"
+          width={960}
+          height={960}
+        />
+      ) : photo ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img className="person-photo" src={`${bp}${photo}`} alt={tr(name, lang)} loading="lazy" width={400} height={500} />
       ) : (

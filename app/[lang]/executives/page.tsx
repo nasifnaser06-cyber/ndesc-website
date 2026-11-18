@@ -34,13 +34,29 @@ export default async function Executives({ params }: Props) {
     </div>
   );
 
+  // Group the current panel by wing, keeping the order the members are listed in.
+  const wings: { wing: string | null; members: typeof current.members }[] = [];
+  for (const m of current.members) {
+    const key = m.department ? tr(m.department, lang) : null;
+    const group = wings.find((g) => g.wing === key);
+    if (group) group.members.push(m);
+    else wings.push({ wing: key, members: [m] });
+  }
+
   const currentPanel = (
     <div className="tab-section" role="region" aria-labelledby="h-current">
       <h2 id="h-current" className="tab-heading">
-        {en ? "Executive panel" : "কার্যনির্বাহী পরিষদ"} <span className="session-tag"><Txt>{sessionLabel(current.session, lang)}</Txt></span>
+        {en ? "Executive Committee" : "কার্যনির্বাহী পরিষদ"} <span className="session-tag"><Txt>{sessionLabel(current.session, lang)}</Txt></span>
       </h2>
-      <div className="people">
-        {current.members.map((p, i) => <PersonCard key={i} lang={lang} {...p} />)}
+      <div className="wings">
+        {wings.map((g) => (
+          <section key={g.wing ?? "lead"} className="wing" aria-label={g.wing ?? (en ? "Secretary General" : "মহাসচিব")}>
+            {g.wing && <h3 className="wing-name">{g.wing}</h3>}
+            <div className="people">
+              {g.members.map((p, i) => <PersonCard key={i} lang={lang} {...p} />)}
+            </div>
+          </section>
+        ))}
       </div>
     </div>
   );
