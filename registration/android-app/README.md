@@ -10,7 +10,7 @@ The club's own app for the payment phone. When a bKash payment SMS arrives, it s
 
 ## Install on the payment phone
 
-1. Copy `NESSX-Payments-1.1.apk` to the phone (WhatsApp to yourself, Google Drive or a USB cable) and tap it.
+1. Copy `NESSX-Payments-1.2.apk` to the phone (WhatsApp to yourself, Google Drive or a USB cable) and tap it.
 2. Android asks to allow installs from that app (Files, Drive, WhatsApp). Allow it. If Play Protect warns, tap **More details > Install anyway**. It warns because the app is not from the Play Store and reads SMS.
 3. Open **NESSX Payments**:
    - Tap **Allow** for SMS.
@@ -18,6 +18,12 @@ The club's own app for the payment phone. When a bKash payment SMS arrives, it s
    - Tap **Allow notifications** and **Allow running in the background** if those buttons show.
 4. On Xiaomi, Oppo, Realme and Vivo phones also turn on **Autostart** for the app in the phone's settings.
 5. Send 10 Tk from another phone. The payment appears in the app's list as "✓ Sent", a notification shows, and a row appears in the sheet's Payments tab.
+
+## How it avoids missing a payment (1.2)
+
+- **Always on.** A small permanent notification, "NESSX Payments is on", keeps the app running. Phones such as Tecno and Xiaomi do not stop an app that shows one. It starts again by itself after a restart or an update.
+- **Inbox check.** Every minute (and when the app opens, and every 15 minutes as a backup even if the app was closed) it looks through the SMS inbox for bKash payment SMS it has not sent yet, and sends them. It only looks at SMS from after the app was first set up, and never more than 3 days back, so older personal messages are never sent.
+- A payment found both ways is sent once: the app keeps a list of TrxIDs it has seen, and the sheet ignores a TrxID it already has.
 
 ## Day to day
 
@@ -32,7 +38,7 @@ Needs JDK 17+ and the Android SDK (platform 34, build-tools 34).
 ```
 cd registration/android-app
 echo "sdk.dir=/path/to/android-sdk" > local.properties
-gradle testReleaseUnitTest      # 12 checks: the SMS filter and the sending
+gradle testReleaseUnitTest      # 13 checks: the SMS filter and the sending
 gradle assembleRelease          # app/build/outputs/apk/release/app-release.apk
 ```
 
@@ -45,6 +51,10 @@ Signing uses `keystore.properties` (storeFile, storePassword, keyAlias, keyPassw
 | `SmsFilter.java` | Decides which SMS are payments. |
 | `Sender.java` | Sends to the web app and reads its answer (follows Apps Script's redirect). |
 | `SmsReceiver.java` | Runs when an SMS arrives, even with the app closed. |
+| `ListenerService.java` | The always-on part with the permanent notification; checks the inbox every minute. |
+| `InboxScanner.java` | Finds payment SMS in the inbox that were not sent yet. |
+| `ScanWorker.java` | The 15-minute backup check. |
+| `BootReceiver.java` | Starts watching again after a restart or an update. |
 | `ForwardWorker.java` | Sends one SMS, retrying with growing gaps while offline (up to 25 tries). |
 | `Store.java` | Link, key, on/off and the list of recent payment SMS, kept on the phone. |
 | `MainActivity.java` | The one screen. |

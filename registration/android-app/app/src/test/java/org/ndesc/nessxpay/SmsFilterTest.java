@@ -34,6 +34,13 @@ public class SmsFilterTest {
         assertFalse(SmsFilter.isPayment("bKash", "Get 10% cashback this Friday!"));
     }
 
+    @Test public void oneKeyPerPayment() {
+        assertEquals("DK481HDVPG", SmsFilter.key(RECEIVED));
+        assertEquals(SmsFilter.key(RECEIVED), SmsFilter.key(RECEIVED.replace(" ", "  ")));
+        assertNotEquals(SmsFilter.key(RECEIVED), SmsFilter.key(CASH_IN));
+        assertTrue(SmsFilter.key("TrxID but no readable id").startsWith("H"));
+    }
+
     @Test public void readsIdAndAmountForTheList() {
         assertEquals("DKI4MZEC1K", SmsFilter.trxId(CASH_IN));
         assertEquals("1,000.00", SmsFilter.amount(RECEIVED));

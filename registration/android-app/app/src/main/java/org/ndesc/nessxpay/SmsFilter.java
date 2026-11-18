@@ -31,6 +31,14 @@ public final class SmsFilter {
         return m.find() ? m.group(1).toUpperCase(java.util.Locale.ROOT) : "";
     }
 
+    /** One key per payment: its TrxID, or a hash of the text if no ID can be read. */
+    public static String key(String body) {
+        String id = trxId(body);
+        if (!id.isEmpty()) return id;
+        String t = body == null ? "" : body.replaceAll("\\s+", " ").trim();
+        return "H" + Integer.toHexString(t.hashCode());
+    }
+
     /** The first "Tk 1,000.00" amount, for the app's own list. Empty if none. */
     public static String amount(String body) {
         Matcher m = AMOUNT.matcher(body == null ? "" : body);
