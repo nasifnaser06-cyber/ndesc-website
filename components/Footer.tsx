@@ -41,7 +41,14 @@ export default function Footer({ lang }: { lang: Locale }) {
             <li><ExternalLink href={site.social.facebook} lang={lang}>Facebook</ExternalLink></li>
             <li><ExternalLink href={site.social.instagram} lang={lang}>Instagram</ExternalLink></li>
             {site.email && (
-              <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+              <li>
+                {/* Never split the address mid-word: it fits on one line, or breaks once, after the @. */}
+                <a className="footer-email" href={`mailto:${site.email}`}>
+                  <span>{site.email.split("@")[0]}@</span>
+                  <wbr />
+                  <span>{site.email.split("@")[1]}</span>
+                </a>
+              </li>
             )}
           </ul>
         </div>
