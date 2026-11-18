@@ -35,9 +35,12 @@ export const site = {
    * people can see it, but it sends them to the Google Form instead.
    * The payment numbers and prices shown on the page come live from the sheet's Settings tab once
    * connected; these are only the fallback.
+   * trial: true while testing with the trial sheet (10 Tk payments). The page stays hidden from
+   * search engines and shows a "Trial" notice. Set false only with the club's real sheet.
    */
   registration: {
-    endpoint: null as string | null,
+    endpoint: "https://script.google.com/macros/s/AKfycby5E_2gLVJd30XMD5YUu3iQ_eyZdWfl3UXnWXrpU6yVcGMa8G_pszExSbXE8TAP-KuW/exec" as string | null,
+    trial: true,
     bkash: "[club bKash number]",
     nagad: null as string | null,
     prices: { solo: 200, team: 300, online: 0 },

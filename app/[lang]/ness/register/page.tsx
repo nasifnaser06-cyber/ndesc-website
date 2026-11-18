@@ -15,7 +15,7 @@ const lead = {
 export async function generateMetadata({ params }: Props) {
   const { lang } = await params;
   const m = meta(lang, "/ness/register", title, lead);
-  return site.registration.endpoint ? m : { ...m, robots: { index: false } };
+  return site.registration.endpoint && !site.registration.trial ? m : { ...m, robots: { index: false } };
 }
 
 export default async function Register({ params }: Props) {
@@ -30,6 +30,7 @@ export default async function Register({ params }: Props) {
       <div className="wrap">
         <RegisterForm
           endpoint={site.registration.endpoint}
+          trial={site.registration.trial}
           fallback={{ bkash: site.registration.bkash, nagad: site.registration.nagad, prices: site.registration.prices }}
           googleForm={site.forms.nessRegister}
           categories={categories.filter((c) => c.code !== "C")}

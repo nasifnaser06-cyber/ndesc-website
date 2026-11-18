@@ -67,6 +67,13 @@ function parseBkashSms(text) {
  * r: {pass, name, email, phone, institution, className, category, segments[], teamCode,
  *     parentName, parentPhone, wallet, trxId, sender, consent}
  */
+/** What each pass includes. There is no segment choice: the pass decides. */
+function passIncludes(pass) {
+  if (pass === 'team') return 'All segments in the category (solo and team)';
+  if (pass === 'online') return 'All online segments in the category';
+  return 'All solo segments in the category';
+}
+
 function validateRegistration(r) {
   var errors = [];
   if (LOGIC.PASSES.indexOf(r.pass) < 0) errors.push('Choose a pass.');
@@ -75,10 +82,6 @@ function validateRegistration(r) {
   if (!normPhone(r.phone)) errors.push('Enter a Bangladeshi mobile number, like 01712345678.');
   if (!String(r.institution || '').trim()) errors.push('Enter your school or college.');
   if (LOGIC.CATEGORIES.indexOf(r.category) < 0) errors.push('Choose your category.');
-  if (!r.segments || !r.segments.length) errors.push('Choose at least one segment.');
-  if ((r.category === 'P' || r.category === 'J') && (!String(r.parentName || '').trim() || !normPhone(r.parentPhone))) {
-    errors.push("For Primary and Junior, enter a parent's name and mobile number.");
-  }
   if (r.pass !== 'online') {
     if (['bKash', 'Nagad'].indexOf(r.wallet) < 0) errors.push('Choose how you paid.');
     if (!LOGIC.TRX_RE.test(normTrx(r.trxId))) errors.push('Enter the TrxID from your payment SMS (8 to 12 letters and numbers).');
@@ -178,5 +181,5 @@ function decide(regs, pays, prices, nowMs) {
 }
 
 if (typeof module !== 'undefined') {
-  module.exports = { LOGIC: LOGIC, normPhone: normPhone, normTrx: normTrx, parseBkashSms: parseBkashSms, validateRegistration: validateRegistration, decide: decide };
+  module.exports = { LOGIC: LOGIC, passIncludes: passIncludes, normPhone: normPhone, normTrx: normTrx, parseBkashSms: parseBkashSms, validateRegistration: validateRegistration, decide: decide };
 }

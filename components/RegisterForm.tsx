@@ -17,10 +17,10 @@ const normPhone = (s: string) => {
 };
 const normTrx = (s: string) => s.toUpperCase().replace(/[^A-Z0-9]/g, "");
 
-/** Which segments a person can choose with this category and pass. */
+/** Which segments a pass includes for this category. Solo: all solo segments. Team: every segment. */
 function allowed(seg: SegOption, category: string, pass: Pass) {
   if (pass === "online" && !seg.online) return false;
-  if (pass === "solo" && seg.team && !seg.online) return false;
+  if (pass === "solo" && seg.team) return false;
   return seg.cats.some((c) => c === category || c === "C" || c.startsWith("PS"));
 }
 
@@ -30,9 +30,10 @@ async function call(endpoint: string, body: object) {
 }
 
 export default function RegisterForm({
-  endpoint, fallback, googleForm, categories, segments, privacyHref, nessHref,
+  endpoint, trial = false, fallback, googleForm, categories, segments, privacyHref, nessHref,
 }: {
   endpoint: string | null;
+  trial?: boolean;
   fallback: { bkash: string; nagad: string | null; prices: Record<Pass, number> };
   googleForm: string | null;
   categories: { code: string; name: string; who: string }[];
@@ -43,7 +44,6 @@ export default function RegisterForm({
   const [live, setLive] = useState<Live>({ open: true, bkash: fallback.bkash, nagad: fallback.nagad ?? "", prices: fallback.prices });
   const [pass, setPass] = useState<Pass>("solo");
   const [category, setCategory] = useState("");
-  const [chosen, setChosen] = useState<string[]>([]);
   const [wallet, setWallet] = useState("bKash");
   const [errors, setErrors] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
@@ -59,17 +59,11 @@ export default function RegisterForm({
     }).catch(() => {});
   }, [endpoint, fallback.bkash, fallback.prices]);
 
-  const options = useMemo(() => (category ? segments.filter((s) => allowed(s, category, pass)) : []), [segments, category, pass]);
-  // Drop choices that no longer fit after the pass or category changes.
-  useEffect(() => setChosen((c) => c.filter((n) => options.some((o) => o.name === n))), [options]);
+  const included = useMemo(() => (category ? segments.filter((s) => allowed(s, category, pass)) : []), [segments, category, pass]);
 
   const price = live.prices[pass];
-  const needsParent = category === "P" || category === "J";
   const payNumber = wallet === "Nagad" ? live.nagad : live.bkash;
 
-  function toggle(name: string) {
-    setChosen((c) => (c.includes(name) ? c.filter((x) => x !== name) : [...c, name]));
-  }
 
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -84,10 +78,7 @@ export default function RegisterForm({
       institution: v("institution"),
       className: v("className"),
       category,
-      segments: chosen,
       teamCode: normTrx(v("teamCode")),
-      parentName: v("parentName"),
-      parentPhone: normPhone(v("parentPhone")),
       wallet: pass === "online" ? "" : wallet,
       trxId: pass === "online" ? "" : normTrx(v("trxId")),
       sender: pass === "online" ? "" : normPhone(v("sender")),
@@ -101,8 +92,6 @@ export default function RegisterForm({
     if (!PHONE.test(body.phone)) errs.push("Enter a Bangladeshi mobile number, like 01712345678.");
     if (!body.institution) errs.push("Enter your school or college.");
     if (!category) errs.push("Choose your category.");
-    if (!chosen.length) errs.push("Choose at least one segment.");
-    if (needsParent && (!body.parentName || !PHONE.test(body.parentPhone))) errs.push("For Primary and Junior, enter a parent's name and mobile number.");
     if (body.teamCode && !/^[A-Z0-9]{6}$/.test(body.teamCode)) errs.push("A team code has 6 letters and numbers.");
     if (pass !== "online") {
       if (!TRX.test(body.trxId)) errs.push("Enter the TrxID from your payment SMS. It has 8 to 12 letters and numbers, like DK481HDVPG.");
@@ -161,6 +150,12 @@ export default function RegisterForm({
           {googleForm && <> To register now, use the <a href={googleForm} target="_blank" rel="noopener noreferrer">registration form</a>.</>}
         </div>
       )}
+      {!draft && trial && (
+        <div className="reg-draft" role="note">
+          <strong>Trial.</strong> This page is being tested by the organisers with small test payments. Please don't register here yet.
+          {googleForm && <> To register, use the <a href={googleForm} target="_blank" rel="noopener noreferrer">registration form</a>.</>}
+        </div>
+      )}
       {!live.open && <div className="reg-draft" role="note"><strong>Registration is closed.</strong></div>}
 
       <form className="form reg-form" onSubmit={submit} noValidate>
@@ -169,8 +164,8 @@ export default function RegisterForm({
           <div className="reg-passes">
             {([
               ["solo", "Solo pass", `${live.prices.solo} Tk`, "All solo segments in your category"],
-              ["team", "Team pass", `${live.prices.team} Tk per person`, "Solo and team segments. Up to 3 per team, each registers"],
-              ["online", "Online only", "Free", "Online submission segments"],
+              ["team", "Team pass", `${live.prices.team} Tk per person`, "Every segment, solo and team. Up to 3 per team, each registers"],
+              ["online", "Online only", "Free", "All online submission segments"],
             ] as const).map(([val, name, cost, note]) => (
               <label key={val} className="reg-pass" data-on={pass === val}>
                 <input type="radio" name="pass" value={val} checked={pass === val} onChange={() => setPass(val)} />
@@ -198,30 +193,32 @@ export default function RegisterForm({
                 {categories.map((c) => <option key={c.code} value={c.code}>{c.name} ({c.code}): {c.who}</option>)}
               </select>
             </div>
-            {needsParent && (
-              <>
-                <div><label htmlFor="parentName">Parent's name</label><input id="parentName" name="parentName" required /></div>
-                <div><label htmlFor="parentPhone">Parent's mobile number</label><input id="parentPhone" name="parentPhone" inputMode="tel" required /></div>
-              </>
-            )}
           </div>
         </fieldset>
 
         <fieldset>
-          <legend><span className="reg-step">3</span> Segments</legend>
+          <legend><span className="reg-step">3</span> What your pass includes</legend>
           {!category ? (
-            <p className="muted">Choose your category first to see the segments you can enter.</p>
+            <p className="muted">Choose your category to see the segments your pass includes.</p>
           ) : (
-            <div className="reg-segs">
-              {options.map((s) => (
-                <label key={s.name} className="reg-seg">
-                  <input type="checkbox" checked={chosen.includes(s.name)} onChange={() => toggle(s.name)} />
-                  <span>{s.name}</span>
-                  {s.team && <span className="tag">Team</span>}
-                  {s.online && <span className="tag tag-up">Online</span>}
-                </label>
-              ))}
-            </div>
+            <>
+              <p>
+                {pass === "team"
+                  ? "Your team pass includes every segment open to your category, solo and team. You don't need to pick."
+                  : pass === "online"
+                    ? "Your online pass includes every online submission segment open to your category. You don't need to pick."
+                    : "Your solo pass includes every solo segment open to your category. You don't need to pick."}
+              </p>
+              <ul className="reg-included">
+                {included.map((s) => (
+                  <li key={s.name}>
+                    <span>{s.name}</span>
+                    {s.team && <span className="tag">Team</span>}
+                    {s.online && <span className="tag tag-up">Online</span>}
+                  </li>
+                ))}
+              </ul>
+            </>
           )}
           <p className="small muted" style={{ marginTop: "var(--s3)" }}>The UNOOSA special committee has its own registration form. Full rules for each segment are on the <a href={nessHref}>NESSX page</a>.</p>
         </fieldset>
