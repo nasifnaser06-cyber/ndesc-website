@@ -24,9 +24,8 @@ Run the tests: `node registration/tests/logic.test.js && node registration/tests
 4. **Settings tab.** Fill in the bKash number, the Nagad number (or leave blank) and the alert email. Check the prices. "Registration open" is the on/off switch.
 5. **Publish.** Deploy > New deployment > Web app. Execute as: Me. Who has access: Anyone. Copy the web app address (it ends in `/exec`).
 6. **Website.** In `content/site.ts`, put that address in `registration.endpoint`. The Register page stops being a draft and shows the live numbers and prices from the Settings tab.
-7. **Payment phone.** Install an SMS forwarder app. Forward only messages from `bKash` (and `NAGAD`) as an HTTP POST to the web app address, with the body:
-   `{"action":"sms","key":"<SMS key from Settings>","text":"%message%"}`
-   (the placeholder for the message text depends on the app). Send 10 Tk from another phone and check that a row appears in the Payments tab.
+7. **Payment phone.** Install the club's own app, **NESSX Payments** (`android-app/`, guide in `android-app/README.md`). Paste the web app address and the SMS key, tap "Save and check". It forwards only bKash (and Nagad) messages that carry a TrxID. Send 10 Tk from another phone and check that a row appears in the Payments tab.
+   Any other SMS forwarder also works if it POSTs `{"action":"sms","key":"<SMS key>","text":"<message>"}`, or sends `action`, `key` and `text` as form or query fields.
 8. **Test** every case in the doc's Step 5 checklist with 10 Tk payments, setting the prices to 10 in Settings first, then back.
 
 After changing the script, use Deploy > Manage deployments > Edit > New version, so the same web address keeps working.
