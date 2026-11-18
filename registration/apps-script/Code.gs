@@ -96,16 +96,17 @@ function handleRegister(b) {
     institution: clean(b.institution, 120),
     className: clean(b.className, 40),
     category: String(b.category || ''),
-    segments: (Array.isArray(b.segments) ? b.segments : []).map(function (x) { return clean(x, 80); }).slice(0, 20),
+    segments: [],
     teamCode: clean(b.teamCode, 6).toUpperCase(),
-    parentName: clean(b.parentName, 80),
-    parentPhone: normPhone(b.parentPhone),
+    parentName: '',
+    parentPhone: '',
     wallet: String(b.wallet || ''),
     trxId: normTrx(b.trxId),
     sender: normPhone(b.sender),
     consent: b.consent === true || b.consent === 'true',
   };
   if (r.pass === 'online') { r.wallet = ''; r.trxId = ''; r.sender = ''; }
+  r.segments = [passIncludes(r.pass)];
   var errors = validateRegistration(r);
   if (errors.length) return { ok: false, errors: errors };
 
@@ -300,7 +301,7 @@ function sendPassEmail(r, isResend) {
     row('Pass', passName) +
     row('Category', esc(r.category)) +
     row('Institution', esc(r.institution)) +
-    row('Segments', esc(r.segments)) +
+    row('Your pass includes', esc(r.segments)) +
     (r.teamCode ? row('Team code', esc(r.teamCode)) : '') +
     row('Check code', '<span style="font-family:monospace;font-size:18px">' + esc(r.checkCode) + '</span>') +
     '</table>' + qr +
