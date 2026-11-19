@@ -582,3 +582,7 @@ details[open] > summary::after { transform: rotate(45deg); }
 .ps-examples { margin: 0; padding-left: 1.2rem; display: grid; gap: var(--s2); }
 .ps-list { max-width: 72ch; padding-left: 1.2rem; display: grid; gap: var(--s2); }
 .ps-list li::marker { color: var(--sprout); }
+
+/* NESS page: the NESS logo in place of the "NESSX" heading */
+.ness-logo-h1 { margin: var(--s2) 0 var(--s3); line-height: 0; }
+.ness-logo-h1 img { display: block; width: auto; height: clamp(7.5rem, 12vw, 11.25rem); }

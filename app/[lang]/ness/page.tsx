@@ -61,7 +61,18 @@ export default async function Ness({ params }: Props) {
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>
           <div className="sky-copy">
             <p className="label">{nessx.fullName}, 2027</p>
-            <h1 id="ness-h1">{nessx.name}</h1>
+            <h1 id="ness-h1" className="ness-logo-h1">
+              {/* The NESS logo stands in for the "NESSX" heading; its alt text is the heading's name. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-logo-360.webp`}
+                srcSet={[180, 360, 540].map((h) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-logo-${h}.webp ${h}x`.replace(`${h}x`, `${h / 180}x`)).join(", ")}
+                alt={nessx.name}
+                width={166}
+                height={180}
+                fetchPriority="high"
+              />
+            </h1>
             <p>{nessx.intro}</p>
             <dl className="facts">
               <div><dt>{tr(ui.dates, lang)}</dt><dd>{formatDateRange(ness.start, ness.end, lang, "long")}</dd></div>
