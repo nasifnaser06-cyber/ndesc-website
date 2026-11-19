@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 /**
  * "Register for NESSX" with ice that forms on the button.
  * Crystals draw themselves out from their centres (stroke), grow and settle, then a frost sheen
@@ -40,8 +42,9 @@ export default function IceButton({ href, external, label = "Register for NESSX"
   label?: string;
   note?: string;
 }) {
+  const Tag = (external ? "a" : Link) as React.ElementType;
   return (
-    <a
+    <Tag
       className="btn btn-small join-btn ice-btn"
       href={href}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
@@ -60,6 +63,6 @@ export default function IceButton({ href, external, label = "Register for NESSX"
       </svg>
       <span className="ice-label">{label}</span>
       {note && <span className="visually-hidden"> {note}</span>}
-    </a>
+    </Tag>
   );
 }

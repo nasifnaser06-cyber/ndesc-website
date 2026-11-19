@@ -6,7 +6,7 @@ import { site } from "@/content/site";
 import { sortedEvents, getEvent, ness2027Banner } from "@/content/events";
 import { timeline, partnersPast } from "@/content/club";
 import { posts, newsCategories } from "@/content/news";
-import { Banner, FormButton, PhotoSlot, SectionHead, Stars, T } from "@/components/bits";
+import { Banner, FormButton, PhotoSlot, SectionHead, Stars, T, RegisterButton } from "@/components/bits";
 import { EventRows } from "@/components/EventList";
 
 
@@ -68,7 +68,7 @@ export default async function Home() {
             </dl>
           </div>
           <div className="actions">
-            <FormButton href={site.forms.nessRegister} lang={lang}>{en ? "Register now" : "এখনই নিবন্ধন করুন"}</FormButton>
+            <RegisterButton lang={lang}>{en ? "Register now" : "এখনই নিবন্ধন করুন"}</RegisterButton>
             <Link className="btn btn-secondary" href={path(lang, "/ness")}>{en ? "Segments and passes" : "সেগমেন্ট ও পাস"}</Link>
           </div>
         </div>

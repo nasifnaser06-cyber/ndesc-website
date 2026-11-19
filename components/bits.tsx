@@ -2,6 +2,15 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { type L, type Locale, tr, path } from "@/lib/i18n";
 import { ui } from "@/content/ui";
+import { site } from "@/content/site";
+
+/** A "Register" button: the website's Register page, or the Google Form if site.registerWith is "form". */
+export function RegisterButton({ lang, children, secondary = false }: { lang: Locale; children: ReactNode; secondary?: boolean }) {
+  if (site.registerWith === "form" && site.forms.nessRegister) {
+    return <FormButton href={site.forms.nessRegister} lang={lang} secondary={secondary}>{children}</FormButton>;
+  }
+  return <Link className={`btn ${secondary ? "btn-secondary" : ""}`} href={path(lang, "/ness/register")}>{children}</Link>;
+}
 
 /** Renders text and marks any [square bracket] part as a placeholder for the club to fill in. */
 export function Txt({ children }: { children: string }) {

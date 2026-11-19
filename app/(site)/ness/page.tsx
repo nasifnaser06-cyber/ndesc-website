@@ -6,7 +6,7 @@ import { ui } from "@/content/ui";
 import { getEvent, ness2027Banner } from "@/content/events";
 import { nessSchedule, nessPast, nessFaq } from "@/content/club";
 import { nessx, passes, passNote, registerWays, categories, categoryNote, winnersNote, soloSegments, teamSegments, specialSegments, programmes, organizers, type Segment } from "@/content/ness2027";
-import { Banner, ExternalLink, FormButton, Stars, T } from "@/components/bits";
+import { Banner, ExternalLink, FormButton, Stars, T, RegisterButton } from "@/components/bits";
 
 const title = { en: "NESS 2027", bn: "NESS ২০২৭" };
 const description = {
@@ -79,7 +79,7 @@ export default async function Ness() {
               <div><dt>{en ? "Passes" : "পাস"}</dt><dd>{en ? "From 200 BDT" : "২০০ টাকা থেকে"}</dd></div>
             </dl>
             <div className="actions">
-              <FormButton href={site.forms.nessRegister} lang={lang}>{en ? "Register now" : "এখনই নিবন্ধন করুন"}</FormButton>
+              <RegisterButton lang={lang}>{en ? "Register now" : "এখনই নিবন্ধন করুন"}</RegisterButton>
               <a className="btn btn-secondary" href="#segments">{en ? "See all segments" : "সব সেগমেন্ট দেখুন"}</a>
             </div>
             <p className="small">{en ? "Online submission segments are free for everyone." : "অনলাইন সাবমিশন সেগমেন্টে অংশ নেওয়া সবার জন্য বিনামূল্যে।"}</p>
@@ -113,9 +113,9 @@ export default async function Ness() {
             ))}
           </ol>
           <div className="actions" style={{ marginTop: "var(--s5)" }}>
-            <FormButton href={site.forms.nessRegister} lang={lang}>{en ? "Open the registration form" : "নিবন্ধন ফর্ম খুলুন"}</FormButton>
+            <RegisterButton lang={lang}>{en ? "Register for NESSX" : "নিবন্ধন করুন"}</RegisterButton>
           </div>
-          <p className="small muted" style={{ marginTop: "var(--s3)" }}><T lang={lang} text={{ en: "[How to pay, and how you get your confirmation]", bn: "[ফি জমার নিয়ম ও নিশ্চিতকরণ]" }} /></p>
+          <p className="small muted" style={{ marginTop: "var(--s3)" }}>{en ? "Pick your pass, pay by bKash Send Money, type the TrxID, and your pass arrives by email." : "পাস বেছে নিন, বিকাশে পেমেন্ট করুন, TrxID লিখুন, পাস ইমেইলে পাবেন।"}</p>
         </section>
 
         <section aria-labelledby="cats">
