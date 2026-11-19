@@ -113,10 +113,10 @@ export default function Header({ lang }: { lang: Locale }) {
         <div className="header-tools">
           {/* No Register button on the Register page itself. */}
           {sub !== "/ness/register" &&
-            (site.forms.nessRegister ? (
+            (site.registerWith === "form" && site.forms.nessRegister ? (
               <IceButton href={site.forms.nessRegister} external note={tr(ui.newTab, lang)} />
             ) : (
-              <IceButton href={`${path(lang, "/ness")}#register`} />
+              <IceButton href={path(lang, "/ness/register")} />
             ))}
           <button
             ref={menuButton}
