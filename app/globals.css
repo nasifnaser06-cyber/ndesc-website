@@ -431,24 +431,24 @@ html.motion main section > :nth-child(n + 5) { --d: 330ms; }
 
 /* Item cascade: the container stays put and its items come in one after another,
    gaps shrinking (0, 110, 200, 275, 335, 385, then together). */
-html.motion main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps),
-html.motion main section.is-in > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) {
+html.motion main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments),
+html.motion main section.is-in > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) {
   opacity: 1; transform: none;
 }
-html.motion main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > * {
+html.motion main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > * {
   opacity: 0;
   transform: translateY(calc(24px * var(--dir, 1)));
 }
-html.motion main section.is-in > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > * {
+html.motion main section.is-in > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > * {
   opacity: 1; transform: none;
   transition: opacity var(--reveal-item) var(--ease-reveal), transform var(--reveal-item) var(--ease-reveal);
   transition-delay: calc(var(--d, 0ms) + var(--gap, 0ms));
 }
-main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > :nth-child(2) { --gap: 110ms; }
-main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > :nth-child(3) { --gap: 200ms; }
-main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > :nth-child(4) { --gap: 275ms; }
-main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > :nth-child(5) { --gap: 335ms; }
-main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > :nth-child(n + 6) { --gap: 385ms; }
+main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > :nth-child(2) { --gap: 110ms; }
+main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > :nth-child(3) { --gap: 200ms; }
+main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > :nth-child(4) { --gap: 275ms; }
+main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > :nth-child(5) { --gap: 335ms; }
+main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > :nth-child(n + 6) { --gap: 385ms; }
 
 /* Timeline: each year's line draws in order, a real sequence. */
 .timeline li { border-top: 0; position: relative; }
@@ -484,9 +484,9 @@ details[open] > summary::after { transform: rotate(45deg); }
   .page-head > *, .sky-copy > *, .sky-media { animation-name: fade-in; animation-duration: 0.3s; animation-delay: 0ms; }
   .sky::before, .sky-inner, .stars { animation: none; }
   html.motion main section:not(.sky) > *,
-  html.motion main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > * { transform: none; }
+  html.motion main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > * { transform: none; }
   html.motion main section.is-in > *,
-  html.motion main section.is-in > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps) > * { transition: opacity 0.3s ease; transition-delay: 0ms; }
+  html.motion main section.is-in > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > * { transition: opacity 0.3s ease; transition-delay: 0ms; }
   html.motion main section .timeline li::before { transform: none; }
   .js .main-nav[data-open="true"] { animation-name: fade-in; }
   details::details-content { transition: none; }
@@ -567,3 +567,22 @@ details[open] > summary::after { transform: rotate(45deg); }
   .ice-btn { padding-inline: 1.3rem; font-size: 0.75rem; }
   .ice .c3, .ice .c4 { display: none; }
 }
+
+/* Photosphere 7.0 page */
+.ps-page { display: flex; flex-direction: column; gap: var(--s8); }
+.ps-page > section > h2 { margin-bottom: var(--s4); }
+.ps-intro { display: flex; flex-direction: column; gap: var(--s4); max-width: 72ch; }
+.ps-note { max-width: 70ch; margin-bottom: var(--s5); }
+.ps-code { font-family: var(--font-head); font-weight: 600; white-space: nowrap; }
+.ps-segments { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(24rem, 100%), 1fr)); gap: var(--s5); }
+.ps-segment { padding: var(--s5); display: flex; flex-direction: column; gap: var(--s3); align-items: flex-start; }
+.ps-segment p { flex: 1; }
+.ps-seg-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s2) var(--s3); }
+.ps-seg-head .segment-tags { display: inline-flex; gap: var(--s2); flex-wrap: wrap; }
+.ps-rename { padding: var(--s6); display: flex; flex-direction: column; gap: var(--s3); border-color: #f2c27b; }
+.ps-rename h2 { margin-bottom: 0 !important; }
+.ps-format code, .ps-examples code { font-size: 1rem; background: rgba(233, 238, 246, 0.08); padding: 0.2em 0.5em; border-radius: 6px; overflow-wrap: anywhere; }
+.ps-format code { font-size: 1.0625rem; color: #f2c27b; }
+.ps-examples { margin: 0; padding-left: 1.2rem; display: grid; gap: var(--s2); }
+.ps-list { max-width: 72ch; padding-left: 1.2rem; display: grid; gap: var(--s2); }
+.ps-list li::marker { color: var(--sprout); }
