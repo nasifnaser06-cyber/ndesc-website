@@ -37,7 +37,7 @@ var DEFAULT_SETTINGS = [
   ['Email from name', 'NESSX Team', ''],
   ['Reply-to email', 'ndesc.organizers.2027@gmail.com', ''],
   ['QR image service', 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=', 'Gets only the random check code, never names or numbers. Blank = no QR image.'],
-  ['Website', 'https://nasifnaser06-cyber.github.io/ndesc-website/en/ness/', ''],
+  ['Website', 'https://ndesc.com/ness/', ''],
 ];
 
 // ---------------------------------------------------------------- web app

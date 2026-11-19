@@ -3,8 +3,9 @@ export type Locale = (typeof locales)[number];
 
 /**
  * Languages the site is published in. Bangla was taken off on 18 Nov 2026 (Mahmud's call);
- * the Bangla text is kept in content/ so it can come back by adding "bn" here
- * and putting the language switch back in components/Header.tsx.
+ * the Bangla text is kept in content/. Since 20 Nov 2026 the English pages live at the root
+ * (app/(site)/, no /en/ prefix); bringing Bangla back would mean adding a /bn/ copy of those
+ * routes, adding "bn" here and putting the language switch back in components/Header.tsx.
  */
 export const publishedLocales: readonly Locale[] = ["en"];
 
@@ -19,10 +20,14 @@ export function tr(text: L, lang: Locale): string {
   return text[lang];
 }
 
-/** Path inside the site for a language, e.g. path("bn", "/events") -> "/bn/events/". */
+/** The default language has no prefix in addresses (ndesc.com/events/). Since 20 Nov 2026. */
+export const defaultLocale: Locale = "en";
+
+/** Path inside the site for a language, e.g. path("en", "/events") -> "/events/", path("bn", "/events") -> "/bn/events/". */
 export function path(lang: Locale, to = "/"): string {
   const clean = to === "/" ? "" : to.replace(/\/+$/, "");
-  return `/${lang}${clean}/`;
+  const prefix = lang === defaultLocale ? "" : `/${lang}`;
+  return `${prefix}${clean}/`;
 }
 
 const dateLocale: Record<Locale, string> = { en: "en-GB", bn: "bn-BD" };

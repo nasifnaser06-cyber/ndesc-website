@@ -1,0 +1,140 @@
+import Link from "next/link";
+import { type Locale, path } from "@/lib/i18n";
+import { meta } from "@/lib/view";
+import { site } from "@/content/site";
+import { photosphere, photosphereBanner } from "@/content/photosphere";
+import { Banner, ExternalLink, FormButton, PageHead } from "@/components/bits";
+
+const title = { en: "Photosphere 7.0", bn: "Photosphere 7.0" };
+const lead = {
+  en: "The visual art competition and exhibition of NESSX. Astro and eco photography, poster design and AI art. Free to submit.",
+  bn: "NESSX-এর দৃশ্যশিল্প প্রতিযোগিতা ও প্রদর্শনী। অ্যাস্ট্রো ও ইকো ফটোগ্রাফি, পোস্টার ডিজাইন ও এআই আর্ট। জমা দেওয়া বিনামূল্যে।",
+};
+
+export async function generateMetadata() {
+  const lang: Locale = "en";
+  return meta(lang, "/ness/photosphere", title, lead, { src: photosphereBanner.social, alt: photosphereBanner.alt });
+}
+
+export default async function Photosphere() {
+  const lang: Locale = "en";
+  const p = photosphere;
+  const tel = (s: string) => `tel:${s.replace(/[^+\d]/g, "")}`;
+
+  return (
+    <>
+      <PageHead
+        lang={lang}
+        kicker={{ en: "NESSX 2027", bn: "NESSX ২০২৭" }}
+        title={title}
+        lead={lead}
+        crumbs={[{ label: { en: "NESS 2027", bn: "NESS ২০২৭" }, to: "/ness" }]}
+      />
+
+      <div className="wrap ps-page">
+        <figure className="banner-figure">
+          <Banner lang={lang} {...photosphereBanner} priority />
+        </figure>
+
+        <section aria-labelledby="ps-about" className="ps-intro">
+          <h2 id="ps-about" className="visually-hidden">About Photosphere 7.0</h2>
+          {p.intro.map((t) => <p key={t}>{t}</p>)}
+          <dl className="facts">
+            <div><dt>Entry</dt><dd>Free to submit</dd></div>
+            <div><dt>How many</dt><dd>Up to 5 per segment</dd></div>
+            <div><dt>Files</dt><dd>JPG, up to 20 MB each</dd></div>
+            <div><dt>Exhibition</dt><dd>At NESSX, 28–30 January 2027</dd></div>
+          </dl>
+          <div className="actions">
+            <a className="btn" href="#ps-submit">Submit your work</a>
+            <a className="btn btn-secondary" href="#ps-rules">Read the rules</a>
+          </div>
+        </section>
+
+        <section aria-labelledby="ps-cats">
+          <h2 id="ps-cats">Categories</h2>
+          <div className="table-scroll">
+            <table>
+              <thead><tr><th scope="col">Code</th><th scope="col">Category</th><th scope="col">Who</th></tr></thead>
+              <tbody>
+                {p.categories.map((c) => (
+                  <tr key={c.code}><td className="ps-code">{c.code}</td><td>{c.name}</td><td>{c.who}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="ps-submit" aria-labelledby="ps-seg">
+          <h2 id="ps-seg">Segments and submission</h2>
+          <p className="muted ps-note">Each segment has its own Google Form. Rename your files first (see below), or they won&apos;t be accepted.</p>
+          <div className="ps-segments">
+            {p.segments.map((s) => (
+              <article className="surface ps-segment" key={s.name}>
+                <div className="ps-seg-head">
+                  <h3>{s.name}</h3>
+                  <span className="segment-tags">{s.cats.map((c) => <span key={c} className="tag">{c}</span>)}</span>
+                </div>
+                <p className="muted">{s.desc}</p>
+                <FormButton href={s.form} lang={lang}>Submit {s.name}</FormButton>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="ps-rename" aria-labelledby="ps-ren" className="surface ps-rename">
+          <h2 id="ps-ren">Rename every file before you upload</h2>
+          <p><strong>Files that aren&apos;t named in this format won&apos;t be accepted.</strong></p>
+          <p className="ps-format"><code>{p.renaming.format}</code></p>
+          <p className="muted small">Number your files in order: 01, 02, 03 and so on. For example:</p>
+          <ul className="ps-examples">
+            {p.renaming.examples.map((e) => <li key={e}><code>{e}</code></li>)}
+          </ul>
+        </section>
+
+        <section id="ps-rules" aria-labelledby="ps-rul">
+          <h2 id="ps-rul">Submission rules</h2>
+          <ul className="ps-list">
+            {p.rules.map((r) => <li key={r}>{r}</li>)}
+          </ul>
+        </section>
+
+        <section aria-labelledby="ps-fee">
+          <h2 id="ps-fee">Fee, exhibition and pass</h2>
+          <ul className="ps-list">
+            {p.fee.map((r) => <li key={r}>{r}</li>)}
+          </ul>
+        </section>
+
+        <section aria-labelledby="ps-contact">
+          <h2 id="ps-contact">Questions? Contact the organizers</h2>
+          <div className="cards-3">
+            {p.organizers.map((o) => (
+              <div className="surface organizer" key={o.name}>
+                <h3>{o.name}</h3>
+                <p className="muted small">{o.role}</p>
+                <p><a href={tel(o.phone)}>{o.phone}</a></p>
+                <p><ExternalLink href={o.facebook} lang={lang}>Facebook</ExternalLink></p>
+              </div>
+            ))}
+          </div>
+          <p className="small muted ps-note">
+            Or email the club at <a href={`mailto:${site.email}`}>{site.email}</a>.
+          </p>
+        </section>
+
+        <section className="surface panel-band" aria-labelledby="ps-main">
+          <div>
+            <p className="label">Don&apos;t forget the main event</p>
+            <h2 id="ps-main">NESSX, the 10th National Earth and Space Summit</h2>
+            <p className="muted">28–30 January 2027 at Notre Dame College, Dhaka. Olympiads, quizzes, team contests, exhibitions and talks.</p>
+          </div>
+          <div className="actions">
+            <Link className="btn" href={path(lang, "/ness")}>See NESSX</Link>
+            <ExternalLink className="btn btn-secondary" href={p.nessxFacebook} lang={lang}>NESSX on Facebook</ExternalLink>
+          </div>
+        </section>
+      </div>
+    </>
+  );
+}
