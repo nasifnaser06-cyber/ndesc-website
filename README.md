@@ -2,7 +2,7 @@
 
 The website of the Notre Dame Eco and Space Club (NDESC), Notre Dame College, Dhaka. It is in English. (A Bangla version was built and then taken off on 18 Nov 2026; the Bangla text is still in `content/`.)
 
-**Live site:** https://nasifnaser06-cyber.github.io/ndesc-website/
+**Live site:** https://ndesc.com/ (the old nasifnaser06-cyber.github.io/ndesc-website/ address forwards here)
 
 This is a **draft**. Anything shown in [square brackets] on the site is waiting for the club to confirm or supply it. Facts on the site come from press coverage, and each summit page links its sources.
 
