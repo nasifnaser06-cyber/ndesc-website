@@ -1,6 +1,6 @@
 # NESSX automatic registration
 
-Participants register on the website's Register page (`/en/ness/register/`), pay by bKash Send Money, and type the TrxID. A Google Sheet owned by the club receives the form and the payment SMS, matches them, and emails the pass. Only mismatches reach a person.
+Participants register on the website's Register page (`/ness/register/`), pay by bKash Send Money, and type the TrxID. A Google Sheet owned by the club receives the form and the payment SMS, matches them, and emails the pass. Only mismatches reach a person.
 
 The full process and the risks are in the "NESSX automated registration and payment: process and risks" doc.
 

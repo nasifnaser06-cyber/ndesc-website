@@ -47,7 +47,7 @@ npm install
 npm run dev
 ```
 
-Then open http://localhost:3000/en/.
+Then open http://localhost:3000/.
 
 To build the finished static site into the `out/` folder: `npm run build`.
 

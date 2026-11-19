@@ -19,7 +19,7 @@ const navItems = [
   { key: "gallery", to: "/gallery" },
 ] as const;
 
-/** Strip the base path and language from the current URL, e.g. /ndesc-website/bn/events/ -> /events */
+/** Strip the language from the current URL, e.g. /bn/events/ -> /events (English pages have no prefix). */
 function useSubPath(lang: Locale) {
   const pathname = usePathname() || "/";
   const withoutLang = pathname.replace(new RegExp(`^/${lang}(?=/|$)`), "");
