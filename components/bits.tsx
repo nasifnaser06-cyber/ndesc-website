@@ -180,6 +180,7 @@ export function Banner({ name, widths, alt, lang, sizes = "(min-width: 1280px) 1
       alt={tr(alt, lang)}
       width={1920}
       height={height}
+      style={height !== 1080 ? ({ ["--banner-ratio" as string]: `1920 / ${height}` } as React.CSSProperties) : undefined}
       loading={priority ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : "auto"}
       decoding="async"
