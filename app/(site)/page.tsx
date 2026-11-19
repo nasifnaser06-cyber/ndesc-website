@@ -137,19 +137,6 @@ export default async function Home() {
           </p>
         </div>
       </section>
-
-      <section className="wrap section">
-        <div className="callout">
-          <div className="stack" style={{ gap: "var(--s2)" }}>
-            <h2>{en ? "Studying at Notre Dame College?" : "নটর ডেম কলেজে পড়ো?"}</h2>
-            <p className="muted">
-              {en ? "Join the club to run the summit, go stargazing and compete. " : "ক্লাবে যোগ দিয়ে সামিট আয়োজন করো, তারা দেখো, প্রতিযোগিতায় নামো। "}
-              <T lang={lang} text={{ en: "[Entry period and fee]", bn: "[যোগদানের সময় ও ফি]" }} />
-            </p>
-          </div>
-          <Link className="btn" href={path(lang, "/join")}>{tr(ui.howToJoin, lang)}</Link>
-        </div>
-      </section>
     </>
   );
 }
