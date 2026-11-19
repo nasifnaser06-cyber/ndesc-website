@@ -47,7 +47,7 @@ export const site = {
   },
 
   /** Shows the "draft" ribbon across the top until the club signs off the content. */
-  draft: true,
+  draft: false,
 };
 
 export type Site = typeof site;
