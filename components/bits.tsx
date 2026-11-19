@@ -167,7 +167,7 @@ export function PersonCard({ name, post, department, photo, poster, lang }: { na
 }
 
 /** A responsive banner or poster image (16:9 WebP files at several widths in public/). */
-export function Banner({ name, widths, alt, lang, sizes = "(min-width: 1280px) 1216px, 100vw", priority = false, className = "" }: { name: string; widths: number[]; alt: L; lang: Locale; sizes?: string; priority?: boolean; className?: string }) {
+export function Banner({ name, widths, alt, lang, sizes = "(min-width: 1280px) 1216px, 100vw", priority = false, className = "", height = 1080 }: { name: string; widths: number[]; alt: L; lang: Locale; sizes?: string; priority?: boolean; className?: string; height?: number; social?: string }) {
   const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const largest = Math.max(...widths);
   return (
@@ -179,7 +179,7 @@ export function Banner({ name, widths, alt, lang, sizes = "(min-width: 1280px) 1
       sizes={sizes}
       alt={tr(alt, lang)}
       width={1920}
-      height={1080}
+      height={height}
       loading={priority ? "eager" : "lazy"}
       fetchPriority={priority ? "high" : "auto"}
       decoding="async"

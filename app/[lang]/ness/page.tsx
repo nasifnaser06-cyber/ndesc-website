@@ -40,6 +40,9 @@ function SegmentList({ items, lang }: { items: Segment[]; lang: Locale }) {
               ))}
             </ul>
           )}
+          {g.page && (
+            <p><Link href={path(lang, g.page)}>{lang === "en" ? `Rules, renaming and submission links: ${g.name} page` : `${g.name}: নিয়ম ও জমার লিংক`}</Link></p>
+          )}
         </details>
       ))}
     </div>
@@ -147,7 +150,7 @@ export default async function Ness({ params }: Props) {
           <div className="groups">
             {programmes.map((g) => (
               <div key={g.name}>
-                <h3>{g.name}</h3>
+                <h3>{g.name.includes("Photosphere") ? <Link href={path(lang, "/ness/photosphere")}>{g.name}</Link> : g.name}</h3>
                 <p className="muted small">{g.desc}</p>
               </div>
             ))}

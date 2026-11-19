@@ -42,7 +42,8 @@ export const categoryNote =
 export const winnersNote =
   "Each category has three winners: Champion, 1st Runner-Up and 2nd Runner-Up. A segment open to P, J, S and HS has three winners in each of those categories. A Combined segment picks three winners from everyone. In team segments, all three members of a winning team get their own certificate and crest.";
 
-export type Segment = { name: string; cats: string[]; online?: boolean; desc: string[]; parts?: { name: string; cats: string[]; desc: string }[] };
+export type Segment = {
+  page?: string; name: string; cats: string[]; online?: boolean; desc: string[]; parts?: { name: string; cats: string[]; desc: string }[] };
 
 export const soloSegments: Segment[] = [
   {
@@ -145,14 +146,15 @@ export const soloSegments: Segment[] = [
     name: "Photosphere 7.0",
     cats: ["PS-J", "PS-S", "PS-C"],
     online: true,
+    page: "/ness/photosphere",
     desc: [
-      "Submit to any of the sub-segments below. PS-J is Class 6 to 10, PS-S is Class 11 and 12 and university, and PS-C is everyone competing together. Selected participants will be contacted directly. Topics and themes will be announced on the Photosphere 7.0 event page.",
+      "The visual art competition and exhibition of NESSX. Free to submit, up to 5 works per segment, through each segment's Google Form. PS-J is Class 6 to 10, PS-S is Class 11, 12 and university, and PS-C is everyone competing together. Selected work is shown at the summit.",
     ],
     parts: [
-      { name: "Astro Photography", cats: ["PS-J", "PS-S"], desc: "Your best work on astronomy or the cosmos: moonrises, the night sky, nebulae, anything that catches your eye." },
-      { name: "Eco Photography", cats: ["PS-J", "PS-S"], desc: "Your best work on the Earth and its elements: nature's beauty, environmental decay, anything that catches your eye." },
-      { name: "AI Art", cats: ["PS-C"], desc: "Your best digitally created art on the given theme." },
-      { name: "Poster Designing", cats: ["PS-C"], desc: "An eye-catching, informative or inspiring poster on the given theme." },
+      { name: "Astro Photography", cats: ["PS-J", "PS-S"], desc: "Star trails, constellations, galaxies, nebulae: whatever in the night sky has mesmerised you most." },
+      { name: "Eco Photography", cats: ["PS-J", "PS-S"], desc: "The raw, intricate nature of our Earth from your own perspective." },
+      { name: "Poster Designing", cats: ["PS-C"], desc: "Posters that turn complex scientific or environmental ideas into striking, easy-to-grasp visuals." },
+      { name: "AI Art", cats: ["PS-C"], desc: "Human imagination paired with generative AI, blending science and creativity in a single frame." },
     ],
   },
 ];
