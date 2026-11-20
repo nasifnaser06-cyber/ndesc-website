@@ -1033,10 +1033,25 @@ body:has(.ness-three) .footer-grid a.footer-map-open { background: #ebf5f9; colo
 body:has(.ness-three) .footer-grid a.footer-map-open:hover { background: #0a4a70; color: #ebf5f9; }
 
 /* Footer map marker (Photosphere page): a pale pin with a navy outline and a teal halo, so the college
-   stands out on the blue map. The map becomes a still preview here (the marker would drift if it were
-   dragged); "Open in Maps" opens the full map. */
-.footer-map-pin { display: none; }
+   stands out on the blue map. The map starts still (the marker would drift if it were dragged); the
+   first tap on it fades the marker and unlocks zoom and drag, and Google's pin takes over. */
+.footer-map-pin, .footer-map-unlock, .footer-map-cover { display: none; }
 body:has(.ps-bg) .footer-map iframe { pointer-events: none; }
+body:has(.ps-bg) .footer-map-unlock { display: block; position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0; }
+body:has(.ps-bg) .footer-map-cover {
+  display: flex; position: absolute; inset: 0; z-index: 1; cursor: pointer;
+  align-items: flex-end; justify-content: center; padding-bottom: 2.4rem; border-radius: inherit;
+}
+body:has(.ps-bg) .footer-map-unlock:focus-visible + .footer-map-cover { outline: 2px solid #3ae3d1; outline-offset: -4px; }
+body:has(.ps-bg) .footer-map-hint {
+  font-size: 0.8rem; font-weight: 600; padding: 0.3rem 0.75rem; border-radius: 999px;
+  background: rgba(11, 28, 51, 0.85); color: #e2f2fc; border: 1px solid #1d5f8a;
+}
+body:has(.ps-bg) .footer-map:has(.footer-map-unlock:checked) iframe { pointer-events: auto; }
+body:has(.ps-bg) .footer-map:has(.footer-map-unlock:checked) .footer-map-unlock,
+body:has(.ps-bg) .footer-map:has(.footer-map-unlock:checked) .footer-map-cover { display: none; }
+body:has(.ps-bg) .footer-map-pin { transition: opacity 0.3s ease, visibility 0.3s; }
+body:has(.ps-bg) .footer-map:has(.footer-map-unlock:checked) .footer-map-pin { opacity: 0; visibility: hidden; }
 body:has(.ps-bg) .footer-map-pin {
   display: block; position: absolute; left: 50%; top: 50%; z-index: 1; pointer-events: none;
   width: 36px; height: 48px; transform: translate(-50%, calc(-100% + 4px));

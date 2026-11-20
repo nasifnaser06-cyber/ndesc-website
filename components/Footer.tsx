@@ -44,6 +44,12 @@ export default function Footer({ lang }: { lang: Locale }) {
                 <circle cx="18" cy="17.5" r="6" fill="#0b1c33" />
               </svg>
             </span>
+            {/* Photosphere only: the map starts still so our pin lines up. The first tap fades the pin
+                and unlocks the map (zoom and drag); Google's own pin then marks the college. */}
+            <input className="footer-map-unlock" id="footer-map-unlock" type="checkbox" />
+            <label className="footer-map-cover" htmlFor="footer-map-unlock">
+              <span className="footer-map-hint">{lang === "en" ? "Tap to zoom and move" : "জুম করতে ট্যাপ করুন"}</span>
+            </label>
             <a className="footer-map-open" href={site.mapUrl} target="_blank" rel="noopener noreferrer">
               {lang === "en" ? "Open in Maps" : "ম্যাপে খুলুন"}
               <svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 4h6v6" /><path d="M10 14 20 4" /><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5" /></svg>
