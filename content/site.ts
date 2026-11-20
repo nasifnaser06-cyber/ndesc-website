@@ -47,7 +47,7 @@ export const site = {
    * notice. Set false (live) on 20 Nov 2026, using the sheet in nasifnaser06@gmail.com.
    */
   registration: {
-    endpoint: "https://script.google.com/macros/s/AKfycby5E_2gLVJd30XMD5YUu3iQ_eyZdWfl3UXnWXrpU6yVcGMa8G_pszExSbXE8TAP-KuW/exec" as string | null,
+    endpoint: "https://script.google.com/macros/s/AKfycbyhTlfcbUwn186jl-Goo1y9r-nAiWNg277Ekx3V1ti4ccyViFdw4xGsLg4LJqFK2qk/exec" as string | null,
     trial: false,
     bkash: "[club bKash number]",
     nagad: null as string | null,
