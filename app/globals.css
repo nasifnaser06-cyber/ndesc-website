@@ -1012,3 +1012,11 @@ body:has(.ps-four) .ice-btn::after { background: linear-gradient(105deg, transpa
 @media (prefers-reduced-motion: no-preference) {
   html:has(.ps-bg) { scroll-behavior: smooth; }
 }
+
+/* Photosphere: the footer map in dark mode to match the night page (Mahmud, 20 Nov 2026).
+   Google's free embed has no dark style, so the map is inverted and its hues turned back round:
+   streets go dark, labels light, and the red pin stays red. The chip uses the page's own colours. */
+body:has(.ps-bg) .footer-map { background: #0b1c33; border-color: #1d5f8a; }
+body:has(.ps-bg) .footer-map iframe { filter: invert(0.9) hue-rotate(180deg) brightness(0.95) contrast(0.9); }
+body:has(.ps-bg) .footer-grid a.footer-map-open { background: #0b1c33; color: #3ae3d1; border: 1px solid #1d5f8a; box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4); }
+body:has(.ps-bg) .footer-grid a.footer-map-open:hover { background: #1d5f8a; color: #e2f2fc; }
