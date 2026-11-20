@@ -5,6 +5,7 @@ import { ui } from "@/content/ui";
 import { site } from "@/content/site";
 import { sortedEvents, getEvent, ness2027Banner } from "@/content/events";
 import { timeline } from "@/content/club";
+import { nessx } from "@/content/ness2027";
 import { Banner, PhotoSlot, Stars, T } from "@/components/bits";
 import { EventRows } from "@/components/EventList";
 
@@ -71,7 +72,7 @@ export default async function Home() {
           </Link>
           <div>
             <p className="label">{en ? "Registration open" : "নিবন্ধন চলছে"}</p>
-            <h2 id="ness-title">{tr(ness.title, lang)}</h2>
+            <h2 id="ness-title">{nessx.name}</h2>
             <p className="muted">{tr(ness.summary, lang)}</p>
             <dl className="facts">
               <div><dt>{tr(ui.dates, lang)}</dt><dd>{formatDateRange(ness.start, ness.end, lang, "long")}</dd></div>

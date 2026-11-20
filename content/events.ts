@@ -50,7 +50,8 @@ export const events: ClubEvent[] = [
     type: "ness",
     start: "2027-01-28",
     end: "2027-01-30",
-    title: { en: "NESS X", bn: "NESS X" },
+    // Named like the other summits in the events list (Mahmud, 21 Nov 2026); the home page box still says NESS X.
+    title: { en: "10th National Earth and Space Summit", bn: "১০ম ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট" },
     venue: ndc,
     summary: {
       en: "NESS X, the 10th summit: three days of olympiads, quizzes, team contests, exhibitions and talks for students from Nursery to Class 12.",
