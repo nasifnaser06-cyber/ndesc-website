@@ -65,7 +65,7 @@ export default async function About() {
             <tbody>
               <tr><th scope="row">{en ? "Founded" : "প্রতিষ্ঠা"}</th><td>{en ? "28 October 1992" : "২৮ অক্টোবর ১৯৯২"}</td></tr>
               <tr><th scope="row">{en ? "Former name" : "আগের নাম"}</th><td>{en ? "Notre Dame Environmental Promotion Club" : "নটর ডেম এনভায়রনমেন্টাল প্রমোশন ক্লাব"}</td></tr>
-              <tr><th scope="row">{en ? "Renamed" : "নাম পরিবর্তন"}</th><td><T lang={lang} text={{ en: "[23 May 2018? confirm]", bn: "[২৩ মে ২০১৮? নিশ্চিত করুন]" }} /></td></tr>
+              <tr><th scope="row">{en ? "Renamed" : "নাম পরিবর্তন"}</th><td>{en ? "23 May 2018" : "২৩ মে ২০১৮"}</td></tr>
               <tr><th scope="row">{en ? "Home" : "ঠিকানা"}</th><td>{en ? "Notre Dame College, Dhaka" : "নটর ডেম কলেজ, ঢাকা"}</td></tr>
               <tr><th scope="row">{en ? "Signature event" : "প্রধান আয়োজন"}</th><td><Link href={path(lang, "/ness")}>{en ? "National Earth and Space Summit" : "ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট"}</Link></td></tr>
               <tr><th scope="row">{en ? "Other events" : "অন্যান্য আয়োজন"}</th><td>{en ? "Cosmoterrium (intra-college), National Space Camp, workshops" : "কসমোটেরিয়াম (আন্তঃকলেজ), ন্যাশনাল স্পেস ক্যাম্প, কর্মশালা"}</td></tr>
