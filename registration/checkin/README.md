@@ -22,7 +22,7 @@ Every scan, repeats included, is a row in the **Check-ins** tab. The **Participa
    `=QUERY(IMPORTRANGE("LINK","Registrations!A1:V"),"select Col18, Col3, Col5, Col4, Col10, Col8, Col9, Col7, Col2 where Col5 is not null label Col18 'Participant ID', Col2 'Registered'",1)` and press Allow access.
 2. Extensions > Apps Script: paste `CheckIn.gs` as the only file, save, run `setup`, allow the permissions.
 3. Settings tab: paste the registration sheet address into **Registration sheet link**.
-4. Deploy > New deployment > Web app, Execute as Me, Who has access Anyone.
+4. Deploy > New deployment > Web app, Execute as Me, Who has access Anyone. Copy the Web app URL (ends in /exec) into Settings > **Web app link**.
 5. Back in the sheet: menu **NESS X check-in > Show the scanner link**. Open that link on each phone, name the phone, tap Start scanning.
 
 To stop old links working, change the **Scanner key** in Settings and share the new link.

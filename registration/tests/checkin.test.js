@@ -20,6 +20,7 @@ const reg = sheet('Registrations', [regHeader,
 const sheets = {};
 const ss = { getName: () => 'NESS X Summit', getSheetByName: n => sheets[n] || null, insertSheet: n => (sheets[n] = sheet(n)), setSpreadsheetTimeZone() {} };
 sheets.Participants = sheet('Participants');
+let devUrl = false;
 let clock = new Date('2027-01-28T03:14:00Z');
 const ctx = {
   console, JSON, String, Number, Array, Object, Math,
@@ -30,7 +31,7 @@ const ctx = {
   Utilities: { getUuid: () => '11112222-3333-4444-5555-666677778888',
     formatDate: (d, tz, f) => { const x = new Date(d.getTime() + 6 * 3600e3); const h = x.getUTCHours(); return x.getUTCDate() + ' Jan, ' + ((h % 12) || 12) + ':' + String(x.getUTCMinutes()).padStart(2, '0') + ' ' + (h < 12 ? 'AM' : 'PM'); } },
   ContentService: { createTextOutput: t => ({ setMimeType: () => JSON.parse(t) }), MimeType: { JSON: 'json' } },
-  ScriptApp: { getService: () => ({ getUrl: () => 'https://script.google.com/macros/s/AKfyTEST123/exec' }) },
+  ScriptApp: { getService: () => ({ getUrl: () => devUrl ? 'https://script.google.com/macros/s/AKfyHEAD456/dev' : 'https://script.google.com/macros/s/AKfyTEST123/exec' }) },
 };
 vm.createContext(ctx);
 vm.runInContext(fs.readFileSync(path.join(__dirname, '../checkin/CheckIn.gs'), 'utf8'), ctx);
@@ -41,7 +42,11 @@ const S = sheets.Settings.data;
 S.find(r => r[0] === 'Registration sheet link')[1] = 'https://docs.google.com/spreadsheets/d/REG/edit';
 const key = S.find(r => r[0] === 'Scanner key')[1];
 check('key made', key.length === 32);
-check('scanner link', ctx.scannerLink() === 'https://ndesc.com/scan/#AKfyTEST123.' + key, ctx.scannerLink());
+check('own /exec address used when Settings is empty', ctx.scannerLink() === 'https://ndesc.com/scan/#AKfyTEST123.' + key, ctx.scannerLink());
+devUrl = true;
+check('a /dev address is never used', ctx.scannerLink() === '', ctx.scannerLink());
+S.find(r => r[0] === 'Web app link')[1] = 'https://script.google.com/macros/s/AKfyPUBLISHED_9x/exec';
+check('Settings web app link wins', ctx.scannerLink() === 'https://ndesc.com/scan/#AKfyPUBLISHED_9x.' + key, ctx.scannerLink());
 const post = b => ctx.doPost({ postData: { contents: JSON.stringify(b) } });
 
 check('wrong key refused', post({ action: 'scan', key: 'nope', code: 'K7P2QXM9AB' }).ok === false);
