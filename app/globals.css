@@ -994,3 +994,9 @@ body:has(.ps-four) .ice .crystal path { stroke: #e2f2fc; }
 body:has(.ps-four) .ice { filter: drop-shadow(0 0 0.6px #0b1c33) drop-shadow(0 0 2px rgba(11, 28, 51, 0.4)); }
 body:has(.ps-four) .ice-btn::before,
 body:has(.ps-four) .ice-btn::after { background: linear-gradient(105deg, transparent 30%, rgba(226, 242, 252, 0.6) 48%, rgba(226, 242, 252, 0.1) 56%, transparent 70%); }
+
+/* Photosphere: "Submit Creation" glides down to the submission forms, stopping clear of the header. */
+#ps-submit { scroll-margin-top: 5.5rem; }
+@media (prefers-reduced-motion: no-preference) {
+  html:has(.ps-bg) { scroll-behavior: smooth; }
+}
