@@ -117,16 +117,16 @@ main:focus { outline: none; }
 .only-menu { display: none; }
 .header-tools { display: flex; align-items: center; gap: var(--s3); }
 /* On wide screens the tools hold only the hidden menu button, so take them out of the row and let the menu reach the right edge. */
-@media (min-width: 901px) { .header-tools:not(:has(> :not(.menu-btn))) { display: none; } }
+@media (min-width: 1161px) { .header-tools:not(:has(> :not(.menu-btn))) { display: none; } }
 .lang { display: inline-flex; border: 1px solid var(--edge); border-radius: 999px; overflow: hidden; }
 .lang a { min-height: 40px; display: inline-flex; align-items: center; padding: 0 var(--s3); font-size: 0.875rem; color: var(--starlight); text-decoration: none; }
 .lang a.on { background: var(--starlight); color: var(--night); }
 .menu-btn { display: none; width: 44px; height: 44px; align-items: center; justify-content: center; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--starlight); cursor: pointer; }
 
-@media (max-width: 1100px) {
-  .main-nav ul { gap: var(--s3); }
-}
-@media (max-width: 900px) {
+/* The menu folds into the menu button up to 1160px: with the club name and the Register button
+   beside it, the full menu needs about 1120px to sit on one line (20 Nov 2026), plus some margin
+   for wider font rendering. */
+@media (max-width: 1160px) {
   .header-row { flex-wrap: wrap; }
   /* Without JavaScript the menu stays visible as a wrapped row. */
   .main-nav { order: 3; width: 100%; padding-bottom: var(--s3); }
@@ -140,9 +140,25 @@ main:focus { outline: none; }
   .only-menu { display: list-item; }
   .brand-name { display: inline; }
 }
-/* Phones keep the club's name beside the logo, a touch smaller on the narrowest screens. */
-@media (max-width: 360px) {
+/* Phones keep the club's name beside the logo and the Register button on one row: the button
+   says just "Register", and the header uses a little less side space and smaller gaps. */
+.ice-label-short { display: none; }
+@media (max-width: 600px) {
+  .site-header .wrap { padding-inline: var(--s4); }
+  .header-row { gap: var(--s3); }
+  .header-tools { gap: var(--s2); }
+  .brand { gap: var(--s2); }
   .brand-name { font-size: 0.8125rem; }
+  .ice-btn .ice-label-long { display: none; }
+  .ice-btn .ice-label-short { display: inline; }
+}
+@media (max-width: 380px) {
+  .brand-name { font-size: 0.6875rem; }
+  .brand .logo-mark { width: 38px; height: 38px; }
+}
+/* The narrowest phones (under 360px) show the logo alone, so the row still fits. */
+@media (max-width: 359px) {
+  .brand-name { display: none; }
 }
 
 /* Footer */

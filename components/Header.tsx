@@ -7,6 +7,7 @@ import { type Locale, tr, path } from "@/lib/i18n";
 import { ui } from "@/content/ui";
 import { site } from "@/content/site";
 import { Logo } from "./bits";
+import IceButton from "./IceButton";
 
 // Gallery and Resources left the header on 20 Nov 2026 (the pages still exist).
 const navItems = [
@@ -113,8 +114,14 @@ export default function Header({ lang }: { lang: Locale }) {
         </nav>
 
         <div className="header-tools">
-          {/* The "Register for NESS X" ice button left the header on 20 Nov 2026 (Mahmud).
-              components/IceButton.tsx is kept in case it comes back. */}
+          {/* The "Register for NESS X" ice button, back in the header (Mahmud, 20 Nov 2026).
+              No Register button on the Register page itself. */}
+          {sub !== "/ness/register" &&
+            (site.registerWith === "form" && site.forms.nessRegister ? (
+              <IceButton href={site.forms.nessRegister} external note={tr(ui.newTab, lang)} />
+            ) : (
+              <IceButton href={path(lang, "/ness/register")} />
+            ))}
           <button
             ref={menuButton}
             type="button"
