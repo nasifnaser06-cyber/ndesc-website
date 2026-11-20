@@ -1,0 +1,353 @@
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import jsQR from "jsqr";
+
+// NESS X check-in scanner. Reads the participant's QR code with the phone camera, asks the
+// check-in web app in the NESS X Summit sheet, and shows Registered, Already scanned or
+// Not registered with the pass. The web app address and key come from the scanner link
+// (ndesc.com/scan/#<web app id>.<key>) and are remembered on the phone.
+
+type Link = { endpoint: string; key: string };
+type Answer = {
+  ok: boolean;
+  error?: string;
+  result?: "registered" | "already" | "unpaid" | "not_registered";
+  name?: string;
+  participantId?: string;
+  pass?: string;
+  firstAt?: string;
+  firstBy?: string;
+  sheet?: string;
+};
+type BarcodeDetectorLike = { detect(src: CanvasImageSource): Promise<{ rawValue: string }[]> };
+
+const STORE_LINK = "ndesc-scan-link";
+const STORE_PHONE = "ndesc-scan-phone";
+
+function readLink(): Link | null {
+  const fromHash = (h: string): Link | null => {
+    const raw = decodeURIComponent(h.replace(/^#/, ""));
+    const dot = raw.lastIndexOf(".");
+    if (dot < 1) return null;
+    const id = raw.slice(0, dot), key = raw.slice(dot + 1);
+    if (!/^[A-Za-z0-9]{16,}$/.test(key)) return null;
+    if (/^https?:\/\//.test(id)) return { endpoint: id, key }; // full address, used in local tests
+    if (!/^[A-Za-z0-9_-]{20,}$/.test(id)) return null;
+    return { endpoint: `https://script.google.com/macros/s/${id}/exec`, key };
+  };
+  try {
+    const link = fromHash(window.location.hash);
+    if (link) {
+      localStorage.setItem(STORE_LINK, JSON.stringify(link));
+      return link;
+    }
+    const saved = localStorage.getItem(STORE_LINK);
+    return saved ? (JSON.parse(saved) as Link) : null;
+  } catch {
+    return fromHash(window.location.hash);
+  }
+}
+
+async function ask(link: Link, body: object): Promise<Answer> {
+  const res = await fetch(link.endpoint, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify({ ...body, key: link.key }),
+  });
+  return res.json();
+}
+
+const C = {
+  night: "#0F1E36", panel: "#172A4A", line: "#2E4670", star: "#E9EEF6", haze: "#A9B7CC", sprout: "#8FD3A6",
+  green: "#17733F", amber: "#8A5A00", red: "#A3271D",
+};
+
+const btn: React.CSSProperties = {
+  minHeight: 52, padding: "0 22px", borderRadius: 12, border: "none", fontSize: 18, fontWeight: 700,
+  background: C.sprout, color: C.night, cursor: "pointer", fontFamily: "inherit",
+};
+const ghost: React.CSSProperties = { ...btn, background: "transparent", color: C.star, border: `1px solid ${C.line}` };
+const input: React.CSSProperties = {
+  minHeight: 52, padding: "0 14px", borderRadius: 12, border: `1px solid ${C.line}`, background: C.panel,
+  color: C.star, fontSize: 18, fontFamily: "inherit", width: "100%", boxSizing: "border-box",
+};
+
+export default function Scanner() {
+  const [link, setLink] = useState<Link | null | undefined>(undefined);
+  const [phone, setPhone] = useState("");
+  const [phoneDraft, setPhoneDraft] = useState("Phone 1");
+  const [connected, setConnected] = useState<"checking" | "yes" | "no">("checking");
+  const [connError, setConnError] = useState("");
+  const [camera, setCamera] = useState<"off" | "on" | "error">("off");
+  const [cameraError, setCameraError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [answer, setAnswer] = useState<Answer | null>(null);
+  const [lastValue, setLastValue] = useState("");
+  const [typed, setTyped] = useState("");
+  const [typedError, setTypedError] = useState("");
+
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const scanningRef = useRef(false);
+  const detectorRef = useRef<BarcodeDetectorLike | null>(null);
+  // After "Scan next" the last person's QR is often still in view: ignore that code for a moment.
+  const ignoreRef = useRef<{ value: string; until: number }>({ value: "", until: 0 });
+
+  useEffect(() => {
+    setLink(readLink());
+    try { setPhone(localStorage.getItem(STORE_PHONE) || ""); } catch { /* private mode */ }
+    if (window.location.hash) history.replaceState(null, "", window.location.pathname); // keep the key off the screen
+  }, []);
+
+  useEffect(() => {
+    if (!link) return;
+    setConnected("checking");
+    ask(link, { action: "ping" })
+      .then((a) => { if (a.ok) setConnected("yes"); else { setConnected("no"); setConnError(a.error || ""); } })
+      .catch(() => { setConnected("no"); setConnError("No answer from the sheet. Check the internet."); });
+  }, [link]);
+
+  const stopCamera = useCallback(() => {
+    scanningRef.current = false;
+    streamRef.current?.getTracks().forEach((t) => t.stop());
+    streamRef.current = null;
+    setCamera("off");
+  }, []);
+  useEffect(() => stopCamera, [stopCamera]);
+
+  const check = useCallback(async (value: string) => {
+    if (!link) return;
+    scanningRef.current = false;
+    setLastValue(value);
+    setBusy(true);
+    setAnswer(null);
+    try {
+      const a = await ask(link, { action: "scan", code: value, device: phone });
+      setAnswer(a);
+      if (a.ok && navigator.vibrate) navigator.vibrate(a.result === "registered" ? 120 : [90, 70, 90, 70, 90]);
+    } catch {
+      setAnswer({ ok: false, error: "No answer from the sheet. Check the internet and try again." });
+    } finally {
+      setBusy(false);
+    }
+  }, [link, phone]);
+
+  const loop = useCallback(async () => {
+    const video = videoRef.current;
+    if (!scanningRef.current || !video) return;
+    if (video.readyState >= 2 && video.videoWidth) {
+      let value = "";
+      try {
+        if (detectorRef.current) {
+          const found = await detectorRef.current.detect(video);
+          value = found[0]?.rawValue || "";
+        } else {
+          const canvas = canvasRef.current || (canvasRef.current = document.createElement("canvas"));
+          const scale = Math.min(1, 640 / video.videoWidth);
+          canvas.width = Math.round(video.videoWidth * scale);
+          canvas.height = Math.round(video.videoHeight * scale);
+          const g = canvas.getContext("2d", { willReadFrequently: true });
+          if (g) {
+            g.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const img = g.getImageData(0, 0, canvas.width, canvas.height);
+            value = jsQR(img.data, img.width, img.height, { inversionAttempts: "dontInvert" })?.data || "";
+          }
+        }
+      } catch { /* try the next frame */ }
+      const ign = ignoreRef.current;
+      if (value.trim() && value.trim() === ign.value && Date.now() < ign.until) value = "";
+      if (value.trim() && scanningRef.current) {
+        check(value.trim());
+        return;
+      }
+    }
+    setTimeout(loop, 120);
+  }, [check]);
+
+  const startCamera = useCallback(async () => {
+    setCameraError("");
+    try {
+      if (!streamRef.current) {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" } }, audio: false });
+        streamRef.current = stream;
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          await videoRef.current.play();
+        }
+      }
+      const W = window as unknown as { BarcodeDetector?: { new (o: object): BarcodeDetectorLike; getSupportedFormats?: () => Promise<string[]> } };
+      if (!detectorRef.current && W.BarcodeDetector) {
+        try {
+          const formats = (await W.BarcodeDetector.getSupportedFormats?.()) || [];
+          if (formats.includes("qr_code")) detectorRef.current = new W.BarcodeDetector({ formats: ["qr_code"] });
+        } catch { /* use jsQR */ }
+      }
+      setCamera("on");
+      scanningRef.current = true;
+      loop();
+    } catch (e) {
+      setCamera("error");
+      setCameraError(e instanceof Error && e.name === "NotAllowedError"
+        ? "Camera blocked. Allow the camera for ndesc.com in the browser settings, then tap Start again."
+        : "The camera could not start. Close other apps using it and try again.");
+    }
+  }, [loop]);
+
+  const next = useCallback(() => {
+    ignoreRef.current = { value: lastValue, until: Date.now() + 3000 };
+    setAnswer(null);
+    setTyped("");
+    setTypedError("");
+    if (streamRef.current) {
+      scanningRef.current = true;
+      loop();
+    }
+  }, [loop, lastValue]);
+
+  const submitTyped = (e: React.FormEvent) => {
+    e.preventDefault();
+    const v = typed.trim();
+    if (!v) { setTypedError("Type a Participant ID first, like NESSX-HS-0042."); return; }
+    setTypedError("");
+    check(v);
+  };
+
+  // ---------------------------------------------------------------- screens
+
+  const shell = (children: React.ReactNode) => (
+    <main style={{ maxWidth: 520, margin: "0 auto", padding: "16px 16px 40px", boxSizing: "border-box", minHeight: "100dvh" }}>
+      <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 14 }}>
+        <div>
+          <div style={{ fontSize: 13, color: C.haze }}>NESS X</div>
+          <div style={{ fontSize: 20, fontWeight: 800 }}>Check-in scanner</div>
+        </div>
+        {link && phone && (
+          <div style={{ textAlign: "right", fontSize: 13, color: C.haze }}>
+            <div>{phone}</div>
+            <div aria-live="polite">
+              <span aria-hidden="true" style={{ display: "inline-block", width: 8, height: 8, borderRadius: 4, marginRight: 6,
+                background: connected === "yes" ? C.sprout : connected === "no" ? "#F08A7E" : C.haze }} />
+              {connected === "yes" ? "Connected" : connected === "no" ? "Not connected" : "Connecting…"}
+            </div>
+          </div>
+        )}
+      </header>
+      {children}
+    </main>
+  );
+
+  if (link === undefined) return shell(null);
+
+  if (!link) {
+    return shell(
+      <section style={{ background: C.panel, borderRadius: 16, padding: 20, lineHeight: 1.6 }}>
+        <h1 style={{ fontSize: 22, margin: "0 0 8px" }}>Open the scanner link</h1>
+        <p style={{ margin: 0, color: C.haze }}>This page only works from the scanner link. In the NESS X Summit sheet, use the menu NESS X check-in, then Show the scanner link, and open that link on this phone.</p>
+      </section>,
+    );
+  }
+
+  if (!phone) {
+    return shell(
+      <form
+        style={{ background: C.panel, borderRadius: 16, padding: 20 }}
+        onSubmit={(e) => {
+          e.preventDefault();
+          const p = phoneDraft.trim().slice(0, 40) || "Phone 1";
+          try { localStorage.setItem(STORE_PHONE, p); } catch { /* private mode */ }
+          setPhone(p);
+        }}
+      >
+        <h1 style={{ fontSize: 22, margin: "0 0 6px" }}>Name this phone</h1>
+        <p style={{ margin: "0 0 14px", color: C.haze, lineHeight: 1.5 }}>It shows in the sheet next to every scan, so you can tell the two phones apart.</p>
+        <label htmlFor="phone" style={{ display: "block", fontSize: 14, color: C.haze, marginBottom: 6 }}>Phone name</label>
+        <input id="phone" style={input} value={phoneDraft} onChange={(e) => setPhoneDraft(e.target.value)} maxLength={40} />
+        <button type="submit" style={{ ...btn, width: "100%", marginTop: 14 }}>Save</button>
+      </form>,
+    );
+  }
+
+  const res = answer?.ok ? answer.result : undefined;
+  const panel = res && {
+    registered: { bg: C.green, title: "Registered" },
+    already: { bg: C.amber, title: "Already scanned" },
+    unpaid: { bg: C.red, title: "Not registered" },
+    not_registered: { bg: C.red, title: "Not registered" },
+  }[res];
+
+  return shell(
+    <>
+      {connected === "no" && (
+        <p role="alert" style={{ background: "#3A1D24", border: "1px solid #7A3340", borderRadius: 12, padding: "10px 14px", margin: "0 0 12px", lineHeight: 1.5 }}>
+          {connError || "Not connected to the sheet."}
+        </p>
+      )}
+
+      {/* Camera view, hidden (but kept running) while a result is on screen */}
+      <div style={{ position: "relative", borderRadius: 16, overflow: "hidden", background: "#000", aspectRatio: "1 / 1", display: answer || busy ? "none" : "block" }}>
+        <video ref={videoRef} playsInline muted autoPlay style={{ width: "100%", height: "100%", objectFit: "cover", display: camera === "on" ? "block" : "none" }} />
+        {camera === "on" && (
+          <div aria-hidden="true" style={{ position: "absolute", inset: "18%", border: `3px solid ${C.sprout}`, borderRadius: 18, boxShadow: "0 0 0 2000px rgba(15,30,54,.35)" }} />
+        )}
+        {camera !== "on" && (
+          <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14, padding: 20, textAlign: "center" }}>
+            <button type="button" style={btn} onClick={startCamera}>Start scanning</button>
+            {cameraError && <p role="alert" style={{ margin: 0, color: "#F6B4AA", lineHeight: 1.5 }}>{cameraError}</p>}
+          </div>
+        )}
+      </div>
+      {camera === "on" && !answer && !busy && <p style={{ textAlign: "center", color: C.haze, margin: "10px 0 0" }}>Point the camera at the QR code</p>}
+
+      {busy && (
+        <div aria-live="polite" style={{ background: C.panel, borderRadius: 16, padding: "48px 20px", textAlign: "center", fontSize: 22, fontWeight: 700 }}>Checking…</div>
+      )}
+
+      {answer && (
+        <section aria-live="assertive" style={{ background: panel ? panel.bg : C.panel, borderRadius: 16, padding: "26px 20px", color: "#fff" }}>
+          {panel ? (
+            <>
+              <h1 style={{ fontSize: 38, lineHeight: 1.1, margin: 0, fontWeight: 800 }}>{panel.title}</h1>
+              {res === "unpaid" && <p style={{ fontSize: 18, margin: "10px 0 0" }}>Payment not confirmed yet. Send them to the help desk.</p>}
+              {answer.pass && res !== "unpaid" && <p style={{ fontSize: 28, fontWeight: 800, margin: "14px 0 0" }}>{answer.pass}</p>}
+              {res === "already" && <p style={{ fontSize: 18, margin: "10px 0 0" }}>First scanned {answer.firstAt}{answer.firstBy ? ` on ${answer.firstBy}` : ""}</p>}
+              {answer.name && (
+                <p style={{ fontSize: 16, margin: "16px 0 0", opacity: 1, color: "rgba(255,255,255,.88)" }}>
+                  {answer.name}{answer.participantId ? ` · ${answer.participantId}` : ""}
+                </p>
+              )}
+            </>
+          ) : (
+            <>
+              <h1 style={{ fontSize: 24, margin: 0 }}>Could not check</h1>
+              <p style={{ margin: "8px 0 0", lineHeight: 1.5, color: C.haze }}>{answer.error}</p>
+              {lastValue && <button type="button" style={{ ...ghost, marginTop: 14 }} onClick={() => check(lastValue)}>Try again</button>}
+            </>
+          )}
+        </section>
+      )}
+      {answer && (
+        <button type="button" style={{ ...btn, width: "100%", marginTop: 12, minHeight: 60, fontSize: 20 }} onClick={next} autoFocus>
+          Scan next
+        </button>
+      )}
+
+      <form onSubmit={submitTyped} style={{ marginTop: 22, display: answer || busy ? "none" : "block" }} noValidate>
+        <label htmlFor="typed" style={{ display: "block", fontSize: 14, color: C.haze, marginBottom: 6 }}>QR won't scan? Type the Participant ID</label>
+        <div style={{ display: "flex", gap: 8 }}>
+          <input id="typed" style={input} value={typed} placeholder="NESSX-HS-0042" autoCapitalize="characters" autoComplete="off"
+            onChange={(e) => { setTyped(e.target.value); setTypedError(""); }} aria-invalid={Boolean(typedError)} aria-describedby="typed-err" />
+          <button type="submit" style={ghost}>Check</button>
+        </div>
+        {typedError && <p id="typed-err" role="alert" style={{ color: "#F6B4AA", fontSize: 14, margin: "6px 0 0" }}>{typedError}</p>}
+      </form>
+
+      {camera === "on" && !answer && !busy && (
+        <p style={{ textAlign: "center", marginTop: 18 }}>
+          <button type="button" style={{ ...ghost, minHeight: 44, fontSize: 15 }} onClick={stopCamera}>Stop camera</button>
+        </p>
+      )}
+    </>,
+  );
+}

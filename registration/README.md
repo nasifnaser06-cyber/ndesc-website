@@ -15,7 +15,9 @@ The full process and the risks are in the "NESSX automated registration and paym
 | `tests/email.test.js` | 5 checks of the pass email for online and team passes and when the QR service is down. |
 | `tests/mock-server.js` | A stand-in for the web app at `http://localhost:8078`, to try the Register page locally. |
 
-Run the tests: `node registration/tests/logic.test.js && node registration/tests/flow.test.js && node registration/tests/email.test.js`
+Run the tests: `node registration/tests/logic.test.js && node registration/tests/flow.test.js && node registration/tests/email.test.js && node registration/tests/checkin.test.js`
+
+The summit check-in (scanner) is in `checkin/`, with its own README.
 
 ## Emails
 
