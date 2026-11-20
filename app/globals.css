@@ -116,6 +116,8 @@ main:focus { outline: none; }
 .main-nav a[aria-current="page"] { color: var(--sprout); text-decoration: underline; text-underline-offset: 8px; text-decoration-thickness: 2px; }
 .only-menu { display: none; }
 .header-tools { display: flex; align-items: center; gap: var(--s3); }
+/* On wide screens the tools hold only the hidden menu button, so take them out of the row and let the menu reach the right edge. */
+@media (min-width: 901px) { .header-tools:not(:has(> :not(.menu-btn))) { display: none; } }
 .lang { display: inline-flex; border: 1px solid var(--edge); border-radius: 999px; overflow: hidden; }
 .lang a { min-height: 40px; display: inline-flex; align-items: center; padding: 0 var(--s3); font-size: 0.875rem; color: var(--starlight); text-decoration: none; }
 .lang a.on { background: var(--starlight); color: var(--night); }
