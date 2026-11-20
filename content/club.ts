@@ -6,7 +6,7 @@ import type { L } from "@/lib/i18n";
 export const timeline: { year: string; text: L }[] = [
   { year: "1992", text: { en: "Founded on 28 October as the Notre Dame Environmental Promotion Club.", bn: "২৮ অক্টোবর নটর ডেম এনভায়রনমেন্টাল প্রমোশন ক্লাব নামে প্রতিষ্ঠা।" } },
   { year: "2017", text: { en: "First Earth and Space Carnival, and the first inter-college space camp in Bangladesh.", bn: "প্রথম আর্থ অ্যান্ড স্পেস কার্নিভাল, আর দেশের প্রথম আন্তঃকলেজ স্পেস ক্যাম্প।" } },
-  { year: "2018", text: { en: "Renamed the Notre Dame Eco and Space Club [confirm date].", bn: "নাম বদলে নটর ডেম ইকো অ্যান্ড স্পেস ক্লাব [তারিখ নিশ্চিত করুন]।" } },
+  { year: "2018", text: { en: "Renamed the Notre Dame Eco and Space Club on 23 May 2018.", bn: "২৩ মে ২০১৮ নাম বদলে নটর ডেম ইকো অ্যান্ড স্পেস ক্লাব।" } },
   { year: "2022", text: { en: "The 5th summit returns to campus after an online year.", bn: "অনলাইনে এক বছরের পর ৫ম সামিট আবার ক্যাম্পাসে।" } },
   { year: "2025", text: { en: "8th summit: nearly 2,000 participants from more than 60 institutions.", bn: "৮ম সামিট: ৬০টির বেশি প্রতিষ্ঠানের প্রায় ২,০০০ অংশগ্রহণকারী।" } },
   { year: "2026", text: { en: "9th summit, 4–10 April.", bn: "৯ম সামিট, ৪–১০ এপ্রিল।" } },
