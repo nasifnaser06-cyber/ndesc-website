@@ -1,14 +1,13 @@
 import Link from "next/link";
 import { type Locale, path } from "@/lib/i18n";
 import { meta } from "@/lib/view";
-import { site } from "@/content/site";
 import { photosphere, photosphereBanner } from "@/content/photosphere";
-import { Banner, ExternalLink, FormButton, PageHead } from "@/components/bits";
+import { ContactLink, FormButton } from "@/components/bits";
 
 const title = { en: "Photosphere 7.0", bn: "Photosphere 7.0" };
 const lead = {
-  en: "The visual art competition and exhibition of NESSX. Astro and eco photography, poster design and AI art. Free to submit.",
-  bn: "NESSX-এর দৃশ্যশিল্প প্রতিযোগিতা ও প্রদর্শনী। অ্যাস্ট্রো ও ইকো ফটোগ্রাফি, পোস্টার ডিজাইন ও এআই আর্ট। জমা দেওয়া বিনামূল্যে।",
+  en: "The visual art competition and exhibition of NESS X. Astro and eco photography, poster design and AI art. Free to submit.",
+  bn: "NESS X-এর দৃশ্যশিল্প প্রতিযোগিতা ও প্রদর্শনী। অ্যাস্ট্রো ও ইকো ফটোগ্রাফি, পোস্টার ডিজাইন ও এআই আর্ট। জমা দেওয়া বিনামূল্যে।",
 };
 
 export async function generateMetadata() {
@@ -19,36 +18,53 @@ export async function generateMetadata() {
 export default async function Photosphere() {
   const lang: Locale = "en";
   const p = photosphere;
-  const tel = (s: string) => `tel:${s.replace(/[^+\d]/g, "")}`;
 
   return (
     <>
-      <PageHead
-        lang={lang}
-        kicker={{ en: "NESSX 2027", bn: "NESSX ২০২৭" }}
-        title={title}
-        lead={lead}
-        crumbs={[{ label: { en: "NESS 2027", bn: "NESS ২০২৭" }, to: "/ness" }]}
+      {/* Page background (trial, 20 Nov 2026): snowy peaks under the aurora and the Milky Way, behind a dark veil. */}
+      <div
+        className="ps-bg"
+        aria-hidden="true"
+        style={{
+          ["--bg-lg" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ps-bg-2400.webp")`,
+          ["--bg-sm" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ps-bg-1600.webp")`,
+        }}
       />
+      {/* Hero, laid out like the NESS 2027 page: a short brief, key facts, then the two actions. */}
+      <section className="sky sky-clear" aria-labelledby="ps-h1">
+        <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>
+          <div className="sky-copy">
+            <p className="label">Visual art competition and exhibition of NESS X, 2027</p>
+            <h1 id="ps-h1" className="ps-logo-h1">
+              {/* The Photosphere 7.0 logo stands in for the heading; its alt text is the heading's name. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ps7-logo-192.webp`}
+                srcSet={[96, 192, 288].map((h) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ps7-logo-${h}.webp ${h / 96}x`).join(", ")}
+                alt={p.name}
+                width={577}
+                height={96}
+                fetchPriority="high"
+              />
+            </h1>
+            <p>{p.brief}</p>
+            <dl className="facts">
+              <div><dt>Exhibition</dt><dd>28–30 January 2027</dd></div>
+              <div><dt>Venue</dt><dd>Notre Dame College, Motijheel, Dhaka</dd></div>
+              <div><dt>Entry</dt><dd>Free to submit</dd></div>
+            </dl>
+            <div className="actions">
+              <a className="btn" href="#ps-submit">Register now</a>
+              <Link className="btn btn-secondary" href={`${path(lang, "/ness")}#segments`}>See other segments</Link>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <div className="wrap ps-page">
-        <figure className="banner-figure">
-          <Banner lang={lang} {...photosphereBanner} priority />
-        </figure>
-
         <section aria-labelledby="ps-about" className="ps-intro">
-          <h2 id="ps-about" className="visually-hidden">About Photosphere 7.0</h2>
+          <h2 id="ps-about">About Photosphere</h2>
           {p.intro.map((t) => <p key={t}>{t}</p>)}
-          <dl className="facts">
-            <div><dt>Entry</dt><dd>Free to submit</dd></div>
-            <div><dt>How many</dt><dd>Up to 5 per segment</dd></div>
-            <div><dt>Files</dt><dd>JPG, up to 20 MB each</dd></div>
-            <div><dt>Exhibition</dt><dd>At NESSX, 28–30 January 2027</dd></div>
-          </dl>
-          <div className="actions">
-            <a className="btn" href="#ps-submit">Submit your work</a>
-            <a className="btn btn-secondary" href="#ps-rules">Read the rules</a>
-          </div>
         </section>
 
         <section aria-labelledby="ps-cats">
@@ -113,25 +129,12 @@ export default async function Photosphere() {
               <div className="surface organizer" key={o.name}>
                 <h3>{o.name}</h3>
                 <p className="muted small">{o.role}</p>
-                <p><a href={tel(o.phone)}>{o.phone}</a></p>
-                <p><ExternalLink href={o.facebook} lang={lang}>Facebook</ExternalLink></p>
+                <ul className="contact-links">
+                  <li><ContactLink kind="phone" value={o.phone} lang={lang} /></li>
+                  <li><ContactLink kind="facebook" value={o.facebook} lang={lang} /></li>
+                </ul>
               </div>
             ))}
-          </div>
-          <p className="small muted ps-note">
-            Or email the club at <a href={`mailto:${site.email}`}>{site.email}</a>.
-          </p>
-        </section>
-
-        <section className="surface panel-band" aria-labelledby="ps-main">
-          <div>
-            <p className="label">Don&apos;t forget the main event</p>
-            <h2 id="ps-main">NESSX, the 10th National Earth and Space Summit</h2>
-            <p className="muted">28–30 January 2027 at Notre Dame College, Dhaka. Olympiads, quizzes, team contests, exhibitions and talks.</p>
-          </div>
-          <div className="actions">
-            <Link className="btn" href={path(lang, "/ness")}>See NESSX</Link>
-            <ExternalLink className="btn btn-secondary" href={p.nessxFacebook} lang={lang}>NESSX on Facebook</ExternalLink>
           </div>
         </section>
       </div>

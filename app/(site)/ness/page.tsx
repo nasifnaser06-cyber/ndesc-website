@@ -6,11 +6,11 @@ import { ui } from "@/content/ui";
 import { getEvent, ness2027Banner } from "@/content/events";
 import { nessSchedule, nessPast, nessFaq } from "@/content/club";
 import { nessx, passes, passNote, registerWays, categories, categoryNote, winnersNote, soloSegments, teamSegments, specialSegments, programmes, organizers, type Segment } from "@/content/ness2027";
-import { Banner, ExternalLink, FormButton, Stars, T, RegisterButton } from "@/components/bits";
+import { ContactLink, ExternalLink, FormButton, Stars, T, RegisterButton } from "@/components/bits";
 
 const title = { en: "NESS 2027", bn: "NESS ২০২৭" };
 const description = {
-  en: "NESSX, the 10th National Earth and Space Summit: 28–30 January 2027 at Notre Dame College, Dhaka. Olympiads, quizzes, team contests, exhibitions and talks. Register now.",
+  en: "NESS X, the 10th National Earth and Space Summit: 28–30 January 2027 at Notre Dame College, Dhaka. Olympiads, quizzes, team contests, exhibitions and talks. Register now.",
   bn: "ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট ২০২৭, ২৮–৩০ জানুয়ারি, নটর ডেম কলেজ, ঢাকা। অলিম্পিয়াড, কুইজ, দলীয় প্রতিযোগিতা, আলোচনা ও প্রদর্শনী।",
 };
 
@@ -55,17 +55,26 @@ export default async function Ness() {
 
   return (
     <>
-      <section className="sky" aria-labelledby="ness-h1">
+      {/* Page background (trial, 20 Nov 2026): polar bears under the aurora, behind a white veil; the page uses dark text. */}
+      <div
+        className="ness-bg"
+        aria-hidden="true"
+        style={{
+          ["--bg-lg" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ness-bg-2400.webp")`,
+          ["--bg-sm" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ness-bg-1600.webp")`,
+        }}
+      />
+      <section className="sky sky-clear" aria-labelledby="ness-h1">
         <Stars />
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>
           <div className="sky-copy">
             <p className="label">{nessx.fullName}, 2027</p>
             <h1 id="ness-h1" className="ness-logo-h1">
-              {/* The NESS logo stands in for the "NESSX" heading; its alt text is the heading's name. */}
+              {/* The NESS logo stands in for the "NESS X" heading; its alt text is the heading's name. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-logo-360.webp`}
-                srcSet={[180, 360, 540].map((h) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-logo-${h}.webp ${h}x`.replace(`${h}x`, `${h / 180}x`)).join(", ")}
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-logo-dark-360.webp`}
+                srcSet={[180, 360, 540].map((h) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-logo-dark-${h}.webp ${h}x`.replace(`${h}x`, `${h / 180}x`)).join(", ")}
                 alt={nessx.name}
                 width={166}
                 height={180}
@@ -88,9 +97,6 @@ export default async function Ness() {
       </section>
 
       <div className="wrap" style={{ display: "flex", flexDirection: "column", gap: "var(--s9)", paddingTop: "var(--s8)" }}>
-        <figure className="banner-figure">
-          <Banner lang={lang} {...ness2027Banner} />
-        </figure>
         <section aria-labelledby="passes-h">
           <h2 id="passes-h" style={{ marginBottom: "var(--s5)" }}>{en ? "Passes" : "পাস"}</h2>
           <div className="cards-3">
@@ -113,7 +119,7 @@ export default async function Ness() {
             ))}
           </ol>
           <div className="actions" style={{ marginTop: "var(--s5)" }}>
-            <RegisterButton lang={lang}>{en ? "Register for NESSX" : "নিবন্ধন করুন"}</RegisterButton>
+            <RegisterButton lang={lang}>{en ? "Register for NESS X" : "নিবন্ধন করুন"}</RegisterButton>
           </div>
           <p className="small muted" style={{ marginTop: "var(--s3)" }}>{en ? "Pick your pass, pay by bKash Send Money, type the TrxID, and your pass arrives by email." : "পাস বেছে নিন, বিকাশে পেমেন্ট করুন, TrxID লিখুন, পাস ইমেইলে পাবেন।"}</p>
         </section>
@@ -126,7 +132,7 @@ export default async function Ness() {
               <thead><tr><th scope="col">{en ? "Code" : "কোড"}</th><th scope="col">{en ? "Category" : "বিভাগ"}</th><th scope="col">{en ? "Who" : "কারা"}</th></tr></thead>
               <tbody>
                 {categories.map((c) => (
-                  <tr key={c.code}><td style={{ fontFamily: "var(--font-head)", fontWeight: 600 }}>{c.code}</td><td>{c.name}</td><td>{c.who}</td></tr>
+                  <tr key={c.code}><td style={{ fontFamily: "var(--font-head)", fontWeight: "var(--weight-head)" }}>{c.code}</td><td>{c.name}</td><td>{c.who}</td></tr>
                 ))}
               </tbody>
             </table>
@@ -203,14 +209,13 @@ export default async function Ness() {
               <div className="surface organizer" key={o.name}>
                 <h3>{o.name}</h3>
                 <p className="muted small">{o.role}</p>
-                <p><a href={`tel:${o.phone.replace(/[^+\d]/g, "")}`}>{o.phone}</a></p>
-                <p><ExternalLink href={o.facebook} lang={lang}>Facebook</ExternalLink></p>
+                <ul className="contact-links">
+                  <li><ContactLink kind="phone" value={o.phone} lang={lang} /></li>
+                  <li><ContactLink kind="facebook" value={o.facebook} lang={lang} /></li>
+                </ul>
               </div>
             ))}
           </div>
-          <p className="small muted" style={{ marginTop: "var(--s4)" }}>
-            {en ? "Or email the club at " : "অথবা ক্লাবকে ইমেইল করুন "}<a href={`mailto:${site.email}`}>{site.email}</a>.
-          </p>
         </section>
 
         <section aria-labelledby="past">
@@ -221,7 +226,7 @@ export default async function Ness() {
               <tbody>
                 {nessPast.map((p) => (
                   <tr key={p.edition.en}>
-                    <td style={{ fontFamily: "var(--font-head)", fontWeight: 600 }}>
+                    <td style={{ fontFamily: "var(--font-head)", fontWeight: "var(--weight-head)" }}>
                       {p.slug ? <Link href={path(lang, `/events/${p.slug}`)}>{tr(p.edition, lang)}</Link> : tr(p.edition, lang)}
                     </td>
                     <td style={{ whiteSpace: "nowrap" }}><T text={{ en: p.year, bn: num(p.year, "bn") }} lang={lang} /></td>
