@@ -85,7 +85,6 @@ export default async function Ness() {
             <dl className="facts">
               <div><dt>{tr(ui.dates, lang)}</dt><dd>{formatDateRange(ness.start, ness.end, lang, "long")}</dd></div>
               <div><dt>{tr(ui.venue, lang)}</dt><dd>{en ? "Notre Dame College, Motijheel, Dhaka" : "নটর ডেম কলেজ, মতিঝিল, ঢাকা"}</dd></div>
-              <div><dt>{en ? "Passes" : "পাস"}</dt><dd>{en ? "From 200 BDT" : "২০০ টাকা থেকে"}</dd></div>
             </dl>
             <div className="actions">
               <RegisterButton lang={lang}>{en ? "Register now" : "এখনই নিবন্ধন করুন"}</RegisterButton>
