@@ -201,7 +201,7 @@ export default function RegisterForm({
           <legend><span className="reg-step">2</span> Your details</legend>
           <div className="reg-grid">
             <div><label htmlFor="name">Full name</label><input id="name" name="name" autoComplete="name" required /></div>
-            <div><label htmlFor="phone">Mobile number</label><input id="phone" name="phone" inputMode="tel" autoComplete="tel" placeholder="01712345678" required /></div>
+            <div><label htmlFor="phone">Mobile number</label><input id="phone" name="phone" inputMode="tel" autoComplete="tel" placeholder="e.g. 01712345678" required /></div>
             <div><label htmlFor="email">Email (your pass is sent here)</label><input id="email" name="email" type="email" autoComplete="email" required /></div>
             <div><label htmlFor="institution">School or college</label><input id="institution" name="institution" autoComplete="organization" required /></div>
             <div>
@@ -284,8 +284,8 @@ export default function RegisterForm({
                   {live.nagad && <option value="Nagad">Nagad</option>}
                 </select>
               </div>
-              <div><label htmlFor="trxId">TrxID</label><input id="trxId" name="trxId" autoComplete="off" placeholder="DK481HDVPG" style={{ textTransform: "uppercase" }} required /></div>
-              <div className="reg-wide"><label htmlFor="sender">Number you paid from</label><input id="sender" name="sender" inputMode="tel" placeholder="01712345678" required /></div>
+              <div><label htmlFor="trxId">TrxID</label><input id="trxId" name="trxId" autoComplete="off" placeholder="e.g. DK481HDVPG" style={{ textTransform: "uppercase" }} required /></div>
+              <div className="reg-wide"><label htmlFor="sender">Number you paid from</label><input id="sender" name="sender" inputMode="tel" placeholder="e.g. 01712345678" required /></div>
             </div>
           </fieldset>
         )}

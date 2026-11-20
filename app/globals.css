@@ -910,7 +910,7 @@ body:has(.ness-three) main .form :is(input:not([type="checkbox"]):not([type="rad
   background: rgba(235, 245, 249, 0.7);
   border-color: #0a4a70;
 }
-body:has(.ness-three) main .form :is(input, select, textarea)::placeholder { color: #0a4a70; opacity: 0.7; }
+body:has(.ness-three) main .form :is(input, select, textarea)::placeholder { color: #0a4a70; opacity: 0.28; } /* 40% of the earlier 0.7, so an example never looks filled in */
 body:has(.ness-three) main .form :is(input, select, textarea):focus-visible { border-color: #0a4a70; background: #ebf5f9; outline-color: #0a4a70; }
 body:has(.ness-three) main .form select option { color: #0a4a70; background: #ebf5f9; }
 body:has(.ness-three) main :is(input[type="checkbox"], input[type="radio"]) { accent-color: #0a4a70; background: #ebf5f9; }
