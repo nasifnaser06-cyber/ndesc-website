@@ -91,7 +91,6 @@ export default async function Ness() {
               <RegisterButton lang={lang}>{en ? "Register now" : "এখনই নিবন্ধন করুন"}</RegisterButton>
               <a className="btn btn-secondary" href="#segments">{en ? "See all segments" : "সব সেগমেন্ট দেখুন"}</a>
             </div>
-            <p className="small">{en ? "Online submission segments are free for everyone." : "অনলাইন সাবমিশন সেগমেন্টে অংশ নেওয়া সবার জন্য বিনামূল্যে।"}</p>
           </div>
         </div>
       </section>
@@ -118,10 +117,7 @@ export default async function Ness() {
               <li key={w.who}><p><strong>{w.who}</strong></p><p className="muted small">{w.how}</p></li>
             ))}
           </ol>
-          <div className="actions" style={{ marginTop: "var(--s5)" }}>
-            <RegisterButton lang={lang}>{en ? "Register for NESS X" : "নিবন্ধন করুন"}</RegisterButton>
-          </div>
-          <p className="small muted" style={{ marginTop: "var(--s3)" }}>{en ? "Pick your pass, pay by bKash Send Money, type the TrxID, and your pass arrives by email." : "পাস বেছে নিন, বিকাশে পেমেন্ট করুন, TrxID লিখুন, পাস ইমেইলে পাবেন।"}</p>
+          <p className="small muted" style={{ marginTop: "var(--s4)" }}>{en ? "Pick your pass, pay by bKash Send Money, type the TrxID, and your pass arrives by email." : "পাস বেছে নিন, বিকাশে পেমেন্ট করুন, TrxID লিখুন, পাস ইমেইলে পাবেন।"}</p>
         </section>
 
         <section aria-labelledby="cats">
