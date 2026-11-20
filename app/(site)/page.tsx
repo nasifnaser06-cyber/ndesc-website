@@ -5,8 +5,7 @@ import { ui } from "@/content/ui";
 import { site } from "@/content/site";
 import { sortedEvents, getEvent, ness2027Banner } from "@/content/events";
 import { timeline } from "@/content/club";
-import { posts, newsCategories } from "@/content/news";
-import { Banner, FormButton, PhotoSlot, SectionHead, Stars, T, RegisterButton } from "@/components/bits";
+import { Banner, PhotoSlot, Stars, T } from "@/components/bits";
 import { EventRows } from "@/components/EventList";
 
 
@@ -56,7 +55,6 @@ export default async function Home() {
                 : "অলিম্পিয়াড, কর্মশালা, তারা দেখার ক্যাম্প আর ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিটের মাধ্যমে ইকো অ্যান্ড স্পেস ক্লাব শিক্ষার্থীদের রাতের আকাশ চেনা আর জীবজগৎ রক্ষার কাজে একসঙ্গে করে।"}
             </p>
             <div className="actions">
-              <Link className="btn" href={path(lang, "/ness")}>{tr(ui.seeNess, lang)}</Link>
               <Link className="btn btn-secondary" href={path(lang, "/join")}>{tr(ui.nav.join, lang)}</Link>
             </div>
           </div>
@@ -82,8 +80,7 @@ export default async function Home() {
             </dl>
           </div>
           <div className="actions">
-            <RegisterButton lang={lang}>{en ? "Register now" : "এখনই নিবন্ধন করুন"}</RegisterButton>
-            <Link className="btn btn-secondary" href={path(lang, "/ness")}>{en ? "Segments and passes" : "সেগমেন্ট ও পাস"}</Link>
+            <Link className="btn" href={path(lang, "/ness")}>{en ? "See NESS X" : "NESS X দেখুন"}</Link>
           </div>
         </div>
       </section>
@@ -130,18 +127,6 @@ export default async function Home() {
         </ol>
       </section>
 
-      <section className="wrap section" aria-labelledby="news-title">
-        <SectionHead title={ui.nav.news} link={{ label: ui.allNews, to: "/news" }} lang={lang} />
-        <div className="grid-3">
-          {posts.slice(0, 3).map((p) => (
-            <Link key={p.slug} className="card-link" href={path(lang, `/news/${p.slug}`)}>
-              <p className="label">{tr(newsCategories[p.category], lang)}, {formatDateRange(p.date, undefined, lang)}</p>
-              <h3>{tr(p.title, lang)}</h3>
-              <p className="muted small">{tr(p.summary, lang)}</p>
-            </Link>
-          ))}
-        </div>
-      </section>
     </>
   );
 }
