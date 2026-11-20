@@ -37,7 +37,8 @@ function readLink(): Link | null {
     return { endpoint: `https://script.google.com/macros/s/${id}/exec`, key };
   };
   try {
-    const link = fromHash(window.location.hash);
+    const fromQuery = new URLSearchParams(window.location.search).get("l");
+    const link = fromHash(window.location.hash) || (fromQuery ? fromHash(fromQuery) : null);
     if (link) {
       localStorage.setItem(STORE_LINK, JSON.stringify(link));
       return link;
@@ -45,9 +46,31 @@ function readLink(): Link | null {
     const saved = localStorage.getItem(STORE_LINK);
     return saved ? (JSON.parse(saved) as Link) : null;
   } catch {
-    return fromHash(window.location.hash);
+    const q = new URLSearchParams(window.location.search).get("l");
+    return fromHash(window.location.hash) || (q ? fromHash(q) : null);
   }
 }
+
+/** Messenger, Facebook, Instagram and other in-app browsers usually block the camera. */
+function inAppBrowser(): { inApp: boolean; android: boolean } {
+  const ua = navigator.userAgent || "";
+  const inApp = /FBAN|FBAV|FB_IAB|FBIOS|MESSENGER|Messenger|Instagram|Line\/|MicroMessenger|; wv\)/.test(ua);
+  return { inApp, android: /Android/i.test(ua) };
+}
+
+/** The same scanner link with the key in the query, so it survives the jump to Chrome. */
+function chromeLinks(link: Link): { https: string; intent: string } {
+  const m = link.endpoint.match(/\/macros\/s\/([^/]+)\/exec$/);
+  const id = m ? m[1] : link.endpoint;
+  const q = `?l=${encodeURIComponent(`${id}.${link.key}`)}`;
+  const path = window.location.pathname;
+  return {
+    https: `${window.location.origin}${path}${q}`,
+    intent: `intent://${window.location.host}${path}${q}#Intent;scheme=${window.location.protocol.replace(":", "")};package=com.android.chrome;end`,
+  };
+}
+
+const MIN_CHECK_MS = 1000; // the "Checking…" screen stays up at least this long
 
 async function ask(link: Link, body: object): Promise<Answer> {
   const res = await fetch(link.endpoint, {
@@ -86,6 +109,9 @@ export default function Scanner() {
   const [lastValue, setLastValue] = useState("");
   const [typed, setTyped] = useState("");
   const [typedError, setTypedError] = useState("");
+  const [browser, setBrowser] = useState<{ inApp: boolean; android: boolean }>({ inApp: false, android: false });
+  const [tryHere, setTryHere] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -98,7 +124,8 @@ export default function Scanner() {
   useEffect(() => {
     setLink(readLink());
     try { setPhone(localStorage.getItem(STORE_PHONE) || ""); } catch { /* private mode */ }
-    if (window.location.hash) history.replaceState(null, "", window.location.pathname); // keep the key off the screen
+    setBrowser(inAppBrowser());
+    if (window.location.hash || window.location.search) history.replaceState(null, "", window.location.pathname); // keep the key off the screen
   }, []);
 
   useEffect(() => {
@@ -123,11 +150,15 @@ export default function Scanner() {
     setLastValue(value);
     setBusy(true);
     setAnswer(null);
+    const started = Date.now();
+    const settle = () => new Promise((r) => setTimeout(r, Math.max(0, MIN_CHECK_MS - (Date.now() - started))));
     try {
       const a = await ask(link, { action: "scan", code: value, device: phone });
+      await settle();
       setAnswer(a);
       if (a.ok && navigator.vibrate) navigator.vibrate(a.result === "registered" ? 120 : [90, 70, 90, 70, 90]);
     } catch {
+      await settle();
       setAnswer({ ok: false, error: "No answer from the sheet. Check the internet and try again." });
     } finally {
       setBusy(false);
@@ -249,6 +280,38 @@ export default function Scanner() {
     );
   }
 
+  if (browser.inApp && !tryHere) {
+    const links = chromeLinks(link);
+    return shell(
+      <section style={{ background: C.panel, borderRadius: 16, padding: 20, lineHeight: 1.6 }}>
+        <h1 style={{ fontSize: 22, margin: "0 0 8px" }}>Open this in Chrome</h1>
+        <p style={{ margin: "0 0 16px", color: C.haze }}>This app's built-in browser blocks the camera, so the scanner can't work here.</p>
+        {browser.android ? (
+          <a href={links.intent} style={{ ...btn, display: "flex", alignItems: "center", justifyContent: "center", textDecoration: "none", width: "100%", boxSizing: "border-box" }}>
+            Open in Chrome
+          </a>
+        ) : (
+          <p style={{ margin: "0 0 12px" }}>Tap <b>⋯</b> or the share button at the top, then <b>Open in browser</b> (Safari or Chrome).</p>
+        )}
+        <button
+          type="button"
+          style={{ ...ghost, width: "100%", marginTop: 10 }}
+          onClick={async () => {
+            try { await navigator.clipboard.writeText(links.https); setCopied(true); } catch { setCopied(false); }
+          }}
+        >
+          {copied ? "Link copied. Paste it into Chrome." : "Copy the scanner link"}
+        </button>
+        <p style={{ margin: "16px 0 0", fontSize: 14, color: C.haze }}>
+          Keep this link private: anyone with it can check people in.{" "}
+          <button type="button" onClick={() => setTryHere(true)} style={{ background: "none", border: "none", color: C.star, textDecoration: "underline", padding: 0, font: "inherit", cursor: "pointer" }}>
+            Try here anyway
+          </button>
+        </p>
+      </section>,
+    );
+  }
+
   if (!phone) {
     return shell(
       <form
@@ -301,7 +364,13 @@ export default function Scanner() {
       {camera === "on" && !answer && !busy && <p style={{ textAlign: "center", color: C.haze, margin: "10px 0 0" }}>Point the camera at the QR code</p>}
 
       {busy && (
-        <div aria-live="polite" style={{ background: C.panel, borderRadius: 16, padding: "48px 20px", textAlign: "center", fontSize: 22, fontWeight: 700 }}>Checking…</div>
+        <div aria-live="polite" style={{ background: C.panel, borderRadius: 16, padding: "44px 24px", textAlign: "center" }}>
+          <div style={{ fontSize: 24, fontWeight: 700 }}>Checking…</div>
+          <div aria-hidden="true" style={{ height: 6, borderRadius: 3, background: C.line, marginTop: 18, overflow: "hidden" }}>
+            <div className="scan-bar" style={{ height: "100%", background: C.sprout, borderRadius: 3 }} />
+          </div>
+          <style>{`.scan-bar{width:100%;transform-origin:left;animation:scanbar ${MIN_CHECK_MS}ms linear both}@keyframes scanbar{from{transform:scaleX(0)}to{transform:scaleX(1)}}@media (prefers-reduced-motion:reduce){.scan-bar{animation:none}}`}</style>
+        </div>
       )}
 
       {answer && (
