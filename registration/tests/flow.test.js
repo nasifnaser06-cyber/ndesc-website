@@ -1,5 +1,5 @@
 const { makeGoogle } = require('./fake-google');
-const { ctx, sheets, mails } = makeGoogle();
+const { ctx, sheets, mails, fetches } = makeGoogle();
 let pass = 0, fail = 0;
 const check = (n, c, x) => { if (c) pass++; else { fail++; console.log('FAIL', n, x !== undefined ? JSON.stringify(x) : ''); } };
 const post = body => ctx.doPost({ postData: { contents: JSON.stringify(body) }, parameter: {} });
@@ -14,7 +14,7 @@ const base = { action: 'register', name: 'Rahim Uddin', email: 'rahim@example.co
 
 let r1 = post({ ...base, pass: 'solo', trxId: 'DK481HDVPG', sender: '01730260578' });
 check('register accepted, waiting', r1.ok && r1.status === 'Waiting', r1);
-check('received email sent', mails.length === 1 && /received/.test(mails[0].subject), mails.map(m => m.subject));
+check('no received email', mails.length === 0, mails.map(m => m.subject));
 
 let bad = post({ action: 'sms', key: 'wrong', text: 'You have received Tk 200.00 from 01730260578. Fee Tk 0.00. Balance Tk 9.00. TrxID DK481HDVPG at 18/11/2026 13:38' });
 check('sms without key refused', bad.ok === false);
@@ -28,7 +28,16 @@ check('name and details in the sheet', reg[4] === 'Rahim Uddin' && reg[5] === 'r
 check('solo pass includes all solo segments', /All solo segments/.test(reg[10]), reg[10]);
 check('no parent details kept', reg[12] === '' && reg[13] === '', [reg[12], reg[13]]);
 check('pass email to the right person with name and ID', mails[mails.length - 1].to === 'rahim@example.com' && /Rahim Uddin/.test(mails[mails.length - 1].htmlBody) && /NESSX-S-0001/.test(mails[mails.length - 1].htmlBody), mails[mails.length - 1].to);
-check('pass emailed', /Your NESSX Solo Pass, NESSX-S-0001/.test(mails[mails.length - 1].subject), mails.map(m => m.subject));
+check('pass emailed', /^Your NESS X pass: NESSX-S-0001$/.test(mails[mails.length - 1].subject), mails.map(m => m.subject));
+{ const m = mails[mails.length - 1];
+  check('sender name', m.name === 'NESS X Organizers', m.name);
+  check('QR inline', m.inlineImages && m.inlineImages.qr && /cid:qr/.test(m.htmlBody));
+  check('QR attached', m.attachments && m.attachments[0].name === 'NESSX-pass-qr.png');
+  const code = sheets.Registrations.data[1][18];
+  check('check code hidden in email', code && m.htmlBody.indexOf(code) < 0);
+  check('check code sent to QR only', fetches.some(u => u.endsWith(encodeURIComponent(code))));
+  check('pass wording', /Solo pass/.test(m.htmlBody) && /Secondary/.test(m.htmlBody) && /payment is confirmed/.test(m.htmlBody));
+  check('no team code row', !/Team code/.test(m.htmlBody)); }
 check('payment marked used', sheets.Payments.data[1][7] === reg[0], sheets.Payments.data[1]);
 check('balance not stored', !JSON.stringify(sheets.Payments.data).includes('1075'));
 
@@ -40,7 +49,7 @@ check('same form twice returns first', dup.ok && dup.duplicate && dup.regId === 
 
 let thief = post({ ...base, phone: '01811111111', email: 'x@example.com', pass: 'solo', trxId: 'DK481HDVPG', sender: '01811111111' });
 check('reused TrxID goes to review', thief.ok && thief.status === 'Needs review', thief);
-check('review email sent', /checking your payment/.test(mails[mails.length - 1].subject));
+check('review email sent', /^We're checking your NESS X payment$/.test(mails[mails.length - 1].subject), mails[mails.length - 1].subject);
 
 // pay first, register later (Cash In from an agent)
 post({ action: 'sms', key, text: 'Cash In Tk 300.00 from 01622334999 successful. Fee Tk 0.00. Balance Tk 1,035.17. TrxID DKI4MZEC1K at 18/11/2026 17:50. Download App: https://bKa.sh/8app' });
