@@ -36,6 +36,14 @@ export default function Footer({ lang }: { lang: Locale }) {
               referrerPolicy="no-referrer-when-downgrade"
               allowFullScreen
             />
+            {/* Our own marker on top of Google's (shown on the Photosphere page, where the tinted map
+                swallows Google's pin). It sits on the map centre, which is where the college is. */}
+            <span className="footer-map-pin" aria-hidden="true">
+              <svg viewBox="0 0 36 48" width="36" height="48">
+                <path d="M18 2C9.2 2 2 9 2 17.6 2 29.4 18 46 18 46s16-16.6 16-28.4C34 9 26.8 2 18 2z" fill="#e2f2fc" stroke="#0b1c33" strokeWidth="2.5" />
+                <circle cx="18" cy="17.5" r="6" fill="#0b1c33" />
+              </svg>
+            </span>
             <a className="footer-map-open" href={site.mapUrl} target="_blank" rel="noopener noreferrer">
               {lang === "en" ? "Open in Maps" : "ম্যাপে খুলুন"}
               <svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 4h6v6" /><path d="M10 14 20 4" /><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5" /></svg>

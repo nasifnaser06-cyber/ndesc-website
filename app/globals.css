@@ -1030,3 +1030,26 @@ body:has(.ness-three) .footer-map { background: #ebf5f9; border-color: #8ed1e6; 
 body:has(.ness-three) .footer-map iframe { filter: grayscale(1) sepia(1) hue-rotate(160deg) saturate(1.6) brightness(1.05); }
 body:has(.ness-three) .footer-grid a.footer-map-open { background: #ebf5f9; color: #0a4a70; border: 1px solid #8ed1e6; box-shadow: 0 1px 6px rgba(10, 74, 112, 0.18); }
 body:has(.ness-three) .footer-grid a.footer-map-open:hover { background: #0a4a70; color: #ebf5f9; }
+
+/* Footer map marker (Photosphere page): a pale pin with a navy outline and a teal halo, so the college
+   stands out on the blue map. The map becomes a still preview here (the marker would drift if it were
+   dragged); "Open in Maps" opens the full map. */
+.footer-map-pin { display: none; }
+body:has(.ps-bg) .footer-map iframe { pointer-events: none; }
+body:has(.ps-bg) .footer-map-pin {
+  display: block; position: absolute; left: 50%; top: 50%; z-index: 1; pointer-events: none;
+  width: 36px; height: 48px; transform: translate(-50%, calc(-100% + 4px));
+  filter: drop-shadow(0 3px 6px rgba(11, 28, 51, 0.6));
+}
+body:has(.ps-bg) .footer-map-pin svg { display: block; }
+body:has(.ps-bg) .footer-map-pin::before {
+  content: ""; position: absolute; left: 50%; bottom: -9px; width: 26px; height: 26px; margin-left: -13px;
+  border-radius: 50%; border: 2px solid #3ae3d1; background: rgba(58, 227, 209, 0.25); z-index: -1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  body:has(.ps-bg) .footer-map-pin::before { animation: map-pin-halo 2.4s ease-out infinite; }
+}
+@keyframes map-pin-halo {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
