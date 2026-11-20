@@ -4,8 +4,8 @@ import type { L } from "@/lib/i18n";
 export const ui = {
   nav: {
     about: { en: "About", bn: "আমাদের কথা" },
-    ness: { en: "NESS 2027", bn: "NESS ২০২৭" },
-    /** Header label for the NESS page (Mahmud, 20 Nov 2026, trial). The footer keeps "NESS 2027". */
+    ness: { en: "NESS X", bn: "NESS X" },
+    /** Header label for the NESS page (Mahmud, 20 Nov 2026). Everything is called NESS X, never NESS 2027. */
     nessX: { en: "NESS X", bn: "NESS X" },
     photosphere: { en: "PS 7.0", bn: "PS 7.0" },
     events: { en: "Events", bn: "ইভেন্ট" },
@@ -34,7 +34,7 @@ export const ui = {
   allEvents: { en: "All events", bn: "সব ইভেন্ট" },
   allNews: { en: "All news", bn: "সব খবর" },
   ourStory: { en: "Our story", bn: "আমাদের গল্প" },
-  seeNess: { en: "See NESS 2027", bn: "NESS ২০২৭ দেখুন" },
+  seeNess: { en: "See NESS X", bn: "NESS X দেখুন" },
   register: { en: "Register to compete", bn: "প্রতিযোগিতায় নিবন্ধন করুন" },
   exhibit: { en: "Exhibit your project", bn: "আপনার প্রকল্প প্রদর্শন করুন" },
   howToJoin: { en: "How to join", bn: "কীভাবে যোগ দেবেন" },

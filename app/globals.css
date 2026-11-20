@@ -210,7 +210,7 @@ body:has(.ness-bg) .site-footer { background: rgba(255, 255, 255, 0.42); border-
 .panel-band { padding: var(--s7); display: flex; flex-wrap: wrap; gap: var(--s6); align-items: flex-end; justify-content: space-between; }
 .panel-band > div:first-child { flex: 1 1 28rem; display: flex; flex-direction: column; gap: var(--s3); }
 @media (max-width: 640px) { .panel-band { padding: var(--s5); } }
-/* Banners and posters (NESS 2027) */
+/* Banners and posters (NESS X) */
 .banner { display: block; width: 100%; height: auto; aspect-ratio: var(--banner-ratio, 16 / 9); object-fit: cover; border-radius: 16px; background: var(--deep); border: 1px solid var(--line); }
 .banner-figure { margin: 0; }
 

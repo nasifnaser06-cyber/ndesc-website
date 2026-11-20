@@ -23,13 +23,13 @@ export type ClubEvent = {
   poster?: { name: string; widths: number[]; alt: L; social?: string };
 };
 
-/** The official NESS 2027 banner, used on the home page, the NESS page and the event page. */
+/** The official NESS X banner, used on the home page, the NESS page and the event page. */
 export const ness2027Banner = {
   name: "/ness/ness-2027",
   widths: [768, 1280, 1920],
   social: "/ness/ness-2027-og.jpg",
   alt: {
-    en: "NESS, 10th National Earth and Space Summit 2027: two polar bears on melting ice reach towards each other under a pastel sky, with the Notre Dame College and club logos.",
+    en: "NESS X, the 10th National Earth and Space Summit: two polar bears on melting ice reach towards each other under a pastel sky, with the Notre Dame College and club logos.",
     bn: "NESS, ১০ম ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট ২০২৭: গলতে থাকা বরফের ওপর দুটি মেরু ভালুক একে অপরের দিকে হাত বাড়িয়েছে, সঙ্গে নটর ডেম কলেজ ও ক্লাবের লোগো।",
   },
 };
@@ -46,11 +46,11 @@ export const eventTypes: Record<EventType, L> = {
 
 export const events: ClubEvent[] = [
   {
-    slug: "ness-2027",
+    slug: "ness-x",
     type: "ness",
     start: "2027-01-28",
     end: "2027-01-30",
-    title: { en: "National Earth and Space Summit 2027", bn: "ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট ২০২৭" },
+    title: { en: "NESS X", bn: "NESS X" },
     venue: ndc,
     summary: {
       en: "NESS X, the 10th summit: three days of olympiads, quizzes, team contests, exhibitions and talks for students from Nursery to Class 12.",

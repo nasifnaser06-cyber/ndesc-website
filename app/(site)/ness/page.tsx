@@ -1,14 +1,14 @@
 import Link from "next/link";
-import { type Locale, tr, path, formatDateRange, num } from "@/lib/i18n";
+import { type Locale, tr, path, formatDateRange } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { site } from "@/content/site";
 import { ui } from "@/content/ui";
 import { getEvent, ness2027Banner } from "@/content/events";
-import { nessSchedule, nessPast, nessFaq } from "@/content/club";
+import { nessSchedule, showNessSchedule, nessFaq } from "@/content/club";
 import { nessx, passes, passNote, registerWays, categories, categoryNote, winnersNote, soloSegments, teamSegments, specialSegments, programmes, organizers, type Segment } from "@/content/ness2027";
 import { ContactLink, ExternalLink, FormButton, Stars, T, RegisterButton } from "@/components/bits";
 
-const title = { en: "NESS 2027", bn: "NESS ২০২৭" };
+const title = { en: "NESS X", bn: "NESS X" };
 const description = {
   en: "NESS X, the 10th National Earth and Space Summit: 28–30 January 2027 at Notre Dame College, Dhaka. Olympiads, quizzes, team contests, exhibitions and talks. Register now.",
   bn: "ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট ২০২৭, ২৮–৩০ জানুয়ারি, নটর ডেম কলেজ, ঢাকা। অলিম্পিয়াড, কুইজ, দলীয় প্রতিযোগিতা, আলোচনা ও প্রদর্শনী।",
@@ -51,7 +51,7 @@ function SegmentList({ items, lang }: { items: Segment[]; lang: Locale }) {
 export default async function Ness() {
   const lang: Locale = "en";
   const en = lang === "en";
-  const ness = getEvent("ness-2027")!;
+  const ness = getEvent("ness-x")!;
 
   return (
     <>
@@ -68,7 +68,7 @@ export default async function Ness() {
         <Stars />
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>
           <div className="sky-copy">
-            <p className="label">{nessx.fullName}, 2027</p>
+            <p className="label">{nessx.fullName}</p>
             <h1 id="ness-h1" className="ness-logo-h1">
               {/* The NESS logo stands in for the "NESS X" heading; its alt text is the heading's name. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -169,6 +169,7 @@ export default async function Ness() {
           </div>
         </section>
 
+        {showNessSchedule && (
         <section aria-labelledby="schedule">
           <h2 id="schedule" style={{ marginBottom: "var(--s5)" }}>{en ? "Schedule" : "সময়সূচি"}</h2>
           <div className="cards-3">
@@ -180,6 +181,7 @@ export default async function Ness() {
             ))}
           </div>
         </section>
+        )}
 
         <section id="exhibit" className="surface panel-band" aria-labelledby="exh">
           <div>
@@ -212,29 +214,6 @@ export default async function Ness() {
               </div>
             ))}
           </div>
-        </section>
-
-        <section aria-labelledby="past">
-          <h2 id="past" style={{ marginBottom: "var(--s4)" }}>{en ? "Past summits" : "আগের সামিট"}</h2>
-          <div className="table-scroll">
-            <table>
-              <thead><tr><th scope="col">{en ? "Edition" : "আসর"}</th><th scope="col">{en ? "Year" : "বছর"}</th><th scope="col">{en ? "Highlights" : "উল্লেখযোগ্য"}</th></tr></thead>
-              <tbody>
-                {nessPast.map((p) => (
-                  <tr key={p.edition.en}>
-                    <td style={{ fontFamily: "var(--font-head)", fontWeight: "var(--weight-head)" }}>
-                      {p.slug ? <Link href={path(lang, `/events/${p.slug}`)}>{tr(p.edition, lang)}</Link> : tr(p.edition, lang)}
-                    </td>
-                    <td style={{ whiteSpace: "nowrap" }}><T text={{ en: p.year, bn: num(p.year, "bn") }} lang={lang} /></td>
-                    <td className="muted"><T text={p.note} lang={lang} /></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <p className="small muted" style={{ marginTop: "var(--s3)" }}>
-            {en ? "Figures as reported by The Daily Star, The Financial Express and Dhaka Tribune. Each summit page links its sources." : "সংখ্যাগুলো দ্য ডেইলি স্টার, দ্য ফিন্যান্সিয়াল এক্সপ্রেস ও ঢাকা ট্রিবিউনের প্রতিবেদন থেকে। প্রতিটি সামিটের পাতায় সূত্র দেওয়া আছে।"}
-          </p>
         </section>
 
         <section aria-labelledby="faq">

@@ -30,11 +30,11 @@ export default async function Photosphere() {
           ["--bg-sm" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/ps-bg-1600.webp")`,
         }}
       />
-      {/* Hero, laid out like the NESS 2027 page: a short brief, key facts, then the two actions. */}
+      {/* Hero, laid out like the NESS X page: a short brief, key facts, then the two actions. */}
       <section className="sky sky-clear" aria-labelledby="ps-h1">
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>
           <div className="sky-copy">
-            <p className="label">Visual art competition and exhibition of NESS X, 2027</p>
+            <p className="label">Visual art competition and exhibition of NESS X</p>
             <h1 id="ps-h1" className="ps-logo-h1">
               {/* The Photosphere 7.0 logo stands in for the heading; its alt text is the heading's name. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
