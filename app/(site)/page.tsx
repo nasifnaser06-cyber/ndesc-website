@@ -20,6 +20,19 @@ export async function generateMetadata() {
   return meta(lang, "/", null, description);
 }
 
+// Tells Google the site's name and logo, for the name and icon beside ndesc.com in search results.
+function siteJsonLd() {
+  const origin = (process.env.NEXT_PUBLIC_SITE_ORIGIN ?? "https://ndesc.com") + (process.env.NEXT_PUBLIC_BASE_PATH ?? "");
+  return JSON.stringify([
+    { "@context": "https://schema.org", "@type": "WebSite", name: site.name.en, alternateName: [site.shortName, "Notre Dame Eco & Space Club"], url: `${origin}/` },
+    {
+      "@context": "https://schema.org", "@type": "Organization", name: site.name.en, alternateName: site.shortName, url: `${origin}/`,
+      logo: `${origin}/brand/ndesc-logo-288.png`, foundingDate: site.founded, email: site.email ?? undefined,
+      sameAs: [site.social.facebook, site.social.instagram],
+    },
+  ]).replace(/</g, "\\u003c");
+}
+
 export default async function Home() {
   const lang: Locale = "en";
   const ness = getEvent("ness-2027")!;
@@ -28,6 +41,7 @@ export default async function Home() {
 
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: siteJsonLd() }} />
       <section className="sky" aria-labelledby="hero-title">
         <Stars />
         <div className="wrap sky-inner">
