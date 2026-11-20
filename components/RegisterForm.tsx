@@ -17,6 +17,20 @@ const normPhone = (s: string) => {
 };
 const normTrx = (s: string) => s.toUpperCase().replace(/[^A-Z0-9]/g, "");
 
+/**
+ * Class choices and the category each one belongs to (Mahmud, 20 Nov 2026, trial).
+ * Bangladesh levels: pre-primary and Classes 1-5 primary, 6-8 junior secondary,
+ * 9-10 secondary (SSC), 11-12 higher secondary (HSC). O Levels/IGCSE count as Class 10,
+ * A Levels (AS and A2) as Classes 11-12.
+ */
+const CLASS_GROUPS: { category: string; label: string; classes: string[] }[] = [
+  { category: "P", label: "Primary (P)", classes: ["Pre-primary (before Class 1)", "Class 1", "Class 2", "Class 3", "Class 4", "Class 5"] },
+  { category: "J", label: "Junior (J)", classes: ["Class 6", "Class 7", "Class 8"] },
+  { category: "S", label: "Secondary (S)", classes: ["Class 9", "Class 10 (SSC)", "O Level / IGCSE"] },
+  { category: "HS", label: "Higher Secondary (HS)", classes: ["Class 11", "Class 12 (HSC)", "A Level (AS)", "A Level (A2)"] },
+];
+const CATEGORY_OF: Record<string, string> = Object.fromEntries(CLASS_GROUPS.flatMap((g) => g.classes.map((c) => [c, g.category])));
+
 /** Which segments a pass includes for this category. Solo: all solo segments. Team: every segment. */
 function allowed(seg: SegOption, category: string, pass: Pass) {
   if (pass === "online" && !seg.online) return false;
@@ -43,7 +57,8 @@ export default function RegisterForm({
 }) {
   const [live, setLive] = useState<Live>({ open: true, bkash: fallback.bkash, nagad: fallback.nagad ?? "", prices: fallback.prices });
   const [pass, setPass] = useState<Pass>("solo");
-  const [category, setCategory] = useState("");
+  const [className, setClassName] = useState("");
+  const category = CATEGORY_OF[className] ?? "";
   const [wallet, setWallet] = useState("bKash");
   const [errors, setErrors] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
@@ -76,7 +91,7 @@ export default function RegisterForm({
       email: v("email"),
       phone: normPhone(v("phone")),
       institution: v("institution"),
-      className: v("className"),
+      className,
       category,
       teamCode: normTrx(v("teamCode")),
       wallet: pass === "online" ? "" : wallet,
@@ -89,10 +104,9 @@ export default function RegisterForm({
     const errs: string[] = [];
     if (!body.name) errs.push("Enter your full name.");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) errs.push("Enter a valid email address. Your pass is sent there.");
-    if (body.email !== v("email2")) errs.push("The two email addresses don't match.");
     if (!PHONE.test(body.phone)) errs.push("Enter a Bangladeshi mobile number, like 01712345678.");
     if (!body.institution) errs.push("Enter your school or college.");
-    if (!category) errs.push("Choose your category.");
+    if (!category) errs.push("Choose your class.");
     if (body.teamCode && !/^[A-Z0-9]{6}$/.test(body.teamCode)) errs.push("A team code has 6 letters and numbers.");
     if (pass !== "online") {
       if (!TRX.test(body.trxId)) errs.push("Enter the TrxID from your payment SMS. It has 8 to 12 letters and numbers, like DK481HDVPG.");
@@ -137,7 +151,7 @@ export default function RegisterForm({
             {done.newTeam && <span className="small muted"> Share this with your teammates. They type it in when they register.</span>}
           </p>
         )}
-        <p><a href={nessHref}>Back to NESSX</a></p>
+        <p><a href={nessHref}>Back to NESS X</a></p>
       </div>
     );
   }
@@ -165,7 +179,7 @@ export default function RegisterForm({
             {([
               ["solo", "Solo pass", `${live.prices.solo} Tk`, "All solo segments in your category"],
               ["team", "Team pass", `${live.prices.team} Tk per person`, "Every segment, solo and team. Up to 3 per team, each registers"],
-              ["online", "Online only", "Free", "All online submission segments"],
+              ["online", "Online segments", "Free", "All online submission segments"],
             ] as const).map(([val, name, cost, note]) => (
               <label key={val} className="reg-pass" data-on={pass === val}>
                 <input type="radio" name="pass" value={val} checked={pass === val} onChange={() => setPass(val)} />
@@ -183,15 +197,23 @@ export default function RegisterForm({
             <div><label htmlFor="name">Full name</label><input id="name" name="name" autoComplete="name" required /></div>
             <div><label htmlFor="phone">Mobile number</label><input id="phone" name="phone" inputMode="tel" autoComplete="tel" placeholder="01712345678" required /></div>
             <div><label htmlFor="email">Email (your pass is sent here)</label><input id="email" name="email" type="email" autoComplete="email" required /></div>
-            <div><label htmlFor="email2">Email again</label><input id="email2" name="email2" type="email" autoComplete="off" required /></div>
             <div><label htmlFor="institution">School or college</label><input id="institution" name="institution" autoComplete="organization" required /></div>
-            <div><label htmlFor="className">Class</label><input id="className" name="className" placeholder="e.g. 9, HSC-27, A Level" /></div>
-            <div className="reg-wide">
-              <label htmlFor="category">Category</label>
-              <select id="category" value={category} onChange={(e) => setCategory(e.target.value)} required>
-                <option value="">Choose your category</option>
-                {categories.map((c) => <option key={c.code} value={c.code}>{c.name} ({c.code}): {c.who}</option>)}
+            <div>
+              <label htmlFor="className">Class</label>
+              <select id="className" name="className" value={className} onChange={(e) => setClassName(e.target.value)} aria-describedby="reg-category" required>
+                <option value="">Choose your class</option>
+                {CLASS_GROUPS.map((g) => (
+                  <optgroup key={g.category} label={g.label}>
+                    {g.classes.map((c) => <option key={c} value={c}>{c}</option>)}
+                  </optgroup>
+                ))}
               </select>
+            </div>
+            <div>
+              <span className="reg-label">Category</span>
+              <output id="reg-category" className={`reg-category${category ? "" : " muted"}`} htmlFor="className" aria-live="polite">
+                {category ? (() => { const c = categories.find((x) => x.code === category); return c ? `${c.name} (${c.code})` : category; })() : "Set by your class"}
+              </output>
             </div>
           </div>
         </fieldset>
@@ -199,14 +221,14 @@ export default function RegisterForm({
         <fieldset>
           <legend><span className="reg-step">3</span> What your pass includes</legend>
           {!category ? (
-            <p className="muted">Choose your category to see the segments your pass includes.</p>
+            <p className="muted">Choose your class to see the segments your pass includes.</p>
           ) : (
             <>
               <p>
                 {pass === "team"
                   ? "Your team pass includes every segment open to your category, solo and team. You don't need to pick."
                   : pass === "online"
-                    ? "Your online pass includes every online submission segment open to your category. You don't need to pick."
+                    ? "This covers every online submission segment open to your category. You don't need to pick."
                     : "Your solo pass includes every solo segment open to your category. You don't need to pick."}
               </p>
               <ul className="reg-included">
@@ -220,7 +242,7 @@ export default function RegisterForm({
               </ul>
             </>
           )}
-          <p className="small muted" style={{ marginTop: "var(--s3)" }}>The UNOOSA special committee has its own registration form. Full rules for each segment are on the <a href={nessHref}>NESSX page</a>.</p>
+          <p className="small muted" style={{ marginTop: "var(--s3)" }}>The UNOOSA special committee has its own registration form. Full rules for each segment are on the <a href={nessHref}>NESS X page</a>.</p>
         </fieldset>
 
         {pass === "team" && (
@@ -274,7 +296,7 @@ export default function RegisterForm({
         <div className="actions">
           <button className="btn" type="submit" disabled={busy || !live.open}>{busy ? "Sending..." : pass === "online" ? "Register" : "Register and confirm payment"}</button>
         </div>
-        <p className="small muted reg-privacy">We use these details only to run NESSX. <a href={privacyHref}>Privacy</a></p>
+        <p className="small muted reg-privacy">We use these details only to run NESS X. <a href={privacyHref}>Privacy</a></p>
       </form>
 
       <StatusCheck endpoint={endpoint} />
@@ -309,8 +331,8 @@ function StatusCheck({ endpoint }: { endpoint: string | null }) {
       <form className="form" onSubmit={(e) => check(e)}>
         <div className="reg-grid">
           <div><label htmlFor="sphone">Mobile number</label><input id="sphone" name="sphone" inputMode="tel" /></div>
-          <div><label htmlFor="strx">TrxID (or leave blank and use email)</label><input id="strx" name="strx" style={{ textTransform: "uppercase" }} /></div>
-          <div className="reg-wide"><label htmlFor="semail">Email (for free online registrations)</label><input id="semail" name="semail" type="email" /></div>
+          <div><label htmlFor="strx">TrxID (if you paid)</label><input id="strx" name="strx" style={{ textTransform: "uppercase" }} /></div>
+          <div className="reg-wide"><label htmlFor="semail">Email (if you registered for online segments)</label><input id="semail" name="semail" type="email" /></div>
         </div>
         <label className="reg-seg"><input type="checkbox" name="resend" /><span>Email my pass again if I'm verified</span></label>
         <div className="actions">
