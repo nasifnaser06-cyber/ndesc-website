@@ -9,13 +9,19 @@ type Result = { regId: string; status: string; teamCode?: string; newTeam?: bool
 
 const PHONE = /^01[3-9]\d{8}$/;
 const TRX = /^[A-Z0-9]{8,12}$/;
+/** Bangla (০-৯) and Arabic-Indic (٠-٩, ۰-۹) digits from phone keyboards become 0-9. */
+const asciiDigits = (s: string) =>
+  s.replace(/[\u09E6-\u09EF\u0660-\u0669\u06F0-\u06F9]/g, (c) => {
+    const n = c.charCodeAt(0);
+    return String(n - (n >= 0x09e6 ? 0x09e6 : n >= 0x06f0 ? 0x06f0 : 0x0660));
+  });
 const normPhone = (s: string) => {
-  let d = s.replace(/\D/g, "");
+  let d = asciiDigits(s).replace(/\D/g, "");
   if (d.startsWith("880")) d = d.slice(2);
   if (d.length === 10 && d.startsWith("1")) d = "0" + d;
   return d;
 };
-const normTrx = (s: string) => s.toUpperCase().replace(/[^A-Z0-9]/g, "");
+const normTrx = (s: string) => asciiDigits(s).toUpperCase().replace(/[^A-Z0-9]/g, "");
 
 /**
  * Class choices and the category each one belongs to (Mahmud, 20 Nov 2026, trial).
@@ -104,13 +110,13 @@ export default function RegisterForm({
     const errs: string[] = [];
     if (!body.name) errs.push("Enter your full name.");
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) errs.push("Enter a valid email address. Your pass is sent there.");
-    if (!PHONE.test(body.phone)) errs.push("Enter a Bangladeshi mobile number, like 01712345678.");
+    if (!PHONE.test(body.phone)) errs.push("Mobile number (near the top): enter your 11-digit number, like 01712345678.");
     if (!body.institution) errs.push("Enter your school or college.");
     if (!category) errs.push("Choose your class.");
     if (body.teamCode && !/^[A-Z0-9]{6}$/.test(body.teamCode)) errs.push("A team code has 6 letters and numbers.");
     if (pass !== "online") {
       if (!TRX.test(body.trxId)) errs.push("Enter the TrxID from your payment SMS. It has 8 to 12 letters and numbers, like DK481HDVPG.");
-      if (!PHONE.test(body.sender)) errs.push("Enter the number you paid from.");
+      if (!PHONE.test(body.sender)) errs.push("Number you paid from: enter the 11-digit bKash or Nagad number, like 01712345678.");
     }
     setErrors(errs);
     if (errs.length) { errorBox.current?.focus(); return; }
