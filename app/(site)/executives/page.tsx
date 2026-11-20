@@ -7,7 +7,7 @@ import Tabs from "@/components/Tabs";
 
 const title = { en: "Executives", bn: "কার্যনির্বাহী" };
 const lead = {
-  en: "The teachers who guide the club and the students who run it, session by session.",
+  en: "Meet the team behind the club's vision and initiatives. Introducing our Executive Committee — the dedicated individuals working together to lead, coordinate, and shape the journey ahead.",
   bn: "যে শিক্ষকেরা ক্লাবকে পথ দেখান আর যে শিক্ষার্থীরা প্রতি সেশনে ক্লাব পরিচালনা করেন।",
 };
 
