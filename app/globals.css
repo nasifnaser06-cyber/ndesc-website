@@ -1019,6 +1019,7 @@ body:has(.ps-four) .ice-btn::after { background: linear-gradient(105deg, transpa
    Google's free embed has no dark style, so the map is inverted and its hues turned back round:
    streets go dark, labels light, and the red pin stays red. The chip uses the page's own colours. */
 body:has(.ps-bg) .footer-map { background: #0b1c33; border-color: #1d5f8a; }
-body:has(.ps-bg) .footer-map iframe { filter: invert(0.9) hue-rotate(180deg) brightness(0.95) contrast(0.9); }
+/* Then tinted blue to match the page (Mahmud, 20 Nov 2026): navy ground, blue streets, a teal pin. */
+body:has(.ps-bg) .footer-map iframe { filter: invert(0.88) hue-rotate(180deg) sepia(1) hue-rotate(150deg) saturate(3) brightness(0.75) contrast(1.1); }
 body:has(.ps-bg) .footer-grid a.footer-map-open { background: #0b1c33; color: #3ae3d1; border: 1px solid #1d5f8a; box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4); }
 body:has(.ps-bg) .footer-grid a.footer-map-open:hover { background: #1d5f8a; color: #e2f2fc; }
