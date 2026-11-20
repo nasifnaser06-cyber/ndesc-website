@@ -34,7 +34,7 @@ function siteJsonLd() {
 
 export default async function Home() {
   const lang: Locale = "en";
-  const ness = getEvent("ness-2027")!;
+  const ness = getEvent("ness-x")!;
   const latest = sortedEvents().slice(0, 3).map((e) => eventRow(e, lang));
   const en = lang === "en";
 

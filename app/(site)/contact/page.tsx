@@ -16,8 +16,8 @@ export default async function Contact() {
   const lang: Locale = "en";
   const en = lang === "en";
   const topics = en
-    ? ["NESS 2027", "Exhibiting or sponsoring", "Joining the club", "Press", "Something else"]
-    : ["NESS ২০২৭", "প্রদর্শনী বা স্পনসরশিপ", "ক্লাবে যোগদান", "সংবাদমাধ্যম", "অন্য কিছু"];
+    ? ["NESS X", "Exhibiting or sponsoring", "Joining the club", "Press", "Something else"]
+    : ["NESS X", "প্রদর্শনী বা স্পনসরশিপ", "ক্লাবে যোগদান", "সংবাদমাধ্যম", "অন্য কিছু"];
   return (
     <>
       <PageHead lang={lang} title={title} lead={lead} />

@@ -64,7 +64,7 @@ export default async function Join() {
             <h3>{en ? "From another school or an organisation?" : "অন্য প্রতিষ্ঠান থেকে?"}</h3>
             <p className="muted small">{en ? "Compete or exhibit at the National Earth and Space Summit." : "ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিটে প্রতিযোগিতা বা প্রদর্শনী করুন।"}</p>
           </div>
-          <Link className="btn btn-secondary" href={path(lang, "/ness")}>{en ? "Go to NESS 2027" : "NESS ২০২৭-এ যান"}</Link>
+          <Link className="btn btn-secondary" href={path(lang, "/ness")}>{en ? "Go to NESS X" : "NESS X-এ যান"}</Link>
         </section>
       </div>
     </>

@@ -13,6 +13,9 @@ export const timeline: { year: string; text: L }[] = [
   { year: "2027", text: { en: "10th summit, 28–30 January.", bn: "১০ম সামিট, ২৮–৩০ জানুয়ারি।" } },
 ];
 
+/** The NESS X page shows the Schedule only when this is true. Hidden until the club sends the day-by-day plan (Mahmud, 20 Nov 2026). */
+export const showNessSchedule = false;
+
 export const nessSchedule: { day: L; plan: L }[] = [
   { day: { en: "Day 1, 28 January", bn: "১ম দিন, ২৮ জানুয়ারি" }, plan: { en: "[Opening, olympiads, exhibitions open]", bn: "[উদ্বোধন, অলিম্পিয়াড, প্রদর্শনী শুরু]" } },
   { day: { en: "Day 2, 29 January", bn: "২য় দিন, ২৯ জানুয়ারি" }, plan: { en: "[Team contests and talks]", bn: "[দলীয় প্রতিযোগিতা ও আলোচনা]" } },
