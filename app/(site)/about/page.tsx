@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { type Locale, path, num } from "@/lib/i18n";
+import { type Locale, path } from "@/lib/i18n";
 import { meta } from "@/lib/view";
-import { timeline, moderators } from "@/content/club";
+import { moderators } from "@/content/club";
 import { PageHead, PhotoSlot, T } from "@/components/bits";
 
 const title = { en: "Our story", bn: "আমাদের গল্প" };
@@ -41,18 +41,6 @@ export default async function About() {
                 : "সদস্যরা জ্যোতির্বিজ্ঞান আর মহাকাশ নিয়ে বেশি কাজ শুরু করলে ক্লাবের নাম হয় ইকো অ্যান্ড স্পেস ক্লাব। ক্লাবটি কর্মশালা, সেমিনার, তারা দেখার ক্যাম্প, ফিল্ড ট্যুর ও প্রতিযোগিতা আয়োজন করে, আর আয়োজন করে ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট।"}
             </p>
           </div>
-        </section>
-
-        <section aria-labelledby="tl">
-          <h2 id="tl" style={{ marginBottom: "var(--s4)" }}>{en ? "Timeline" : "সময়রেখা"}</h2>
-          <ol className="timeline-v">
-            {timeline.map((t) => (
-              <li key={t.year}>
-                <span className="year">{num(t.year, lang)}</span>
-                <span className="muted"><T text={t.text} lang={lang} /></span>
-              </li>
-            ))}
-          </ol>
         </section>
 
         <section aria-labelledby="mods">
