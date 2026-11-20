@@ -7,7 +7,7 @@ export const ui = {
     ness: { en: "NESS X", bn: "NESS X" },
     /** Header label for the NESS page (Mahmud, 20 Nov 2026). Everything is called NESS X, never NESS 2027. */
     nessX: { en: "NESS X", bn: "NESS X" },
-    photosphere: { en: "PS 7.0", bn: "PS 7.0" },
+    photosphere: { en: "Photosphere 7.0", bn: "Photosphere 7.0" },
     events: { en: "Events", bn: "ইভেন্ট" },
     resources: { en: "Resources", bn: "রিসোর্স" },
     news: { en: "News", bn: "খবর" },
