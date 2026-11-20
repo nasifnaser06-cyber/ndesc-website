@@ -220,7 +220,7 @@ function runMatcher() {
     d.verify.forEach(function (v) {
       var r = byId[v.id];
       r.status = 'Verified';
-      r.participantId = nextParticipantId(r.category);
+      r.participantId = nextParticipantId();
       r.checkCode = newCode(10, []);
       sh.getRange(r.row, col('Status')).setValue('Verified');
       sh.getRange(r.row, col('Participant ID')).setValue(r.participantId);
@@ -444,12 +444,20 @@ function readPays() {
   return out;
 }
 
-function nextParticipantId(category) {
+/**
+ * Participant IDs run NESSX-10000, NESSX-10001, ... for everyone (one counter, not per category).
+ * Also looks at the IDs already in the sheet, so a reset counter or copied rows never repeat a number.
+ */
+var FIRST_PARTICIPANT_NUMBER = 10000;
+function nextParticipantId() {
   var props = PropertiesService.getScriptProperties();
-  var key = 'count_' + category;
-  var n = Number(props.getProperty(key) || 0) + 1;
-  props.setProperty(key, String(n));
-  return 'NESSX-' + category + '-' + ('0000' + n).slice(-4);
+  var n = Number(props.getProperty('participant_next') || FIRST_PARTICIPANT_NUMBER);
+  readRegs().forEach(function (r) {
+    var m = String(r.participantId || '').match(/^NESSX-(\d{5,})$/);
+    if (m && Number(m[1]) >= n) n = Number(m[1]) + 1;
+  });
+  props.setProperty('participant_next', String(n + 1));
+  return 'NESSX-' + n;
 }
 
 /** Random code of letters and digits, without look-alikes (0/O, 1/I). */
@@ -518,14 +526,22 @@ function approveSelectedRow() {
   if (sh.getName() !== SHEETS.REG) throw new Error('Select a row in the Registrations tab.');
   var r = sh.getActiveRange().getRow();
   if (r < 2) return;
+  var lock = LockService.getScriptLock();
+  lock.waitLock(30000);
+  try {
   var reg = readRegs().filter(function (x) { return x.row === r; })[0];
+  if (reg.status === 'Verified' && reg.participantId) throw new Error('This row is already verified as ' + reg.participantId + '.');
   reg.status = 'Verified';
-  reg.participantId = nextParticipantId(reg.category);
+  reg.participantId = nextParticipantId();
   reg.checkCode = newCode(10, []);
   sh.getRange(r, col('Status')).setValue('Verified');
   sh.getRange(r, col('Participant ID')).setValue(reg.participantId);
   sh.getRange(r, col('Check code')).setValue(reg.checkCode);
   sh.getRange(r, col('Review reason')).setValue('Approved by hand ' + Utilities.formatDate(new Date(), 'Asia/Dhaka', 'd MMM HH:mm'));
+  SpreadsheetApp.flush();
+  } finally {
+    lock.releaseLock();
+  }
   sendPassEmail(reg, false);
 }
 

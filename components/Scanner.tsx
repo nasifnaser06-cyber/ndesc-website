@@ -24,6 +24,7 @@ type BarcodeDetectorLike = { detect(src: CanvasImageSource): Promise<{ rawValue:
 
 const STORE_LINK = "ndesc-scan-link";
 const STORE_PHONE = "ndesc-scan-phone";
+const PHONES = ["Jarif's phone", "Rion's phone"]; // the two scanning phones at NESS X
 
 function readLink(): Link | null {
   const fromHash = (h: string): Link | null => {
@@ -70,7 +71,6 @@ function chromeLinks(link: Link): { https: string; intent: string } {
   };
 }
 
-const MIN_CHECK_MS = 1000; // the "Checking…" screen stays up at least this long
 
 async function ask(link: Link, body: object): Promise<Answer> {
   const res = await fetch(link.endpoint, {
@@ -99,7 +99,6 @@ const input: React.CSSProperties = {
 export default function Scanner() {
   const [link, setLink] = useState<Link | null | undefined>(undefined);
   const [phone, setPhone] = useState("");
-  const [phoneDraft, setPhoneDraft] = useState("Phone 1");
   const [connected, setConnected] = useState<"checking" | "yes" | "no">("checking");
   const [connError, setConnError] = useState("");
   const [camera, setCamera] = useState<"off" | "on" | "error">("off");
@@ -136,38 +135,45 @@ export default function Scanner() {
       .catch(() => { setConnected("no"); setConnError("No answer from the sheet. Check the internet."); });
   }, [link]);
 
-  const stopCamera = useCallback(() => {
-    scanningRef.current = false;
+  // ---------------------------------------------------------------- camera
+  // genRef: every new scanning run gets a number; an older run that wakes up after it stops.
+  // A watchdog restarts the camera if the picture freezes (track ended, video paused, or no
+  // new frames for 2.5 s), and the camera is released when the screen locks and reopened after.
+
+  const genRef = useRef(0);
+  const wantCameraRef = useRef(false);
+  const pausedForResultRef = useRef(false);
+  const frameRef = useRef({ t: -1, at: 0 });
+  const restartingRef = useRef(false);
+  const checkRef = useRef<(v: string) => void>(() => {});
+
+  const releaseStream = () => {
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
-    setCamera("off");
-  }, []);
-  useEffect(() => stopCamera, [stopCamera]);
+    if (videoRef.current) videoRef.current.srcObject = null;
+  };
 
-  const check = useCallback(async (value: string) => {
-    if (!link) return;
-    scanningRef.current = false;
-    setLastValue(value);
-    setBusy(true);
-    setAnswer(null);
-    const started = Date.now();
-    const settle = () => new Promise((r) => setTimeout(r, Math.max(0, MIN_CHECK_MS - (Date.now() - started))));
-    try {
-      const a = await ask(link, { action: "scan", code: value, device: phone });
-      await settle();
-      setAnswer(a);
-      if (a.ok && navigator.vibrate) navigator.vibrate(a.result === "registered" ? 120 : [90, 70, 90, 70, 90]);
-    } catch {
-      await settle();
-      setAnswer({ ok: false, error: "No answer from the sheet. Check the internet and try again." });
-    } finally {
-      setBusy(false);
-    }
-  }, [link, phone]);
-
-  const loop = useCallback(async () => {
+  const openStream = useCallback(async () => {
+    releaseStream();
+    const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" } }, audio: false });
+    streamRef.current = stream;
     const video = videoRef.current;
-    if (!scanningRef.current || !video) return;
+    if (video) {
+      video.srcObject = stream;
+      await video.play().catch(() => { /* the watchdog tries again */ });
+    }
+  }, []);
+
+  const scanFrame = useCallback(async (gen: number) => {
+    if (gen !== genRef.current || !scanningRef.current) return;
+    const video = videoRef.current;
+    const track = streamRef.current?.getVideoTracks()[0];
+    if (!video || !track || track.readyState === "ended") { restartRef.current(); return; }
+    if (video.paused) video.play().catch(() => {});
+    const now = Date.now();
+    if (video.currentTime !== frameRef.current.t) frameRef.current = { t: video.currentTime, at: now };
+    else if (now - frameRef.current.at > 2500) { restartRef.current(); return; }
+
     if (video.readyState >= 2 && video.videoWidth) {
       let value = "";
       try {
@@ -187,27 +193,85 @@ export default function Scanner() {
           }
         }
       } catch { /* try the next frame */ }
+      if (gen !== genRef.current || !scanningRef.current) return;
+      value = value.trim();
       const ign = ignoreRef.current;
-      if (value.trim() && value.trim() === ign.value && Date.now() < ign.until) value = "";
-      if (value.trim() && scanningRef.current) {
-        check(value.trim());
-        return;
-      }
+      if (value && value === ign.value && Date.now() < ign.until) value = "";
+      if (value) { checkRef.current(value); return; }
     }
-    setTimeout(loop, 120);
-  }, [check]);
+    setTimeout(() => scanFrame(gen), 120);
+  }, []);
+
+  const beginScanning = useCallback(() => {
+    genRef.current += 1;
+    scanningRef.current = true;
+    pausedForResultRef.current = false;
+    frameRef.current = { t: -1, at: Date.now() };
+    scanFrame(genRef.current);
+  }, [scanFrame]);
+
+  const stopScanning = () => { genRef.current += 1; scanningRef.current = false; };
+
+  const restart = useCallback(async () => {
+    if (restartingRef.current || !wantCameraRef.current) return;
+    restartingRef.current = true;
+    stopScanning();
+    try {
+      await openStream();
+      if (!pausedForResultRef.current) beginScanning();
+    } catch {
+      setCamera("error");
+      setCameraError("The camera stopped. Tap Start scanning to turn it on again.");
+      wantCameraRef.current = false;
+    } finally {
+      restartingRef.current = false;
+    }
+  }, [openStream, beginScanning]);
+  const restartRef = useRef<() => void>(() => {});
+  useEffect(() => { restartRef.current = () => { restart(); }; }, [restart]);
+
+  const stopCamera = useCallback(() => {
+    wantCameraRef.current = false;
+    stopScanning();
+    releaseStream();
+    setCamera("off");
+  }, []);
+  useEffect(() => stopCamera, [stopCamera]);
+
+  // Screen locked or app switched: let go of the camera, and take it back on return.
+  useEffect(() => {
+    const onVis = () => {
+      if (document.hidden) { stopScanning(); releaseStream(); }
+      else if (wantCameraRef.current) restartRef.current();
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
+
+  const check = useCallback(async (value: string) => {
+    if (!link) return;
+    stopScanning();
+    pausedForResultRef.current = true;
+    setLastValue(value);
+    setBusy(true);
+    setAnswer(null);
+    try {
+      const a = await ask(link, { action: "scan", code: value, device: phone });
+      setAnswer(a);
+      if (a.ok && navigator.vibrate) navigator.vibrate(a.result === "registered" ? 120 : [90, 70, 90, 70, 90]);
+    } catch {
+      setAnswer({ ok: false, error: "No answer from the sheet. Check the internet and try again." });
+    } finally {
+      setBusy(false);
+    }
+  }, [link, phone]);
+  useEffect(() => { checkRef.current = (v) => { check(v); }; }, [check]);
 
   const startCamera = useCallback(async () => {
     setCameraError("");
+    wantCameraRef.current = true;
     try {
-      if (!streamRef.current) {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: "environment" } }, audio: false });
-        streamRef.current = stream;
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          await videoRef.current.play();
-        }
-      }
+      await openStream();
       const W = window as unknown as { BarcodeDetector?: { new (o: object): BarcodeDetectorLike; getSupportedFormats?: () => Promise<string[]> } };
       if (!detectorRef.current && W.BarcodeDetector) {
         try {
@@ -216,31 +280,33 @@ export default function Scanner() {
         } catch { /* use jsQR */ }
       }
       setCamera("on");
-      scanningRef.current = true;
-      loop();
+      beginScanning();
     } catch (e) {
+      wantCameraRef.current = false;
       setCamera("error");
       setCameraError(e instanceof Error && e.name === "NotAllowedError"
         ? "Camera blocked. Allow the camera for ndesc.com in the browser settings, then tap Start again."
         : "The camera could not start. Close other apps using it and try again.");
     }
-  }, [loop]);
+  }, [openStream, beginScanning]);
 
   const next = useCallback(() => {
     ignoreRef.current = { value: lastValue, until: Date.now() + 3000 };
     setAnswer(null);
     setTyped("");
     setTypedError("");
-    if (streamRef.current) {
-      scanningRef.current = true;
-      loop();
-    }
-  }, [loop, lastValue]);
+    pausedForResultRef.current = false;
+    if (!wantCameraRef.current) return;
+    const track = streamRef.current?.getVideoTracks()[0];
+    if (!track || track.readyState === "ended") { restartRef.current(); return; }
+    videoRef.current?.play().catch(() => {});
+    beginScanning();
+  }, [lastValue, beginScanning]);
 
   const submitTyped = (e: React.FormEvent) => {
     e.preventDefault();
     const v = typed.trim();
-    if (!v) { setTypedError("Type a Participant ID first, like NESSX-HS-0042."); return; }
+    if (!v) { setTypedError("Type a Participant ID first, like NESSX-10000."); return; }
     setTypedError("");
     check(v);
   };
@@ -256,7 +322,13 @@ export default function Scanner() {
         </div>
         {link && phone && (
           <div style={{ textAlign: "right", fontSize: 13, color: C.haze }}>
-            <div>{phone}</div>
+            <div>
+              {phone}{" "}
+              <button type="button" onClick={() => { try { localStorage.removeItem(STORE_PHONE); } catch { /* private mode */ } setPhone(""); }}
+                style={{ background: "none", border: "none", color: C.star, textDecoration: "underline", padding: "0 0 0 4px", font: "inherit", cursor: "pointer" }}>
+                Change
+              </button>
+            </div>
             <div aria-live="polite">
               <span aria-hidden="true" style={{ display: "inline-block", width: 8, height: 8, borderRadius: 4, marginRight: 6,
                 background: connected === "yes" ? C.sprout : connected === "no" ? "#F08A7E" : C.haze }} />
@@ -313,22 +385,18 @@ export default function Scanner() {
   }
 
   if (!phone) {
+    const choose = (p: string) => {
+      try { localStorage.setItem(STORE_PHONE, p); } catch { /* private mode */ }
+      setPhone(p);
+    };
     return shell(
-      <form
-        style={{ background: C.panel, borderRadius: 16, padding: 20 }}
-        onSubmit={(e) => {
-          e.preventDefault();
-          const p = phoneDraft.trim().slice(0, 40) || "Phone 1";
-          try { localStorage.setItem(STORE_PHONE, p); } catch { /* private mode */ }
-          setPhone(p);
-        }}
-      >
-        <h1 style={{ fontSize: 22, margin: "0 0 6px" }}>Name this phone</h1>
-        <p style={{ margin: "0 0 14px", color: C.haze, lineHeight: 1.5 }}>It shows in the sheet next to every scan, so you can tell the two phones apart.</p>
-        <label htmlFor="phone" style={{ display: "block", fontSize: 14, color: C.haze, marginBottom: 6 }}>Phone name</label>
-        <input id="phone" style={input} value={phoneDraft} onChange={(e) => setPhoneDraft(e.target.value)} maxLength={40} />
-        <button type="submit" style={{ ...btn, width: "100%", marginTop: 14 }}>Save</button>
-      </form>,
+      <section style={{ background: C.panel, borderRadius: 16, padding: 20 }}>
+        <h1 style={{ fontSize: 22, margin: "0 0 6px" }}>Whose phone is this?</h1>
+        <p style={{ margin: "0 0 16px", color: C.haze, lineHeight: 1.5 }}>It shows in the sheet next to every scan.</p>
+        {PHONES.map((p) => (
+          <button key={p} type="button" style={{ ...btn, width: "100%", marginTop: 10 }} onClick={() => choose(p)}>{p}</button>
+        ))}
+      </section>,
     );
   }
 
@@ -364,13 +432,7 @@ export default function Scanner() {
       {camera === "on" && !answer && !busy && <p style={{ textAlign: "center", color: C.haze, margin: "10px 0 0" }}>Point the camera at the QR code</p>}
 
       {busy && (
-        <div aria-live="polite" style={{ background: C.panel, borderRadius: 16, padding: "44px 24px", textAlign: "center" }}>
-          <div style={{ fontSize: 24, fontWeight: 700 }}>Checking…</div>
-          <div aria-hidden="true" style={{ height: 6, borderRadius: 3, background: C.line, marginTop: 18, overflow: "hidden" }}>
-            <div className="scan-bar" style={{ height: "100%", background: C.sprout, borderRadius: 3 }} />
-          </div>
-          <style>{`.scan-bar{width:100%;transform-origin:left;animation:scanbar ${MIN_CHECK_MS}ms linear both}@keyframes scanbar{from{transform:scaleX(0)}to{transform:scaleX(1)}}@media (prefers-reduced-motion:reduce){.scan-bar{animation:none}}`}</style>
-        </div>
+        <div aria-live="polite" style={{ background: C.panel, borderRadius: 16, padding: "48px 20px", textAlign: "center", fontSize: 24, fontWeight: 700 }}>Checking…</div>
       )}
 
       {answer && (
@@ -405,7 +467,7 @@ export default function Scanner() {
       <form onSubmit={submitTyped} style={{ marginTop: 22, display: answer || busy ? "none" : "block" }} noValidate>
         <label htmlFor="typed" style={{ display: "block", fontSize: 14, color: C.haze, marginBottom: 6 }}>QR won't scan? Type the Participant ID</label>
         <div style={{ display: "flex", gap: 8 }}>
-          <input id="typed" style={input} value={typed} placeholder="NESSX-HS-0042" autoCapitalize="characters" autoComplete="off"
+          <input id="typed" style={input} value={typed} placeholder="NESSX-10000" autoCapitalize="characters" autoComplete="off"
             onChange={(e) => { setTyped(e.target.value); setTypedError(""); }} aria-invalid={Boolean(typedError)} aria-describedby="typed-err" />
           <button type="submit" style={ghost}>Check</button>
         </div>

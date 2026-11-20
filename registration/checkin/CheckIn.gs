@@ -52,9 +52,12 @@ function checkinJson(obj) {
 
 // ---------------------------------------------------------------- scanning
 
-/** "NESSX-HS-0042", "hs-42", "HS0042" -> "NESSX-HS-0042"; anything else -> "". */
+/** "NESSX-10000", "nessx 10000", "10000" -> "NESSX-10000" (older "NESSX-HS-0042" IDs still work); anything else -> "". */
 function normParticipantId(v) {
-  var m = String(v || '').toUpperCase().replace(/\s+/g, '').match(/^(?:NESSX-?)?(HS|P|J|S)-?0*(\d{1,4})$/);
+  var t = String(v || '').toUpperCase().replace(/\s+/g, '');
+  var m = t.match(/^(?:NESSX-?)?(\d{5,6})$/);
+  if (m) return 'NESSX-' + m[1];
+  m = t.match(/^(?:NESSX-?)?(HS|P|J|S)-?0*(\d{1,4})$/);
   return m ? 'NESSX-' + m[1] + '-' + ('0000' + m[2]).slice(-4) : '';
 }
 

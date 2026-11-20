@@ -23,12 +23,12 @@ let sms = post({ action: 'sms', key, text: 'You have received Tk 200.00 from 017
 check('sms accepted', sms.ok && sms.trxId === 'DK481HDVPG', sms);
 const reg = sheets.Registrations.data[1];
 check('registration verified', reg[2] === 'Verified', reg);
-check('participant id', reg[17] === 'NESSX-S-0001', reg[17]);
+check('participant id', reg[17] === 'NESSX-10000', reg[17]);
 check('name and details in the sheet', reg[4] === 'Rahim Uddin' && reg[5] === 'rahim@example.com' && reg[7] === 'Ideal School' && reg[9] === 'S', reg);
 check('solo pass includes all solo segments', /All solo segments/.test(reg[10]), reg[10]);
 check('no parent details kept', reg[12] === '' && reg[13] === '', [reg[12], reg[13]]);
-check('pass email to the right person with name and ID', mails[mails.length - 1].to === 'rahim@example.com' && /Rahim Uddin/.test(mails[mails.length - 1].htmlBody) && /NESSX-S-0001/.test(mails[mails.length - 1].htmlBody), mails[mails.length - 1].to);
-check('pass emailed', /^Your NESS X pass: NESSX-S-0001$/.test(mails[mails.length - 1].subject), mails.map(m => m.subject));
+check('pass email to the right person with name and ID', mails[mails.length - 1].to === 'rahim@example.com' && /Rahim Uddin/.test(mails[mails.length - 1].htmlBody) && /NESSX-10000/.test(mails[mails.length - 1].htmlBody), mails[mails.length - 1].to);
+check('pass emailed', /^Your NESS X pass: NESSX-10000$/.test(mails[mails.length - 1].subject), mails.map(m => m.subject));
 { const m = mails[mails.length - 1];
   check('sender name', m.name === 'NESS X Organizers', m.name);
   check('QR inline', m.inlineImages && m.inlineImages.qr && /cid:qr/.test(m.htmlBody));
@@ -64,7 +64,7 @@ let online = post({ ...base, phone: '01555555555', email: 'o@example.com', pass:
 check('online pass verified immediately', online.ok && online.status === 'Verified', online);
 
 let st = post({ action: 'status', phone: '01730260578', trxId: 'dk481hdvpg' });
-check('status lookup', st.ok && st.status === 'Verified' && st.participantId === 'NESSX-S-0001', st);
+check('status lookup', st.ok && st.status === 'Verified' && st.participantId === 'NESSX-10000', st);
 
 let otp = post({ action: 'sms', key, text: 'Your bKash verification code is 482910. OTP valid for 2 min' });
 check('otp ignored and not stored', otp.ignored && !JSON.stringify(sheets).includes('482910'));
@@ -78,7 +78,7 @@ ctx.CacheService.getScriptCache().remove('settings');
 let r20 = post({ ...base, name: 'Karim Ahmed', email: 'karim@example.com', phone: '01733333333', category: 'J', pass: 'solo', trxId: 'DK20TK0001', sender: '01733333333' });
 post({ action: 'sms', key, text: 'You have received Tk 20.00 from 01733333333. Fee Tk 0.00. Balance Tk 99.00. TrxID DK20TK0001 at 19/11/2026 01:10' });
 const k = sheets.Registrations.data.find(r => r[0] === r20.regId);
-check('20 Tk solo price: verified and emailed', k && k[2] === 'Verified' && /^NESSX-J-/.test(k[17]) && mails[mails.length - 1].to === 'karim@example.com', k);
+check('20 Tk solo price: verified and emailed', k && k[2] === 'Verified' && /^NESSX-1\d{4}$/.test(k[17]) && mails[mails.length - 1].to === 'karim@example.com', k);
 
 S.find(r => r[0] === 'Registration open')[1] = 'FALSE';
 let closed = post({ ...base, phone: '01722222222', pass: 'online' });
