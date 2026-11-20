@@ -178,6 +178,7 @@ function setup() {
     ['Registration sheet link', '', 'The address of the NESSX registrations sheet'],
     ['Scanner key', Utilities.getUuid().replace(/-/g, ''), 'Secret. Part of the scanner link. Change it to stop old links working.'],
     ['Scanner page', 'https://ndesc.com/scan/', ''],
+    ['Web app link', '', 'From Deploy > Manage deployments: the Web app URL ending in /exec'],
   ].forEach(function (d) { if (have.indexOf(d[0]) < 0) set.appendRow(d); });
 
   // "Checked in at" next to each name on the Participants tab (columns A to I come from the registration sheet).
@@ -196,11 +197,18 @@ function onOpen() {
     .addToUi();
 }
 
-/** The link the two scanning phones open. Works once the script is deployed as a web app. */
+/**
+ * The link the two scanning phones open. Uses the published web app address from Settings
+ * (Google sometimes gives the script its private /dev test address, which the phones cannot use).
+ */
 function scannerLink() {
   var s = checkinSettings();
-  var url = ScriptApp.getService().getUrl() || '';
-  var m = url.match(/\/macros\/s\/([^/]+)\/(exec|dev)/);
+  var url = s['Web app link'] || '';
+  if (!/\/exec$/.test(url)) {
+    var own = ScriptApp.getService().getUrl() || '';
+    url = /\/exec$/.test(own) ? own : '';
+  }
+  var m = url.match(/\/macros\/s\/([^/]+)\/exec$/);
   if (!m) return '';
   return (s['Scanner page'] || 'https://ndesc.com/scan/') + '#' + m[1] + '.' + s['Scanner key'];
 }
@@ -209,7 +217,7 @@ function showScannerLink() {
   var link = scannerLink();
   var ui = SpreadsheetApp.getUi();
   if (!link) {
-    ui.alert('Deploy the script as a web app first (Deploy > New deployment > Web app), then try again.');
+    ui.alert('Paste the web app address into Settings > Web app link first. Find it in Apps Script: Deploy > Manage deployments > Web app URL (it ends in /exec).');
     return;
   }
   var html = HtmlService.createHtmlOutput(
