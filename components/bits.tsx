@@ -164,12 +164,8 @@ export function PersonCard({ name, post, department, photo, poster, lang }: { na
       )}
       <h3><T text={name} lang={lang} /></h3>
       <p className="small muted">
+        {/* Position only (Mahmud, 20 Nov 2026): the wing is already the heading above the cards. */}
         <T text={post} lang={lang} />
-        {department && (
-          <>
-            , <T text={department} lang={lang} />
-          </>
-        )}
       </p>
     </div>
   );

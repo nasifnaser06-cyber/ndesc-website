@@ -48,8 +48,9 @@ export default async function Executives() {
       </h2>
       <div className="wings">
         {wings.map((g) => (
-          <section key={g.wing ?? "lead"} className="wing" aria-label={g.wing ?? (en ? "Secretary General" : "মহাসচিব")}>
-            {g.wing && <h3 className="wing-name">{g.wing}</h3>}
+          <section key={g.wing ?? "lead"} className="wing">
+            {/* The Secretary General has no wing; his heading is "Boss-Man" (Mahmud, 20 Nov 2026). */}
+            <h3 className="wing-name">{g.wing ?? "Boss-Man"}</h3>
             <div className="people">
               {g.members.map((p, i) => <PersonCard key={i} lang={lang} {...p} />)}
             </div>
