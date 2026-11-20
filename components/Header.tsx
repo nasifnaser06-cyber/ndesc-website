@@ -132,8 +132,9 @@ export default function Header({ lang }: { lang: Locale }) {
 
         <div className="header-tools">
           {/* The "Register for NESS X" ice button, back in the header (Mahmud, 20 Nov 2026).
-              No Register button on the Register page itself. */}
-          {sub !== "/ness/register" &&
+              Not on the Register page itself, nor on the NESS X page, which has its own
+              Register now button (Mahmud, 21 Nov 2026). */}
+          {sub !== "/ness/register" && sub !== "/ness" &&
             (site.registerWith === "form" && site.forms.nessRegister ? (
               <IceButton href={site.forms.nessRegister} external note={tr(ui.newTab, lang)} />
             ) : (
