@@ -935,15 +935,16 @@ body:has(.ness-three) main :is(.reg-draft, .reg-errors) { color: #0a4a70; backgr
    #e2f2fc on #1d5f8a 6.0:1. #1d5f8a is only used for lines and edges (2.5:1 on navy).
    --------------------------------------------------------------------------------------------- */
 .ps-bg.ps-four {
+  /* Veil 40% stronger (Mahmud, 20 Nov 2026): 0.5 / 0.42 / 0.7 became 0.7 / 0.59 / 0.98. */
   background:
-    linear-gradient(180deg, rgba(11, 28, 51, 0.5) 0%, rgba(11, 28, 51, 0.42) 45%, rgba(11, 28, 51, 0.7) 100%),
+    linear-gradient(180deg, rgba(11, 28, 51, 0.7) 0%, rgba(11, 28, 51, 0.59) 45%, rgba(11, 28, 51, 0.98) 100%),
     var(--bg-lg) center 55% / cover no-repeat,
     #0b1c33;
 }
 @media (max-width: 900px) {
   .ps-bg.ps-four {
     background:
-      linear-gradient(180deg, rgba(11, 28, 51, 0.5) 0%, rgba(11, 28, 51, 0.42) 45%, rgba(11, 28, 51, 0.7) 100%),
+      linear-gradient(180deg, rgba(11, 28, 51, 0.7) 0%, rgba(11, 28, 51, 0.59) 45%, rgba(11, 28, 51, 0.98) 100%),
       var(--bg-sm) center 55% / cover no-repeat,
       #0b1c33;
   }
