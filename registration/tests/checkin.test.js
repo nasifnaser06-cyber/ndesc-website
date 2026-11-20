@@ -12,10 +12,10 @@ function sheet(name, rows) {
 const regHeader = ['Reg ID', 'Submitted', 'Status', 'Pass', 'Name', 'Email', 'Phone', 'Institution', 'Class', 'Category', 'Segments', 'Team code', 'Parent name', 'Parent phone', 'Wallet', 'TrxID', 'Paid from', 'Participant ID', 'Check code', 'Pass email', 'Review reason', 'Team notes'];
 const row = (status, pass, name, pid, code) => { const r = regHeader.map(() => ''); r[2] = status; r[3] = pass; r[4] = name; r[17] = pid; r[18] = code; return r; };
 const reg = sheet('Registrations', [regHeader,
-  row('Verified', 'solo', 'Ayaan Rahman', 'NESSX-HS-0001', 'K7P2QXM9AB'),
-  row('Verified', 'team', 'Nadia Karim', 'NESSX-S-0002', 'ZZ34PQRS78'),
+  row('Verified', 'solo', 'Ayaan Rahman', 'NESSX-10000', 'K7P2QXM9AB'),
+  row('Verified', 'team', 'Nadia Karim', 'NESSX-10001', 'ZZ34PQRS78'),
   row('Waiting', 'solo', 'Imran Hossain', '', 'WAITCODE22'),
-  row('Verified', 'online', 'Tania Akter', 'NESSX-J-0003', 'ONL9NE2345'),
+  row('Verified', 'online', 'Tania Akter', 'NESSX-10002', 'ONL9NE2345'),
 ]);
 const sheets = {};
 const ss = { getName: () => 'NESS X Summit', getSheetByName: n => sheets[n] || null, insertSheet: n => (sheets[n] = sheet(n)), setSpreadsheetTimeZone() {} };
@@ -52,13 +52,13 @@ const post = b => ctx.doPost({ postData: { contents: JSON.stringify(b) } });
 check('wrong key refused', post({ action: 'scan', key: 'nope', code: 'K7P2QXM9AB' }).ok === false);
 check('ping', post({ action: 'ping', key }).sheet === 'NESS X Summit');
 let r = post({ action: 'scan', key, code: 'k7p2qxm9ab ', device: 'Phone 1' });
-check('first scan registered', r.result === 'registered' && r.pass === 'Solo pass' && r.name === 'Ayaan Rahman' && r.participantId === 'NESSX-HS-0001', r);
+check('first scan registered', r.result === 'registered' && r.pass === 'Solo pass' && r.name === 'Ayaan Rahman' && r.participantId === 'NESSX-10000', r);
 clock = new Date('2027-01-28T04:40:00Z');
 r = post({ action: 'scan', key, code: 'K7P2QXM9AB', device: 'Phone 2' });
 check('second scan already', r.result === 'already' && r.firstAt === '28 Jan, 9:14 AM' && r.firstBy === 'Phone 1' && r.pass === 'Solo pass', r);
-r = post({ action: 'scan', key, code: 'hs-1', device: 'Phone 2' });
+r = post({ action: 'scan', key, code: '10000', device: 'Phone 2' });
 check('typed participant ID finds the same person', r.result === 'already', r);
-r = post({ action: 'scan', key, code: 'NESSX-S-0002', device: 'Phone 1' });
+r = post({ action: 'scan', key, code: 'nessx 10001', device: 'Phone 1' });
 check('team pass by ID', r.result === 'registered' && r.pass === 'Team pass', r);
 r = post({ action: 'scan', key, code: 'ONL9NE2345', device: 'Phone 1' });
 check('online pass', r.result === 'registered' && r.pass === 'Online segments', r);

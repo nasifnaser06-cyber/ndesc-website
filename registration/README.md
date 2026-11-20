@@ -19,6 +19,10 @@ Run the tests: `node registration/tests/logic.test.js && node registration/tests
 
 The summit check-in (scanner) is in `checkin/`, with its own README.
 
+## Participant IDs
+
+Verified registrations get NESSX-10000, NESSX-10001, ... in the order they are verified, one counter for every category and pass. The script also checks the IDs already in the sheet, so a number is never given twice.
+
 ## Emails
 
 Sent from the account that owns the sheet (ndesc.organizers.2027@gmail.com, sender name from Settings, "NESS X Organizers"):
