@@ -1023,3 +1023,10 @@ body:has(.ps-bg) .footer-map { background: #0b1c33; border-color: #1d5f8a; }
 body:has(.ps-bg) .footer-map iframe { filter: invert(0.88) hue-rotate(180deg) sepia(1) hue-rotate(150deg) saturate(3) brightness(0.75) contrast(1.1); }
 body:has(.ps-bg) .footer-grid a.footer-map-open { background: #0b1c33; color: #3ae3d1; border: 1px solid #1d5f8a; box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4); }
 body:has(.ps-bg) .footer-grid a.footer-map-open:hover { background: #1d5f8a; color: #e2f2fc; }
+
+/* NESS X and Register pages: the footer map tinted to the page's ice blues (Mahmud, 20 Nov 2026):
+   pale ice ground, sky-blue roads and a deep-blue pin, close to #ebf5f9, #8ed1e6 and #0a4a70. */
+body:has(.ness-three) .footer-map { background: #ebf5f9; border-color: #8ed1e6; }
+body:has(.ness-three) .footer-map iframe { filter: grayscale(1) sepia(1) hue-rotate(160deg) saturate(1.6) brightness(1.05); }
+body:has(.ness-three) .footer-grid a.footer-map-open { background: #ebf5f9; color: #0a4a70; border: 1px solid #8ed1e6; box-shadow: 0 1px 6px rgba(10, 74, 112, 0.18); }
+body:has(.ness-three) .footer-grid a.footer-map-open:hover { background: #0a4a70; color: #ebf5f9; }
