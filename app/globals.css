@@ -242,6 +242,9 @@ body:has(.ness-bg) .site-footer { background: rgba(255, 255, 255, 0.42); border-
   height: 100lvh;
   transform: translateZ(0);
   backface-visibility: hidden;
+  /* Keep the picture on its own layer that the browser never repaints while scrolling (20 Nov 2026). */
+  will-change: transform;
+  contain: strict;
 }
 html:has(.ness-bg) { background: #6391a8; }
 html:has(.ps-bg) { background: #082846; }
@@ -713,7 +716,8 @@ details[open] > summary::after { transform: rotate(45deg); }
 @font-face { font-family: "Montserrat"; src: url("./fonts/montserrat-600.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
 @font-face { font-family: "Montserrat"; src: url("./fonts/montserrat-800.woff2") format("woff2"); font-weight: 800; font-style: normal; font-display: swap; }
 .ps-bg {
-  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  /* Top-anchored at the largest screen height, like the NESS page. A plain "inset: 0" here used to undo that. */
+  position: fixed; inset: 0 0 auto 0; z-index: -1; pointer-events: none;
   background:
     linear-gradient(180deg, rgba(8, 18, 36, 0.5) 0%, rgba(8, 18, 36, 0.42) 45%, rgba(8, 18, 36, 0.68) 100%),
     var(--bg-lg) center 55% / cover no-repeat,
