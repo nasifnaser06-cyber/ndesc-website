@@ -716,6 +716,9 @@ details[open] > summary::after { transform: rotate(45deg); }
 .ps-examples { margin: 0; padding-left: 1.2rem; display: grid; gap: var(--s2); }
 .ps-list { max-width: 72ch; padding-left: 1.2rem; display: grid; gap: var(--s2); }
 .ps-list li::marker { color: var(--sprout); }
+/* Submission rules in three groups, each with a numbered subheading. */
+.ps-rule-groups { display: grid; gap: var(--s6); margin-top: var(--s4); }
+.ps-rule-group h3 { margin-bottom: var(--s3); }
 
 /* NESS page: the NESS logo in place of the "NESSX" heading */
 .ness-logo-h1 { margin: var(--s2) 0 var(--s3); line-height: 0; }

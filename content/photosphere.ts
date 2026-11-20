@@ -55,17 +55,35 @@ export const photosphere = {
     format: "Photo number_Your name_Phone number_Segment name",
     examples: ["01_Israk Tafhim_01715***_Eco Photography", "02_Israk Tafhim_01715***_Eco Photography"],
   },
+  /** Submission rules in three groups (Mahmud, 20 Nov 2026). */
   rules: [
-    "You must be the sole owner of the photos, art or designs you submit.",
-    "Up to 5 photographs, artworks or designs per person in each segment.",
-    "JPG files only, each no larger than 20 MB.",
-    "Photographs can be black and white or colour.",
-    "No watermarks, borders, signatures, logos, or dates and times on the image.",
-    "Manipulation is strictly prohibited.",
-    "Digital submissions only.",
-    "Mobile and DSLR photos are both accepted. They are judged together, with no separate prizes.",
-    "No nudity or sexually explicit, defamatory or provocative content.",
-    "The organisers can remove a submission after accepting it if it breaks any rule.",
+    {
+      title: "File Requirements",
+      items: [
+        "JPG format only.",
+        "Maximum file size: 20 MB per submission.",
+        "Up to 5 photographs, artworks or designs per person in each segment.",
+        "Digital submissions only.",
+        "Both monochromatic and coloured photographs are accepted.",
+        "Mobile and DSLR photos are both accepted. They are judged together, with no separate prizes.",
+      ],
+    },
+    {
+      title: "Ownership and Authenticity",
+      items: [
+        "Participants must be the sole owners of their submissions.",
+        "Watermarks, borders, signatures, logos, and dates/times are prohibited.",
+        "Manipulation is strictly prohibited.",
+      ],
+    },
+    {
+      title: "Content Guidelines",
+      items: [
+        "No nudity or sexually explicit content.",
+        "No defamatory or provocative content.",
+        "Organizers reserve the right to remove submissions violating the rules.",
+      ],
+    },
   ],
   fee: [
     "Submitting is free. There is no registration fee for the first round.",

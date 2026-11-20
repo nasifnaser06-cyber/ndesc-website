@@ -110,9 +110,16 @@ export default async function Photosphere() {
 
         <section id="ps-rules" aria-labelledby="ps-rul">
           <h2 id="ps-rul">Submission rules</h2>
-          <ul className="ps-list">
-            {p.rules.map((r) => <li key={r}>{r}</li>)}
-          </ul>
+          <div className="ps-rule-groups">
+            {p.rules.map((g, i) => (
+              <div key={g.title} className="ps-rule-group">
+                <h3>{i + 1}. {g.title}</h3>
+                <ul className="ps-list">
+                  {g.items.map((r) => <li key={r}>{r}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
         </section>
 
         <section aria-labelledby="ps-fee">
