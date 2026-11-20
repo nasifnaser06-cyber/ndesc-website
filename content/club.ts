@@ -134,6 +134,7 @@ export const resources: { kind: ResourceKind; title: L; year: string; url: strin
 export const galleryAlbums: { title: L; date: string; photos: string[] }[] = [
   { title: { en: "8th NESS", bn: "৮ম NESS" }, date: "2025-02", photos: [] },
   { title: { en: "7th NESS", bn: "৭ম NESS" }, date: "2024-05", photos: [] },
-  { title: { en: "Cosmoterrium 2026", bn: "কসমোটেরিয়াম ২০২৬" }, date: "2026-01", photos: [] },
+  { title: { en: "Cosmoterrium 2.0", bn: "কসমোটেরিয়াম ২.০" }, date: "2026-10", photos: [] },
+  { title: { en: "Cosmoterrium 1.0", bn: "কসমোটেরিয়াম ১.০" }, date: "2026-01", photos: [] },
   { title: { en: "5th NESS", bn: "৫ম NESS" }, date: "2022-05", photos: [] },
 ];

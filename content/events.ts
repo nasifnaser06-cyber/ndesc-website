@@ -64,10 +64,22 @@ export const events: ClubEvent[] = [
     poster: ness2027Banner,
   },
   {
+    slug: "cosmoterrium-2",
+    type: "cosmoterrium",
+    start: "2026-10-09",
+    title: { en: "Cosmoterrium 2.0", bn: "কসমোটেরিয়াম ২.০" },
+    venue: { en: "Notre Dame College, for its students only", bn: "নটর ডেম কলেজ, শুধু এই কলেজের শিক্ষার্থীদের জন্য" },
+    summary: {
+      en: "The second Cosmoterrium, the club's intra-college festival.",
+      bn: "দ্বিতীয় কসমোটেরিয়াম, ক্লাবের আন্তঃকলেজ উৎসব।",
+    },
+    todo: { en: "segments, passes and highlights", bn: "সেগমেন্ট, পাস ও মূল আকর্ষণ" },
+  },
+  {
     slug: "cosmoterrium-2026",
     type: "cosmoterrium",
     start: "2026-01-17",
-    title: { en: "Cosmoterrium 2026", bn: "কসমোটেরিয়াম ২০২৬" },
+    title: { en: "Cosmoterrium 1.0", bn: "কসমোটেরিয়াম ১.০" },
     venue: { en: "Notre Dame College, for its students only", bn: "নটর ডেম কলেজ, শুধু এই কলেজের শিক্ষার্থীদের জন্য" },
     summary: {
       en: "The club's intra-college festival: olympiads, quizzes, games, sessions and the Stellarscapes astro exhibits.",
