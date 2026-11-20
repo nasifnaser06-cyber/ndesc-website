@@ -19,29 +19,29 @@ export default function Footer({ lang }: { lang: Locale }) {
           <p className="small muted">{tr(site.address, lang)}</p>
         </div>
         <div>
-          <p className="label">{tr(ui.explore, lang)}</p>
-          <ul>
-            <li><Link href={path(lang, "/about")}>{tr(ui.nav.about, lang)}</Link></li>
-            <li><Link href={path(lang, "/executives")}>{tr(ui.nav.executives, lang)}</Link></li>
-            <li><Link href={path(lang, "/events")}>{tr(ui.nav.events, lang)}</Link></li>
-            <li><Link href={path(lang, "/resources")}>{tr(ui.nav.resources, lang)}</Link></li>
-          </ul>
-        </div>
-        <div>
-          <p className="label">{tr(ui.takePart, lang)}</p>
-          <ul>
-            <li><Link href={path(lang, "/ness")}>{tr(ui.nav.ness, lang)}</Link></li>
-            <li><Link href={path(lang, "/join")}>{tr(ui.nav.join, lang)}</Link></li>
-            <li><Link href={path(lang, "/contact")}>{tr(ui.nav.contact, lang)}</Link></li>
-          </ul>
-        </div>
-        <div>
           <p className="label">{tr(ui.follow, lang)}</p>
           <ul className="contact-links">
             <li><ContactLink kind="facebook" value={site.social.facebook} lang={lang} /></li>
             <li><ContactLink kind="instagram" value={site.social.instagram} lang={lang} /></li>
             {site.email && <li><ContactLink kind="email" value={site.email} lang={lang} /></li>}
           </ul>
+        </div>
+        <div className="footer-visit">
+          <p className="label">{lang === "en" ? "Visit us" : "আমাদের কাছে আসুন"}</p>
+          <div className="footer-map">
+            <iframe
+              src={site.mapEmbed}
+              title={lang === "en" ? "Map: Notre Dame College, Dhaka" : "মানচিত্র: নটর ডেম কলেজ, ঢাকা"}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+            <a className="footer-map-open" href={site.mapUrl} target="_blank" rel="noopener noreferrer">
+              {lang === "en" ? "Open in Maps" : "ম্যাপে খুলুন"}
+              <svg aria-hidden="true" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 4h6v6" /><path d="M10 14 20 4" /><path d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5" /></svg>
+              <span className="visually-hidden">{lang === "en" ? " (opens in a new tab)" : " (নতুন ট্যাবে খোলে)"}</span>
+            </a>
+          </div>
         </div>
       </div>
       <div className="wrap footer-base">

@@ -167,7 +167,19 @@ body:has(.ness-bg) .site-footer { background: rgba(255, 255, 255, 0.42); border-
 .footer-grid a:hover { color: var(--sprout); text-decoration: underline; }
 /* Footer columns: one on phones, two on tablets, four on desktop with a wider last column for the email */
 @media (min-width: 600px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 1000px) { .footer-grid { grid-template-columns: 1fr 1fr 1fr 1.45fr; } }
+@media (min-width: 1000px) { .footer-grid { grid-template-columns: minmax(0, 1fr) max-content minmax(0, 1.5fr); column-gap: var(--s8); } }
+/* Footer "Visit us" map (Mahmud, 20 Nov 2026): a Google map of the college with an "Open in Maps" chip. */
+.footer-visit { display: grid; gap: var(--s2); align-content: start; }
+@media (min-width: 600px) and (max-width: 999px) { .footer-visit { grid-column: 1 / -1; } }
+.footer-map { position: relative; margin-top: var(--s2); border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--deep); height: 13.5rem; width: 100%; }
+.footer-map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: block; }
+.footer-grid a.footer-map-open {
+  position: absolute; top: 10px; left: 10px; z-index: 1;
+  display: inline-flex; align-items: center; gap: 0.35em; min-height: 2.25rem; padding: 0.35rem 0.75rem;
+  border-radius: 8px; background: #ffffff; color: #1a56c4; font-size: 0.875rem; font-weight: 700; text-decoration: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+}
+.footer-grid a.footer-map-open:hover { color: #0b3d91; text-decoration: underline; }
 .footer-about { display: grid; gap: var(--s2); align-content: start; }
 .footer-name { font-family: var(--font-head); font-weight: var(--weight-head); }
 .footer-base { margin-top: var(--s6); display: flex; flex-wrap: wrap; gap: var(--s4); justify-content: space-between; }
