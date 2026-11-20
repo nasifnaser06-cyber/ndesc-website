@@ -36,10 +36,12 @@ const crystals: Crystal[] = [
   { x: "0", y: "100%", dx: 34, dy: -6, r: 3.6, spin: 30, cls: "c4" },
 ];
 
-export default function IceButton({ href, external, label = "Register for NESS X", note }: {
+export default function IceButton({ href, external, label = "Register for NESS X", shortLabel = "Register", note }: {
   href: string;
   external?: boolean;
   label?: string;
+  /** Shown instead of the label on phones, where the header is narrow. */
+  shortLabel?: string;
   note?: string;
 }) {
   const Tag = (external ? "a" : Link) as React.ElementType;
@@ -61,7 +63,7 @@ export default function IceButton({ href, external, label = "Register for NESS X
           </svg>
         ))}
       </svg>
-      <span className="ice-label">{label}</span>
+      <span className="ice-label"><span className="ice-label-long">{label}</span><span className="ice-label-short">{shortLabel}</span></span>
       {note && <span className="visually-hidden"> {note}</span>}
     </Tag>
   );
