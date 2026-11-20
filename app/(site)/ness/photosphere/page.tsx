@@ -51,7 +51,7 @@ export default async function Photosphere() {
             <dl className="facts">
               <div><dt>Exhibition</dt><dd>28–30 January 2027</dd></div>
               <div><dt>Venue</dt><dd>Notre Dame College, Motijheel, Dhaka</dd></div>
-              <div><dt>Entry</dt><dd>Free to submit</dd></div>
+              <div><dt>Initial Submission</dt><dd>Free</dd></div>
             </dl>
             <div className="actions">
               <a className="btn" href="#ps-submit">Submit Creation</a>
