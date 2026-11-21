@@ -105,6 +105,11 @@ main:focus { outline: none; }
 .site-header:has(.main-nav[data-open="true"]) {
   background: var(--header-menu);
   -webkit-backdrop-filter: blur(28px) saturate(140%); backdrop-filter: blur(28px) saturate(140%);
+  /* The bottom edge fades out instead of ending in a hard line: an empty strip under the last link that
+     goes from the menu's tint and blur to the clear page. The negative margin keeps the page where it was. */
+  padding-bottom: 4rem; margin-bottom: -4rem;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 4rem), transparent);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 4rem), transparent);
 }
 @media (prefers-reduced-transparency: reduce) {
   .site-header:has(.main-nav[data-open="true"]) { background: var(--header-solid); -webkit-backdrop-filter: none; backdrop-filter: none; }
