@@ -32,23 +32,31 @@ export default function Header({ lang }: { lang: Locale }) {
   const menuButton = useRef<HTMLButtonElement>(null);
 
   // Close the phone menu on navigation and with Escape.
-  // A link tapped in the open menu closes the menu at once, and the new page starts at its top: if the
-  // menu closed only after the page changed, the header would shrink under the reader and leave them
-  // part-way down the new page (seen on Photosphere, 20 Nov 2026).
-  const fromMenu = useRef(false);
+  // A link tapped in the open menu closes the menu at once, so the header doesn't shrink under the reader.
   const onHeaderClick = (e: React.MouseEvent<HTMLElement>) => {
     if (!open) return;
     const a = (e.target as HTMLElement).closest("a");
     if (!a || a.target === "_blank") return;
-    fromMenu.current = true;
     setOpen(false);
   };
+  // Every new page starts at its top (the logo and title), unless the link points at a #section or the
+  // reader went Back/Forward (then the browser puts them where they were). Next.js's own scroll can land
+  // part-way down pages with a fixed background picture (Photosphere opened at "About", 21 Nov 2026).
+  const historyNav = useRef(false);
+  useEffect(() => {
+    const onPop = () => { historyNav.current = true; };
+    window.addEventListener("popstate", onPop);
+    return () => window.removeEventListener("popstate", onPop);
+  }, []);
+  const firstRender = useRef(true);
   useEffect(() => {
     setOpen(false);
-    if (fromMenu.current) {
-      fromMenu.current = false;
-      requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
-    }
+    if (firstRender.current) { firstRender.current = false; return; }
+    if (historyNav.current) { historyNav.current = false; return; }
+    if (window.location.hash) return;
+    const toTop = () => window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    toTop();
+    requestAnimationFrame(() => { toTop(); requestAnimationFrame(toTop); });
   }, [sub]);
   useEffect(() => {
     if (!open) return;
