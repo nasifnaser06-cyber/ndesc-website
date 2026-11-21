@@ -94,11 +94,15 @@ main:focus { outline: none; }
 .actions { display: flex; flex-wrap: wrap; gap: var(--s4); }
 
 /* Header */
-.site-header { position: sticky; top: 0; z-index: 20; background: rgba(15, 30, 54, 0.92); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); border-bottom: 1px solid var(--line); }
-@media (prefers-reduced-transparency: reduce) { .site-header { background: var(--night); backdrop-filter: none; } }
+/* No outline and no colour of its own: at the top the header is see-through, so each page's own
+   background runs right up behind it. Once content scrolls underneath, a glass tint of that same page
+   colour (--header-glass, set per page theme below) keeps the menu readable. */
+.site-header { --header-glass: rgba(15, 30, 54, 0.82); --header-solid: var(--night); position: sticky; top: 0; z-index: 20; background: transparent; border-bottom: 0; transition: opacity 0.35s ease, background-color 0.3s ease; }
+.site-header[data-solid="true"] { background: var(--header-glass); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); }
+@media (prefers-reduced-transparency: reduce) { .site-header[data-solid="true"] { background: var(--header-solid); backdrop-filter: none; -webkit-backdrop-filter: none; } }
 /* Fades out while scrolling down, fades back in on scroll up (Mahmud, 20 Nov 2026: fade, not slide).
    While faded it ignores taps, so the page underneath stays clickable. */
-.site-header { transition: opacity 0.35s ease; }
+.site-header { transition: opacity 0.35s ease, background-color 0.3s ease; }
 .site-header[data-hidden="true"] { opacity: 0; pointer-events: none; transition-duration: 0.3s; }
 /* Stay visible while a keyboard user is inside the header. Only :focus-visible counts: a link tapped
    with a finger or mouse keeps focus after navigating, and must not pin the header on the next page. */
@@ -889,17 +893,17 @@ body:has(.ness-three) .site-footer { background: rgba(235, 245, 249, 0.6); borde
   body:has(.ness-three) .site-footer { background: #ebf5f9; }
 }
 
-/* Header on this page: deep blue bar, ice text, sky accents */
+/* Header on this page: no bar of its own, deep blue text on the page's ice background */
 body:has(.ness-three) .site-header {
-  --starlight: #ebf5f9;
-  --haze: #ebf5f9;
-  --sprout: #8ed1e6;
-  --sprout-light: #ebf5f9;
-  --line: rgba(142, 209, 230, 0.35);
-  background: rgba(10, 74, 112, 0.94);
-}
-@media (prefers-reduced-transparency: reduce) {
-  body:has(.ness-three) .site-header { background: #0a4a70; }
+  --starlight: #0a4a70;
+  --haze: #0a4a70;
+  --sprout: #0a4a70;
+  --sprout-light: #0a4a70;
+  --line: rgba(10, 74, 112, 0.3);
+  --edge: rgba(10, 74, 112, 0.3);
+  --night: #ebf5f9;
+  --header-glass: rgba(235, 245, 249, 0.82);
+  --header-solid: #ebf5f9;
 }
 body:has(.ness-three) .ice-btn {
   background: linear-gradient(135deg, #ebf5f9 0%, #8ed1e6 50%, #ebf5f9 100%);
@@ -1008,8 +1012,7 @@ body:has(.ps-four) main .tag { color: #e2f2fc; border-color: #1d5f8a; background
 body:has(.ps-four) .todo { color: #3ae3d1; border-bottom-color: #3ae3d1; }
 
 /* Header, footer and skip link on this page */
-body:has(.ps-four) .site-header { background: rgba(11, 28, 51, 0.94); --line: rgba(29, 95, 138, 0.6); }
-@media (prefers-reduced-transparency: reduce) { body:has(.ps-four) .site-header { background: #0b1c33; } }
+body:has(.ps-four) .site-header { --line: rgba(29, 95, 138, 0.6); --header-glass: rgba(11, 28, 51, 0.82); --header-solid: #0b1c33; }
 body:has(.ps-four) .site-footer { background: rgba(11, 28, 51, 0.6); border-top-color: #1d5f8a; }
 @media (prefers-reduced-transparency: reduce) { body:has(.ps-four) .site-footer { background: #0b1c33; } }
 body:has(.ps-four) .crest-tile { background: #e2f2fc; }

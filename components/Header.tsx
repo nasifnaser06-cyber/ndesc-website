@@ -65,6 +65,9 @@ export default function Header({ lang }: { lang: Locale }) {
   // Slide the header away while scrolling down, bring it back on any scroll up.
   const header = useRef<HTMLElement>(null);
   const [hidden, setHidden] = useState(false);
+  // At the very top the header is see-through and blends with the page; once the page scrolls under
+  // it, it takes a soft glass tint of the same page colour so the menu stays readable.
+  const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     let lastY = window.scrollY;
     let ticking = false;
@@ -73,6 +76,7 @@ export default function Header({ lang }: { lang: Locale }) {
       const y = Math.max(0, window.scrollY);
       const h = header.current?.offsetHeight ?? 80;
       const dy = y - lastY;
+      setScrolled(y > 4);
       if (y <= h) setHidden(false);
       else if (dy > 6) setHidden(true);
       else if (dy < -6) setHidden(false);
@@ -82,6 +86,7 @@ export default function Header({ lang }: { lang: Locale }) {
       if (!ticking) { ticking = true; requestAnimationFrame(update); }
     };
     window.addEventListener("scroll", onScroll, { passive: true });
+    update();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
   useEffect(() => setHidden(false), [sub]);
@@ -92,7 +97,7 @@ export default function Header({ lang }: { lang: Locale }) {
   const isActive = (to: string) => to === best;
 
   return (
-    <header className="site-header" ref={header} data-hidden={hidden && !open} onClickCapture={onHeaderClick}>
+    <header className="site-header" ref={header} data-hidden={hidden && !open} data-solid={scrolled || open} onClickCapture={onHeaderClick}>
       <div className="wrap header-row">
         <Link href={path(lang)} className="brand">
           <Logo />
