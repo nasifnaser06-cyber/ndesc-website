@@ -1198,7 +1198,9 @@ body:has(.ps-four) .site-header {
    filter chips. Floats over the list (no push), uses the site colours, motion only on transform
    and opacity, none at all under reduced motion.
    --------------------------------------------------------------------------------------------- */
-.ev-search { position: relative; z-index: 5; width: 100%; max-width: 40rem; margin: 0 auto var(--s6); }
+.ev-search { position: relative; z-index: 5; width: 100%; max-width: 40rem; margin: 0 auto var(--s4); }
+/* All / Upcoming / Past under the search bar, centred */
+.ev-when { justify-content: center; margin-bottom: var(--s6); }
 .ev-search-box {
   display: flex; align-items: center; gap: var(--s2);
   min-height: 3.25rem; padding: 0 var(--s2) 0 var(--s4);
@@ -1250,7 +1252,8 @@ body:has(.ps-four) .site-header {
 .ev-empty-title { font-family: var(--font-head); font-weight: var(--weight-head); font-size: 1.25rem; color: var(--starlight); }
 
 @media (max-width: 599px) {
-  .ev-search { margin-bottom: var(--s5); scroll-margin-top: var(--s4); }
+  .ev-search { margin-bottom: var(--s3); scroll-margin-top: var(--s4); }
+  .ev-when { margin-bottom: var(--s5); }
   .ev-suggest-item { min-height: 3.25rem; padding-left: var(--s4); } /* bigger touch rows */
 }
 @media (prefers-reduced-motion: reduce) {

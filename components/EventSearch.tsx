@@ -6,6 +6,7 @@
  * - Suggests up to 6 real events in a dropdown; clicking or Enter on one opens that event.
  * - WAI-ARIA combobox: input with aria-expanded / aria-controls / aria-activedescendant,
  *   a listbox of options, arrow keys, Enter, Escape; Tab moves on as normal.
+ * - All / Upcoming / Past buttons under the bar narrow the list and the suggestions (added 23 Nov 2026).
  * - Without JavaScript every event still shows, in date order.
  */
 
@@ -15,6 +16,7 @@ import { EventRows, type EventRowData } from "./EventList";
 import { prepare, search, highlightRanges, type SearchDoc } from "@/lib/eventSearch";
 
 type Labels = Parameters<typeof EventRows>[0]["labels"];
+type When = "all" | "upcoming" | "past";
 
 const MAX_SUGGESTIONS = 6;
 const EMPTY_SUGGESTIONS = 4; // a few real events when the box is focused but empty
@@ -45,36 +47,46 @@ export default function EventSearch({ items, docs, labels }: { items: EventRowDa
   const [active, setActive] = useState(-1);
   const [announce, setAnnounce] = useState("");
   const [touched, setTouched] = useState(false); // no fade on first load, only after a search
+  const [when, setWhen] = useState<When>("all");
 
   const prepared = useMemo(() => prepare(docs), [docs]);
   const bySlug = useMemo(() => new Map(items.map((i) => [i.slug, i])), [items]);
   const akaOf = useMemo(() => new Map(docs.filter((d) => d.aka).map((d) => [d.slug, d.aka as string])), [docs]);
   const hits = useMemo(() => search(prepared, query), [prepared, query]);
-  const results = useMemo(() => hits.map((h) => bySlug.get(h.slug)).filter((x): x is EventRowData => !!x), [hits, bySlug]);
+  const inWhen = (e: EventRowData) => when === "all" || (when === "upcoming") === e.upcoming;
+  const results = useMemo(
+    () => hits.map((h) => bySlug.get(h.slug)).filter((x): x is EventRowData => !!x && (when === "all" || (when === "upcoming") === x.upcoming)),
+    [hits, bySlug, when],
+  );
   const hasQuery = query.trim().length > 0;
-  const suggestions = hasQuery ? results.slice(0, MAX_SUGGESTIONS) : items.slice(0, EMPTY_SUGGESTIONS);
+  const suggestions = hasQuery ? results.slice(0, MAX_SUGGESTIONS) : items.filter(inWhen).slice(0, EMPTY_SUGGESTIONS);
   const expanded = open && suggestions.length > 0;
 
   // Keep the search in the address (?q=) so Back from an event page brings the same results back.
   useEffect(() => {
-    const q = new URLSearchParams(window.location.search).get("q");
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q");
     if (q) setQuery(q);
+    const w = params.get("when");
+    if (w === "upcoming" || w === "past") setWhen(w);
   }, []);
   useEffect(() => {
     const url = new URL(window.location.href);
     if (query.trim()) url.searchParams.set("q", query);
     else url.searchParams.delete("q");
+    if (when !== "all") url.searchParams.set("when", when);
+    else url.searchParams.delete("when");
     window.history.replaceState(window.history.state, "", url);
-  }, [query]);
+  }, [query, when]);
 
   // Announce the number of results once typing pauses, not on every key.
   useEffect(() => {
-    if (!hasQuery) { setAnnounce(""); return; }
+    if (!hasQuery && when === "all") { setAnnounce(""); return; }
     const t = setTimeout(() => {
       setAnnounce(results.length === 0 ? "No matching events found." : results.length === 1 ? "1 event found." : `${results.length} events found.`);
     }, 450);
     return () => clearTimeout(t);
-  }, [results.length, hasQuery, query]);
+  }, [results.length, hasQuery, query, when]);
 
   // Close the suggestions on a click or tap outside; the results stay.
   useEffect(() => {
@@ -110,6 +122,8 @@ export default function EventSearch({ items, docs, labels }: { items: EventRowDa
     setOpen(false);
     inputRef.current?.focus();
   };
+  const showAll = () => { setWhen("all"); clear(); };
+  const pick = (w: When) => { setWhen(w); setActive(-1); setTouched(true); };
 
   // Phones: bring the box up so the suggestions are not hidden behind the keyboard.
   const onFocus = () => {
@@ -123,7 +137,12 @@ export default function EventSearch({ items, docs, labels }: { items: EventRowDa
   };
 
   // Crossfade the list only when the set of results changes, not on every key.
-  const resultKey = hasQuery ? results.map((r) => r.slug).join(",") : "all";
+  const resultKey = `${when}:${hasQuery ? results.map((r) => r.slug).join(",") : "all"}`;
+  const whenOpts: { key: When; label: string }[] = [
+    { key: "all", label: labels.all },
+    { key: "upcoming", label: labels.upcoming },
+    { key: "past", label: labels.past },
+  ];
 
   return (
     <>
@@ -182,13 +201,21 @@ export default function EventSearch({ items, docs, labels }: { items: EventRowDa
         </ul>
       </div>
 
+      <div className="chips ev-when" role="group" aria-label={labels.when}>
+        {whenOpts.map((o) => (
+          <button key={o.key} type="button" className="chip" aria-pressed={when === o.key} onClick={() => pick(o.key)}>
+            {o.label}
+          </button>
+        ))}
+      </div>
+
       <p className="visually-hidden" aria-live="polite" aria-atomic="true">{announce}</p>
 
       {results.length === 0 ? (
         <div className="ev-empty">
           <p className="ev-empty-title">No matching events found.</p>
-          <p className="muted">Try another event name, category, or year.</p>
-          <button type="button" className="btn btn-secondary" onClick={clear}>Clear search</button>
+          <p className="muted">{hasQuery ? "Try another event name, category, or year." : when === "upcoming" ? "No upcoming events right now." : "No past events to show."}</p>
+          <button type="button" className="btn btn-secondary" onClick={hasQuery ? clear : showAll}>{hasQuery ? "Clear search" : "Show all events"}</button>
         </div>
       ) : (
         <div className={touched ? "list-swap" : undefined} key={resultKey}>
