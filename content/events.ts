@@ -92,6 +92,19 @@ export const events: ClubEvent[] = [
     sources: [{ title: "HappeningNext event listing", url: "https://happeningnext.com/event/cosmoterrium-2026-eid3a0d7pqrpo" }],
   },
   {
+    slug: "ness-2026",
+    type: "ness",
+    start: "2026-04-08",
+    end: "2026-04-10",
+    title: { en: "9th National Earth and Space Summit", bn: "৯ম ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট" },
+    venue: ndc,
+    summary: {
+      en: "The 9th summit: olympiads, quizzes, team contests, exhibitions and talks at Notre Dame College.",
+      bn: "৯ম আসর: নটর ডেম কলেজে অলিম্পিয়াড, কুইজ, দলীয় প্রতিযোগিতা, প্রদর্শনী আর আলোচনা।",
+    },
+    todo: { en: "highlights, participants and partners", bn: "মূল আকর্ষণ, অংশগ্রহণকারী ও সহযোগী" },
+  },
+  {
     slug: "ness-2025",
     type: "ness",
     start: "2025-02-20",
