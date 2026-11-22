@@ -26,13 +26,14 @@ const normTrx = (s: string) => asciiDigits(s).toUpperCase().replace(/[^A-Z0-9]/g
 /**
  * Class choices and the category each one belongs to (Mahmud, 20 Nov 2026, trial).
  * Bangladesh levels: pre-primary and Classes 1-5 primary, 6-8 junior secondary,
- * 9-10 secondary (SSC), 11-12 higher secondary (HSC). O Levels/IGCSE count as Class 10,
+ * 9-10 secondary (SSC), 11-12 higher secondary (HSC). SSC 2027 candidates (added 23 Nov 2026)
+ * are Secondary. O Levels/IGCSE count as Class 10,
  * A Levels (AS and A2) as Classes 11-12.
  */
 const CLASS_GROUPS: { category: string; label: string; classes: string[] }[] = [
   { category: "P", label: "Primary (P)", classes: ["Pre-primary (before Class 1)", "Class 1", "Class 2", "Class 3", "Class 4", "Class 5"] },
   { category: "J", label: "Junior (J)", classes: ["Class 6", "Class 7", "Class 8"] },
-  { category: "S", label: "Secondary (S)", classes: ["Class 9", "Class 10 (SSC)", "O Level / IGCSE"] },
+  { category: "S", label: "Secondary (S)", classes: ["Class 9", "Class 10 (SSC)", "SSC 2027", "O Level / IGCSE"] },
   { category: "HS", label: "Higher Secondary (HS)", classes: ["Class 11", "Class 12 (HSC)", "A Level (AS)", "A Level (A2)"] },
 ];
 const CATEGORY_OF: Record<string, string> = Object.fromEntries(CLASS_GROUPS.flatMap((g) => g.classes.map((c) => [c, g.category])));
