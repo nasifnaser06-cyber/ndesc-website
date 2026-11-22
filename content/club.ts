@@ -72,9 +72,8 @@ const ec = (name: string, post: string, wing: string | null, slug: string): Pers
 
 /** Teachers and college officers who guide the club. */
 export const officers: Person[] = [
-  { name: { en: "Dr Fr Hemanto Pius Rozario", bn: "ড. ফা. হেমন্ত পিউস রোজারিও" }, post: { en: "Principal, Notre Dame College", bn: "অধ্যক্ষ, নটর ডেম কলেজ" } },
+  { name: { en: "Dr Fr Hemanto Pius Rozario", bn: "ড. ফা. হেমন্ত পিউস রোজারিও" }, post: { en: "Principal, Notre Dame College", bn: "অধ্যক্ষ, নটর ডেম কলেজ" }, photo: "/executives/moderators/hemanto-pius-rozario" },
   { name: { en: "Md Nazmul Hassan", bn: "মো. নাজমুল হাসান" }, post: { en: "Moderator [since year]", bn: "মডারেটর [কবে থেকে]" }, photo: "/executives/moderators/md-nazmul-hassan" },
-  { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Founding moderator, 1992]", bn: "[প্রতিষ্ঠাতা মডারেটর, ১৯৯২]" } },
 ];
 
 /** Moderators shown on the About page. */
