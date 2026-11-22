@@ -164,7 +164,7 @@ export default async function Ness() {
                 <h3>{g.name}</h3>
                 <p className="muted small">{g.desc}</p>
                 {g.name.includes("Photosphere") && (
-                  <Link className="btn btn-small" href={path(lang, "/ness/photosphere")} style={{ marginTop: "var(--s3)", alignSelf: "flex-start" }}>
+                  <Link className="btn btn-secondary btn-mini" href={path(lang, "/ness/photosphere")} style={{ marginTop: "var(--s2)", alignSelf: "flex-start" }}>
                     {en ? "Check out Photosphere 7.0" : "ফটোস্ফিয়ার ৭.০ দেখুন"}
                   </Link>
                 )}
