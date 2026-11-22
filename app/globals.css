@@ -537,7 +537,7 @@ details.segment > summary::after { position: absolute; right: 0.25rem; top: 0.1r
 .callout { border-top: 2px solid var(--sprout); padding-top: var(--s6); display: flex; flex-wrap: wrap; gap: var(--s5); justify-content: space-between; align-items: center; }
 
 @media print {
-  .site-header, .site-footer, .footer-zone, .skip-link { display: none; }
+  .site-header, .site-footer, .skip-link { display: none; }
   body { background: #fff; color: #000; }
 }
 
@@ -1149,13 +1149,12 @@ body:has(.ps-four) .site-header { --header-shadow: rgba(11, 28, 51, 0.4); }
 body:has(.ness-three) .main-nav a:not([aria-current="page"]) { opacity: 0.75; transition: opacity 0.2s var(--ease-ui); }
 body:has(.ness-three) .main-nav a:not([aria-current="page"]):is(:hover, :focus-visible) { opacity: 1; }
 
-/* At the very end of every page (on phones) only the footer shows, with no page text above it in the window
-   (Mahmud, 23 Nov 2026). The footer sits at the bottom of a zone at least one screen tall, so the
-   space above it at the bottom of the page is empty background. lvh: the tallest screen, when the
-   phone's browser bars have slid away. */
-/* Phones only (Mahmud, 23 Nov 2026): tablets and desktops keep the footer straight after the content. */
+/* Replaced the same night (Mahmud, 23 Nov 2026): no empty space before the footer. Instead, on phones
+   the footer itself is 85% of the screen tall, its parts spread evenly with the copyright at the bottom. */
 @media (max-width: 599px) {
-  .footer-zone { display: flex; flex-direction: column; justify-content: flex-end; min-height: calc(100vh + var(--s7)); min-height: calc(100lvh + var(--s7)); } /* +3rem covers content that spills a few px past the end of the page */
+  .site-footer { min-height: 85vh; min-height: 85svh; display: flex; flex-direction: column; }
+  .site-footer > .wrap { width: 100%; } /* keep full width inside the flex column */
+  .site-footer .footer-grid { flex: 1; align-content: space-evenly; }
 }
 
 /* NESS X and Photosphere (Mahmud, 23 Nov 2026): the header keeps a frosted-glass bar in the page's

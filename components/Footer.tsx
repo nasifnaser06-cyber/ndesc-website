@@ -5,7 +5,6 @@ import { CollegeCrest, ContactLink, Logo } from "./bits";
 
 export default function Footer({ lang }: { lang: Locale }) {
   return (
-    <div className="footer-zone">
     <footer className="site-footer">
       <div className="wrap footer-grid">
         <div className="footer-about">
@@ -60,6 +59,5 @@ export default function Footer({ lang }: { lang: Locale }) {
         <p className="small muted">© {tr(site.name, lang)}</p>
       </div>
     </footer>
-    </div>
   );
 }
