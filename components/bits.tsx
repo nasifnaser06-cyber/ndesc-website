@@ -51,7 +51,7 @@ export function CollegeCrest({ alt }: { alt: string }) {
   return (
     <span className="crest-tile">
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img src={`${bp()}/brand/ndc-crest-72.png`} srcSet={`${bp()}/brand/ndc-crest-72.png 1x, ${bp()}/brand/ndc-crest-144.png 2x, ${bp()}/brand/ndc-crest-216.png 3x`} width={69} height={72} alt={alt} loading="lazy" />
+      <img src={`${bp()}/brand/ndc-crest-72.png`} srcSet={`${bp()}/brand/ndc-crest-72.png 1x, ${bp()}/brand/ndc-crest-144.png 2x, ${bp()}/brand/ndc-crest-216.png 3x`} width={74} height={72} alt={alt} loading="lazy" />
     </span>
   );
 }
@@ -255,7 +255,7 @@ export function ContactLink({ kind, value, lang, className }: { kind: ContactKin
   return (
     <a className={cls} href={value} target="_blank" rel="noopener noreferrer">
       <ContactIcon kind={kind} />{name}
-      <span>{kind === "instagram" ? `@${handle}` : handle}</span>
+      <span>{handle}</span>
       <span className="visually-hidden"> {tr(ui.newTab, lang)}</span>
     </a>
   );
