@@ -68,6 +68,7 @@ export default async function FactPage({ params }: Props) {
             <p className="ff-summary">{f.body[0]}</p>
             {f.body.slice(1).map((p, k) => <p key={k}>{p}</p>)}
             {f.fromImage && <p className="small muted">This post was published as a picture; the text above is copied from it.</p>}
+            {f.writtenLater && <p className="small muted">This post was published as a picture without a caption. The text above was written later from the sources listed below.</p>}
             {f.credit && <p className="small muted">Written by {f.credit}</p>}
             {f.references && f.references.length > 0 && (
               <section className="ff-refs" aria-labelledby="refs">
