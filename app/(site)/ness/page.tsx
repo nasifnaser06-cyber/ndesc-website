@@ -116,7 +116,6 @@ export default async function Ness() {
               <li key={w.who}><p><strong>{w.who}</strong></p><p className="muted small">{w.how}</p></li>
             ))}
           </ol>
-          <p className="small muted" style={{ marginTop: "var(--s4)" }}>{en ? "Pick your pass, pay by bKash Send Money, type the TrxID, and your pass arrives by email." : "পাস বেছে নিন, বিকাশে পেমেন্ট করুন, TrxID লিখুন, পাস ইমেইলে পাবেন।"}</p>
         </section>
 
         <section aria-labelledby="cats">
@@ -124,7 +123,7 @@ export default async function Ness() {
           <p className="muted" style={{ marginBottom: "var(--s4)", maxWidth: "70ch" }}>{categoryNote}</p>
           <div className="table-scroll">
             <table>
-              <thead><tr><th scope="col">{en ? "Code" : "কোড"}</th><th scope="col">{en ? "Category" : "বিভাগ"}</th><th scope="col">{en ? "Who" : "কারা"}</th></tr></thead>
+              <thead><tr><th scope="col">{en ? "Code" : "কোড"}</th><th scope="col">{en ? "Category" : "বিভাগ"}</th><th scope="col">{en ? "Class" : "শ্রেণি"}</th></tr></thead>
               <tbody>
                 {categories.map((c) => (
                   <tr key={c.code}><td style={{ fontFamily: "var(--font-head)", fontWeight: "var(--weight-head)" }}>{c.code}</td><td>{c.name}</td><td>{c.who}</td></tr>
