@@ -434,7 +434,7 @@ th { font-weight: var(--weight-body); font-size: 0.9375rem; color: var(--haze); 
 .person-poster { width: 100%; height: auto; aspect-ratio: 1; display: block; border-radius: 8px; background: var(--deep); }
 .wings { display: flex; flex-direction: column; gap: var(--s7); }
 .wing-name { font-size: 1.25rem; margin-bottom: var(--s4); padding-bottom: var(--s2); border-bottom: 1px solid var(--line); }
-.person-photo { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 12px; display: block; }
+.person-photo { width: 100%; height: auto; aspect-ratio: 4 / 5; background: var(--deep); object-fit: cover; border-radius: 12px; display: block; }
 .tab-panel[hidden] { display: none; }
 @keyframes tab-in { from { opacity: 0; transform: translateY(8px); } }
 .tabs[data-ready="true"] > .tab-panel:not([hidden]) { animation: tab-in 0.25s var(--ease) both; }

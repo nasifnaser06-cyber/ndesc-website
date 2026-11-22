@@ -158,7 +158,17 @@ export function PersonCard({ name, post, department, photo, poster, lang }: { na
         />
       ) : photo ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img className="person-photo" src={`${bp}${photo}`} alt={tr(name, lang)} loading="lazy" width={400} height={500} />
+        <img
+          className="person-photo"
+          src={`${bp}${photo}-400.webp`}
+          srcSet={`${bp}${photo}-400.webp 400w, ${bp}${photo}-800.webp 800w`}
+          sizes="(min-width: 1280px) 220px, (min-width: 600px) 25vw, 46vw"
+          alt={tr(name, lang)}
+          loading="lazy"
+          decoding="async"
+          width={800}
+          height={1000}
+        />
       ) : (
         <PhotoSlot lang={lang} label={{ en: "photo, with consent", bn: "ছবি, সম্মতিসহ" }} />
       )}

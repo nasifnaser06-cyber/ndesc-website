@@ -2,7 +2,7 @@ import Link from "next/link";
 import { type Locale, path } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { moderators } from "@/content/club";
-import { PageHead, PhotoSlot, T } from "@/components/bits";
+import { PageHead, PersonCard, PhotoSlot } from "@/components/bits";
 
 const title = { en: "Our story", bn: "আমাদের গল্প" };
 const lead = {
@@ -93,11 +93,7 @@ export default async function About() {
           </div>
           <div className="people">
             {moderators.map((m, i) => (
-              <div className="person" key={i}>
-                <PhotoSlot lang={lang} label={{ en: "photo", bn: "ছবি" }} />
-                <h3><T text={m.name} lang={lang} /></h3>
-                <p className="small muted"><T text={m.post} lang={lang} /></p>
-              </div>
+              <PersonCard key={i} name={m.name} post={m.post} photo={m.photo} lang={lang} />
             ))}
           </div>
         </section>
