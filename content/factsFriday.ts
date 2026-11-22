@@ -1,7 +1,8 @@
 // FactsFriday: NDESC's weekly science series, first posted on the club's Facebook page.
 // Text, dates and pictures are the club's own posts (pictures from the club's Drive folder, captions
-// copied from each Facebook post, 23 Nov 2026). Two early posts were pictures only; their text is
-// copied from the picture (fromImage). Hashtags and the student ID in one credit line were left out.
+// copied from each Facebook post, 23 Nov 2026). Two early posts were pictures only; their text was
+// written later in the series' style from checked sources (writtenLater, 23 Nov 2026), with those
+// sources listed. Hashtags and the student ID in one credit line were left out.
 //
 // To add a post: copy an entry, give it a new slug, put the cover in public/factsfriday/ as
 // <slug>-400.webp and <slug>-800.webp, and list the sizes. It then shows up on /factsfriday/, gets its
@@ -34,10 +35,12 @@ export type FactsFridayPost = {
   facebook?: string;
   /** Writer credit, only when the post itself names them. */
   credit?: string;
-  /** Sources named in the post. Shown only when there are some; none are added that the post didn't cite. */
+  /** Sources named in the post (or, for writtenLater posts, the sources the text was written from). Shown only when there are some. */
   references?: { label: string; url?: string }[];
   /** True when the post had no caption and the text is copied from its picture. */
   fromImage?: boolean;
+  /** True when no caption was posted and the text was written later in the series' style. */
+  writtenLater?: boolean;
 };
 
 export const factsFriday: FactsFridayPost[] = [
@@ -832,9 +835,11 @@ export const factsFriday: FactsFridayPost[] = [
     "title": "Socotra",
     "date": "2023-01-06",
     "category": "earth",
-    "summary": "Socotra, a mindblowing island in Yemen, is famously dubbed as \"The Most Alien Place on Earth\" owing to its fabulous flora and fauna.",
+    "summary": "Socotra is the largest island of the Socotra Archipelago, a group of four islands in the Arabian Sea that belongs to Yemen.",
     "body": [
-      "Socotra, a mindblowing island in Yemen, is famously dubbed as \"The Most Alien Place on Earth\" owing to its fabulous flora and fauna. Most prominent among these is the Socotra Dragon Tree or the \"Dragon Blood Tree\", which gets its name from the red sap it produces. The island also contains a myriad of animal species like \"Socotra starling\", \"Socotra sunbird\" and many more, which make the island the jewel of Arabia."
+      "Socotra is the largest island of the Socotra Archipelago, a group of four islands in the Arabian Sea that belongs to Yemen. Cut off from mainland Africa and Arabia for a very long time, the island has evolved plants and animals found nowhere else on Earth, which is why it is often called the most alien-looking place on the planet.",
+      "Of Socotra's 825 plant species, 307, or about 37%, are endemic, along with 90% of its reptiles and 95% of its land snails. The most famous of them is the dragon's blood tree (Dracaena cinnabari). Its umbrella-shaped crown of upward-facing leaves catches moisture from the mists that roll over the island's highlands, and when its bark is cut, it releases a deep red resin that gives the tree its name. Islanders have harvested this resin for medicine for centuries.",
+      "Because of this unique biodiversity, UNESCO declared the archipelago a World Heritage Site in 2008. However, its wildlife now faces threats from cyclones and development, and recent cyclones have destroyed thousands of dragon's blood trees on the Diksam Plateau."
     ],
     "cover": {
       "base": "/factsfriday/socotra",
@@ -845,16 +850,32 @@ export const factsFriday: FactsFridayPost[] = [
       "width": 526
     },
     "facebook": "https://www.facebook.com/share/p/18dnCmMKeM/",
-    "fromImage": true
+    "references": [
+      {
+        "label": "UNESCO World Heritage Centre: Socotra Archipelago",
+        "url": "https://whc.unesco.org/en/list/1263/"
+      },
+      {
+        "label": "IUCN World Heritage Outlook: Socotra Archipelago",
+        "url": "https://worldheritageoutlook.iucn.org/node/1154"
+      },
+      {
+        "label": "National Geographic: Can Socotra, Yemen's 'Dragon's Blood Island,' be saved?",
+        "url": "https://www.nationalgeographic.com/environment/article/socotra-yemen-biodiversity-photography"
+      }
+    ],
+    "writtenLater": true
   },
   {
     "slug": "plants-on-the-lunar-soil",
     "title": "Plants on the Lunar Soil",
     "date": "2022-06-17",
     "category": "biology",
-    "summary": "In a study patronized by NASA, scientists of the University of Florida succeeded in growing Arabidopsis thaliana, a plant of the mustard greens family, in samples of lunar soil collected from the Apollo Missions.",
+    "summary": "In May 2022, scientists at the University of Florida became the first to grow plants in soil brought back from the Moon.",
     "body": [
-      "In a study patronized by NASA, scientists of the University of Florida succeeded in growing Arabidopsis thaliana, a plant of the mustard greens family, in samples of lunar soil collected from the Apollo Missions."
+      "In May 2022, scientists at the University of Florida became the first to grow plants in soil brought back from the Moon. The NASA-funded team planted seeds of Arabidopsis thaliana, a small relative of mustard greens, in lunar regolith collected during the Apollo 11, 12 and 17 missions.",
+      "The team had only 12 grams of regolith to work with, so each plant got about a gram, moistened with a nutrient solution. The seeds sprouted, but the plants grew more slowly than those in a lunar simulant made from volcanic ash, which was used for comparison. They had stunted roots, smaller leaves and clear signs of stress, and plants in the older, more weathered samples struggled the most.",
+      "The results, published in Communications Biology, show that plants can grow in lunar regolith but need help to thrive. This is an important step towards growing food and producing oxygen for astronauts during long stays on the Moon."
     ],
     "cover": {
       "base": "/factsfriday/plants-on-the-lunar-soil",
@@ -864,7 +885,21 @@ export const factsFriday: FactsFridayPost[] = [
       "width": 206
     },
     "facebook": "https://www.facebook.com/share/p/1CVbzsCked/",
-    "fromImage": true
+    "references": [
+      {
+        "label": "NASA: Scientists Grow Plants in Lunar Soil",
+        "url": "https://www.nasa.gov/humans-in-space/scientists-grow-plants-in-lunar-soil/"
+      },
+      {
+        "label": "University of Florida News: A first: Scientists grow plants in soil from the moon",
+        "url": "https://news.ufl.edu/2022/05/lunar-plants/"
+      },
+      {
+        "label": "Eos: Lunar Soil Can Grow Plants",
+        "url": "https://eos.org/articles/lunar-soil-can-grow-plants"
+      }
+    ],
+    "writtenLater": true
   }
 ];
 
