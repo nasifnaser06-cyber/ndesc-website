@@ -1147,7 +1147,37 @@ body:has(.ps-four) .site-header { --header-shadow: rgba(11, 28, 51, 0.4); }
 .menu-btn { border: 0; }
 .menu-btn:focus-visible { outline: 2px solid var(--sprout); outline-offset: 2px; }
 
-/* NESS X: every header link is the same blue, so the other links are dimmed to 75% and the current
-   page stays at full strength (Mahmud, 23 Nov 2026). 75% keeps them readable on the ice background. */
+/* NESS X: the other menu links are dimmed to 75% and the current page stays at full strength
+   (Mahmud, 23 Nov 2026). */
 body:has(.ness-three) .main-nav a:not([aria-current="page"]) { opacity: 0.75; transition: opacity 0.2s var(--ease-ui); }
 body:has(.ness-three) .main-nav a:not([aria-current="page"]):is(:hover, :focus-visible) { opacity: 1; }
+
+/* ---------------------------------------------------------------------------------------------
+   Header has its own bar again (Mahmud, 23 Nov 2026: "cancel" the header blending into the page,
+   which came in on 21 Nov). A tinted glass bar with a thin bottom line on every page, from the top:
+   navy on most pages, deep blue with ice text on NESS X and Register, night navy on Photosphere.
+   The shadow once scrolled, the hide-on-scroll and the phone menu shade all stay.
+   --------------------------------------------------------------------------------------------- */
+.site-header,
+.site-header[data-solid="true"] {
+  background: var(--header-bar, rgba(15, 30, 54, 0.92));
+  border-bottom: 1px solid var(--line);
+  -webkit-backdrop-filter: blur(16px) saturate(160%); backdrop-filter: blur(16px) saturate(160%);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .site-header, .site-header[data-solid="true"] { background: var(--header-solid); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+body:has(.ness-three) .site-header {
+  --header-bar: rgba(10, 74, 112, 0.94);
+  --starlight: #ebf5f9;
+  --haze: #ebf5f9;
+  --sprout: #8ed1e6;
+  --sprout-light: #ebf5f9;
+  --line: rgba(142, 209, 230, 0.35);
+  --edge: rgba(142, 209, 230, 0.35);
+  --night: #0a4a70;
+  --header-glass: rgba(10, 74, 112, 0.94);
+  --header-menu: rgba(10, 74, 112, 0.88);
+  --header-solid: #0a4a70;
+}
+body:has(.ps-four) .site-header { --header-bar: rgba(11, 28, 51, 0.94); }
