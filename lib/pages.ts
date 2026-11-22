@@ -5,7 +5,7 @@ import { posts } from "@/content/news";
 export function sitePages(): string[] {
   return [
     "", "about", "executives", "panel", "ness", "ness/photosphere", "ness/register",
-    "events", "resources", "news", "gallery", "join", "contact", "privacy",
+    "events", "resources", "news", "gallery", "join", "contact",
     ...events.map((e) => `events/${e.slug}`),
     ...posts.map((p) => `news/${p.slug}`),
   ];

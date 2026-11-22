@@ -1,7 +1,6 @@
 import { type Locale, tr, num } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { officers, executiveSessions } from "@/content/club";
-import { ui } from "@/content/ui";
 import { PageHead, PersonCard, Txt } from "@/components/bits";
 import Tabs from "@/components/Tabs";
 
@@ -73,7 +72,6 @@ export default async function Executives() {
             { id: "current", label: en ? "Current" : "বর্তমান", content: currentPanel },
           ]}
         />
-        <p className="small muted">{tr(ui.consentNote, lang)}</p>
       </div>
     </>
   );

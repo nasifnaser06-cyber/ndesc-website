@@ -170,7 +170,7 @@ export function PersonCard({ name, post, department, photo, poster, lang }: { na
           height={1000}
         />
       ) : (
-        <PhotoSlot lang={lang} label={{ en: "photo, with consent", bn: "ছবি, সম্মতিসহ" }} />
+        <PhotoSlot lang={lang} label={{ en: "photo", bn: "ছবি" }} />
       )}
       <h3><T text={name} lang={lang} /></h3>
       <p className="small muted">
