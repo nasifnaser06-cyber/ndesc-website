@@ -1154,3 +1154,18 @@ body:has(.ness-three) .main-nav a:not([aria-current="page"]):is(:hover, :focus-v
    space above it at the bottom of the page is empty background. lvh: the tallest screen, when the
    phone's browser bars have slid away. */
 .footer-zone { display: flex; flex-direction: column; justify-content: flex-end; min-height: calc(100vh + var(--s7)); min-height: calc(100lvh + var(--s7)); } /* +3rem covers content that spills a few px past the end of the page */
+
+/* NESS X and Photosphere (Mahmud, 23 Nov 2026): the header keeps a frosted-glass bar in the page's
+   own colour at all times, not only once scrolled, with a soft shadow under it: snowy white on
+   NESS X and Register, space blue on Photosphere. The fade-on-scroll and the phone menu stay as they are. */
+body:has(.ness-three) .site-header { --header-glass: rgba(235, 245, 249, 0.78); --header-shadow: rgba(255, 255, 255, 0.85); }
+body:has(.ps-four) .site-header { --header-glass: rgba(11, 28, 51, 0.78); --header-shadow: rgba(30, 80, 170, 0.55); }
+body:has(.ness-three) .site-header,
+body:has(.ps-four) .site-header {
+  background: var(--header-glass);
+  -webkit-backdrop-filter: blur(16px) saturate(160%); backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: 0 6px 22px var(--header-shadow);
+}
+@media (prefers-reduced-transparency: reduce) {
+  body:has(.ness-three) .site-header, body:has(.ps-four) .site-header { background: var(--header-solid); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
