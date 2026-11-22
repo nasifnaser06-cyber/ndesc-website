@@ -200,7 +200,7 @@ export default async function Ness() {
         </section>
 
         <section id="contacts" aria-labelledby="contacts-h">
-          <h2 id="contacts-h" style={{ marginBottom: "var(--s5)" }}>{en ? "Questions? Contact the organizers" : "প্রশ্ন? আয়োজকদের সঙ্গে যোগাযোগ করুন"}</h2>
+          <h2 id="contacts-h" style={{ marginBottom: "var(--s5)" }}>{en ? "Questions? Contact us" : "প্রশ্ন? আমাদের সঙ্গে যোগাযোগ করুন"}</h2>
           <div className="cards-3">
             {organizers.map((o) => (
               <div className="surface organizer" key={o.name}>
