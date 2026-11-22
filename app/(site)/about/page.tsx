@@ -29,7 +29,7 @@ export default async function About() {
             <h2>{en ? "Who we are" : "আমরা কারা"}</h2>
             <p className="muted">
               {en
-                ? "Formerly known as the Notre Dame Environmental Promotion Club, it aims to spread knowledge of Astronomy, Earth Science and Biology and provides a hub for like-minded students to venture beyond their academic syllabus and explore new realms of science."
+                ? "Formerly known as the Notre Dame Environmental Promotion Club, the club aims to spread knowledge of Astronomy, Earth Science and Biology and provides a hub for like-minded students to venture beyond their academic syllabus and explore new realms of science."
                 : "আগে নটর ডেম এনভায়রনমেন্টাল প্রমোশন ক্লাব নামে পরিচিত এই ক্লাবের লক্ষ্য জ্যোতির্বিজ্ঞান, ভূবিজ্ঞান ও জীববিজ্ঞানের জ্ঞান ছড়িয়ে দেওয়া, আর সমমনা শিক্ষার্থীদের পাঠ্যসূচির বাইরে বিজ্ঞানের নতুন জগৎ খুঁজে দেখার জায়গা করে দেওয়া।"}
             </p>
           </div>
