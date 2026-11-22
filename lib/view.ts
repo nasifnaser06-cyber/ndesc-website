@@ -35,7 +35,7 @@ export function eventLabels(lang: Locale) {
 const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const full = (lang: Locale, to: string) => `${bp}${path(lang, to)}`;
 
-export function meta(lang: Locale, to: string, title: L | null, description: L, image?: { src: string; alt: L }): Metadata {
+export function meta(lang: Locale, to: string, title: L | null, description: L, image?: { src: string; alt: L; width?: number; height?: number }): Metadata {
   const languages = Object.fromEntries(publishedLocales.map((l) => [l === "bn" ? "bn-BD" : "en", full(l, to)]));
   const t = title ? tr(title, lang) : undefined;
   return {
@@ -49,7 +49,7 @@ export function meta(lang: Locale, to: string, title: L | null, description: L, 
       description: tr(description, lang),
       locale: lang === "bn" ? "bn_BD" : "en_GB",
       url: full(lang, to),
-      ...(image ? { images: [{ url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${image.src}`, width: 1200, height: 675, alt: tr(image.alt, lang) }] } : {}),
+      ...(image ? { images: [{ url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}${image.src}`, width: image.width ?? 1200, height: image.height ?? 675, alt: tr(image.alt, lang) }] } : {}),
     },
     ...(image ? { twitter: { card: "summary_large_image" } } : {}),
   };

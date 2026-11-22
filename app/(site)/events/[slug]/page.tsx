@@ -31,7 +31,7 @@ export default async function EventPage({ params }: Props) {
 
   return (
     <>
-      <PageHead lang={lang} title={e.title} crumbs={[{ label: ui.nav.events, to: "/events" }]} />
+      <PageHead lang={lang} title={e.title} crumbs={[{ label: ui.nav.explore, to: "/explore" }, { label: ui.nav.events, to: "/events" }]} />
       <div className="wrap" style={{ display: "flex", flexDirection: "column", gap: "var(--s8)" }}>
         <div className="split">
           {e.poster ? (

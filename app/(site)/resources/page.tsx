@@ -3,6 +3,7 @@ import { type Locale, tr, path } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { resources, resourceKinds, type ResourceKind } from "@/content/club";
 import { PageHead, T } from "@/components/bits";
+import { ui } from "@/content/ui";
 
 const title = { en: "Resources", bn: "রিসোর্স" };
 const lead = { en: "Past questions, handouts and sky guides to practise and learn with.", bn: "চর্চা আর শেখার জন্য আগের প্রশ্ন, হ্যান্ডআউট আর আকাশ পরিচিতি।" };
@@ -18,7 +19,7 @@ export default async function Resources() {
   const kinds = Object.keys(resourceKinds) as ResourceKind[];
   return (
     <>
-      <PageHead lang={lang} title={title} lead={lead} />
+      <PageHead lang={lang} title={title} lead={lead} crumbs={[{ label: ui.nav.explore, to: "/explore" }, { label: ui.nav.publications, to: "/publications" }]} />
       <div className="wrap" style={{ display: "flex", flexDirection: "column", gap: "var(--s8)" }}>
         <nav aria-label={en ? "Resource types" : "রিসোর্সের ধরন"} className="chips">
           {kinds.map((k) => (
