@@ -1149,10 +1149,12 @@ body:has(.ps-four) .site-header { --header-shadow: rgba(11, 28, 51, 0.4); }
 body:has(.ness-three) .main-nav a:not([aria-current="page"]) { opacity: 0.75; transition: opacity 0.2s var(--ease-ui); }
 body:has(.ness-three) .main-nav a:not([aria-current="page"]):is(:hover, :focus-visible) { opacity: 1; }
 
-/* Replaced the same night (Mahmud, 23 Nov 2026): no empty space before the footer. Instead, on phones
-   the footer itself is 85% of the screen tall, its parts spread evenly with the copyright at the bottom. */
+/* Phones (Mahmud, 23 Nov 2026): the footer is 87.5% of the screen tall, its parts spread evenly with the
+   copyright at the bottom. The gap above it fills the rest of the screen (plus 3rem for content that
+   spills a few px past the page end), so at the very bottom no page text shows above the footer.
+   lvh minus svh also covers the browser's address bar sliding away. */
 @media (max-width: 599px) {
-  .site-footer { min-height: 85vh; min-height: 85svh; display: flex; flex-direction: column; }
+  .site-footer { min-height: 87.5vh; min-height: 87.5svh; display: flex; flex-direction: column; margin-top: calc(12.5vh + var(--s7)); margin-top: calc(100lvh - 87.5svh + var(--s7)); }
   .site-footer > .wrap { width: 100%; } /* keep full width inside the flex column */
   .site-footer .footer-grid { flex: 1; align-content: space-evenly; }
 }
@@ -1184,3 +1186,6 @@ body:has(.ps-four) .site-header {
 @media (prefers-reduced-transparency: reduce) {
   .site-header { background: var(--dusk); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
+
+/* Copyright centred (Mahmud, 23 Nov 2026) */
+.footer-base { justify-content: center; text-align: center; }

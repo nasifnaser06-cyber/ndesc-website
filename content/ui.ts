@@ -44,7 +44,7 @@ export const ui = {
   for: { en: "For", bn: "কাদের জন্য" },
   explore: { en: "Explore", bn: "ঘুরে দেখুন" },
   takePart: { en: "Take part", bn: "অংশ নিন" },
-  follow: { en: "Follow", bn: "ফলো করুন" },
+  follow: { en: "Follow us", bn: "আমাদের ফলো করুন" },
   founded: { en: "Founded 28 October 1992 at Notre Dame College, Dhaka.", bn: "নটর ডেম কলেজ, ঢাকায় ২৮ অক্টোবর ১৯৯২ সালে প্রতিষ্ঠিত।" },
   breadcrumb: { en: "Breadcrumb", bn: "পথনির্দেশ" },
   sources: { en: "Sources", bn: "সূত্র" },
