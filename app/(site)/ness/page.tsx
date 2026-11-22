@@ -161,8 +161,13 @@ export default async function Ness() {
           <div className="groups">
             {programmes.map((g) => (
               <div key={g.name}>
-                <h3>{g.name.includes("Photosphere") ? <Link href={path(lang, "/ness/photosphere")}>{g.name}</Link> : g.name}</h3>
+                <h3>{g.name}</h3>
                 <p className="muted small">{g.desc}</p>
+                {g.name.includes("Photosphere") && (
+                  <Link className="btn btn-small" href={path(lang, "/ness/photosphere")} style={{ marginTop: "var(--s3)", alignSelf: "flex-start" }}>
+                    {en ? "Check out Photosphere 7.0" : "ফটোস্ফিয়ার ৭.০ দেখুন"}
+                  </Link>
+                )}
               </div>
             ))}
           </div>
