@@ -1189,3 +1189,6 @@ body:has(.ps-four) .site-header {
 
 /* Copyright centred (Mahmud, 23 Nov 2026) */
 .footer-base { justify-content: center; text-align: center; }
+
+/* Register form spam trap: off screen, never focused, hidden from screen readers. */
+.hp-trap { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
