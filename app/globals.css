@@ -158,8 +158,9 @@ main:focus { outline: none; }
   .only-menu { display: list-item; }
   .brand-name { display: inline; }
 }
-/* Phones keep the club's name beside the logo and the Register button on one row: the button
-   says just "Register", and the header uses a little less side space and smaller gaps. */
+/* Phones keep the club's name beside the logo and the full "Register for NESS X" button on one row
+   (Mahmud, 23 Nov 2026: the phone button must say Register for NESS X). The header uses a little less
+   side space and smaller gaps, and on narrow phones the label sits on two short lines in the button. */
 .ice-label-short { display: none; }
 @media (max-width: 600px) {
   .site-header .wrap { padding-inline: var(--s4); }
@@ -167,8 +168,12 @@ main:focus { outline: none; }
   .header-tools { gap: var(--s2); }
   .brand { gap: var(--s2); }
   .brand-name { font-size: 0.8125rem; }
-  .ice-btn .ice-label-long { display: none; }
-  .ice-btn .ice-label-short { display: inline; }
+}
+@media (max-width: 539px) {
+  .site-header .ice-btn { white-space: normal; line-height: 1.1; padding-block: 0.25rem; padding-inline: 1rem; font-size: 0.75rem; }
+  .site-header .ice-btn .ice-label-long { display: inline-block; max-width: 6.2em; text-align: center; }
+  /* The two big side crystals would touch the two-line label; the small corner ones stay. */
+  .ice .c1, .ice .c2 { display: none; }
 }
 @media (max-width: 380px) {
   .brand-name { font-size: 0.6875rem; }
@@ -722,13 +727,8 @@ details[open] > summary::after { transform: rotate(45deg); }
 
 
 /* Narrow phones: keep the longer label from crowding the logo */
-@media (max-width: 420px) {
-  .ice-btn { padding-inline: 1.65rem; font-size: 0.8125rem; }
-}
-@media (max-width: 340px) {
-  .header-row { gap: var(--s3); }
-  .ice-btn { padding-inline: 1.3rem; font-size: 0.75rem; }
-  .ice .c3, .ice .c4 { display: none; }
+@media (max-width: 380px) {
+  .header-tools { gap: 6px; }
 }
 
 /* Photosphere 7.0 page */
