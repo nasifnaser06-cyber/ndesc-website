@@ -56,7 +56,7 @@ export default async function Home() {
                 : "অলিম্পিয়াড, কর্মশালা, তারা দেখার ক্যাম্প আর ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিটের মাধ্যমে ইকো অ্যান্ড স্পেস ক্লাব শিক্ষার্থীদের রাতের আকাশ চেনা আর জীবজগৎ রক্ষার কাজে একসঙ্গে করে।"}
             </p>
             <div className="actions">
-              <Link className="btn btn-secondary" href={path(lang, "/join")}>{tr(ui.nav.join, lang)}</Link>
+              <Link className="btn btn-secondary" href={path(lang, "/about")}>{en ? "Learn more about us" : "আমাদের সম্পর্কে আরও জানুন"}</Link>
             </div>
           </div>
           <div className="sky-media">
