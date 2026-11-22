@@ -1198,9 +1198,9 @@ body:has(.ps-four) .site-header {
    filter chips. Floats over the list (no push), uses the site colours, motion only on transform
    and opacity, none at all under reduced motion.
    --------------------------------------------------------------------------------------------- */
-.ev-search { position: relative; z-index: 5; width: 100%; max-width: 40rem; margin: 0 auto var(--s4); }
+.ev-search { position: relative; z-index: 5; width: 100%; max-width: 40rem; margin: 0 0 var(--s4); } /* left-aligned (Mahmud, 23 Nov 2026) */
 /* All / Upcoming / Past under the search bar, centred */
-.ev-when { justify-content: center; margin-bottom: var(--s6); }
+.ev-when { justify-content: flex-start; margin-bottom: var(--s6); }
 .ev-search-box {
   display: flex; align-items: center; gap: var(--s2);
   min-height: 3.25rem; padding: 0 var(--s2) 0 var(--s4);
@@ -1217,7 +1217,7 @@ body:has(.ps-four) .site-header {
   color: var(--starlight); font: inherit; font-size: 1rem; /* 16px: phones do not zoom in */
   -webkit-appearance: none; appearance: none;
 }
-.ev-search-input::placeholder { color: var(--haze); opacity: 0.85; }
+.ev-search-input::placeholder { color: var(--haze); opacity: 0.55; } /* fainter (Mahmud, 23 Nov 2026) */
 .ev-search-input::-webkit-search-cancel-button { display: none; } /* we draw our own clear button */
 .ev-search-clear {
   flex: none; display: inline-grid; place-items: center; width: 2.5rem; height: 2.5rem;

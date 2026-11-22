@@ -158,7 +158,7 @@ export default function EventSearch({ items, docs, labels }: { items: EventRowDa
             id={`${uid}-input`}
             type="search"
             className="ev-search-input"
-            placeholder="Search events, summits, workshops..."
+            placeholder="Search events"
             autoComplete="off"
             autoCorrect="off"
             autoCapitalize="none"
