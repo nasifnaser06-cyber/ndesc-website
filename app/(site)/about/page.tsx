@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { type Locale, path } from "@/lib/i18n";
+import { type Locale, path, tr } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { moderators } from "@/content/club";
+import { olympiadTeams, olympiadIntro } from "@/content/olympiad";
 import { PageHead, PersonCard, PhotoSlot } from "@/components/bits";
 
 const title = { en: "Our story", bn: "আমাদের গল্প" };
@@ -63,24 +64,19 @@ export default async function About() {
         </section>
 
         <section aria-labelledby="teams">
-          <h2 id="teams" style={{ marginBottom: "var(--s4)" }}>{en ? "Our Olympiad teams" : "আমাদের অলিম্পিয়াড দল"}</h2>
-          <p className="muted" style={{ maxWidth: "48rem", marginBottom: "var(--s6)" }}>
-            {en
-              ? "NDESC also consists of its three renowned Olympiad teams. Under the guidance of experienced and award-winning mentors, team members prepare for these international Olympiads, achieving national and international recognition consistently every year."
-              : "NDESC-এর আছে তিনটি সুপরিচিত অলিম্পিয়াড দল। অভিজ্ঞ ও পুরস্কারজয়ী মেন্টরদের তত্ত্বাবধানে দলের সদস্যরা এই আন্তর্জাতিক অলিম্পিয়াডগুলোর প্রস্তুতি নেয়, আর প্রতি বছর ধারাবাহিকভাবে জাতীয় ও আন্তর্জাতিক স্বীকৃতি অর্জন করে।"}
-          </p>
+          <div className="section-head">
+            <h2 id="teams">{en ? "Our Olympiad teams" : "আমাদের অলিম্পিয়াড দল"}</h2>
+            <Link href={path(lang, "/olympiad-teams")}>{en ? "Explore our Olympiad teams" : "আমাদের অলিম্পিয়াড দল দেখুন"}</Link>
+          </div>
+          <p className="muted" style={{ maxWidth: "48rem", marginBottom: "var(--s6)" }}>{tr(olympiadIntro, lang)}</p>
           <div className="cards-3">
-            {[
-              { team: "Team Interstellar", olympiad: { en: "International Olympiad on Astronomy and Astrophysics", bn: "ইন্টারন্যাশনাল অলিম্পিয়াড অন অ্যাস্ট্রোনমি অ্যান্ড অ্যাস্ট্রোফিজিক্স" } },
-              { team: "Team Terrestrial", olympiad: { en: "International Earth Science Olympiad", bn: "ইন্টারন্যাশনাল আর্থ সায়েন্স অলিম্পিয়াড" } },
-              { team: "Team Helix", olympiad: { en: "International Biology Olympiad", bn: "ইন্টারন্যাশনাল বায়োলজি অলিম্পিয়াড" }, isNew: true },
-            ].map((t) => (
-              <div className="surface" key={t.team}>
+            {olympiadTeams.map((t) => (
+              <div className="surface" key={t.slug}>
                 <h3>
-                  {t.team}
-                  {t.isNew && <> <span className="tag tag-up" style={{ verticalAlign: "middle", marginLeft: "var(--s2)" }}>{en ? "Newly formed" : "নতুন"}</span></>}
+                  <Link href={path(lang, `/olympiad-teams/${t.slug}`)} style={{ color: "inherit" }}>{t.name}</Link>
+                  {t.newlyFormed && <> <span className="tag tag-up" style={{ verticalAlign: "middle", marginLeft: "var(--s2)" }}>{en ? "Newly formed" : "নতুন"}</span></>}
                 </h3>
-                <p className="small muted">{en ? "Prepares for the" : "প্রস্তুতি নেয়"} {en ? t.olympiad.en : t.olympiad.bn}</p>
+                <p className="small muted">{en ? "Prepares for the" : "প্রস্তুতি নেয়"} {tr(t.olympiad.name, lang)}</p>
               </div>
             ))}
           </div>

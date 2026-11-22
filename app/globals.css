@@ -1348,3 +1348,73 @@ body:has(.ps-four) .site-header {
     }
   }
 }
+
+/* ---------------------------------------------------------------- Explore hub (23 Nov 2026) */
+/* Cards on /explore/, /olympiad-teams/ and /publications/: dusk surface, a small line icon in the
+   card's own accent, a quiet lift and accent border on hover, the theme focus ring on keyboard. */
+.hub-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr)); gap: var(--s5); }
+.hub-card { --accent: var(--sprout); position: relative; display: flex; flex-direction: column; gap: var(--s3); padding: var(--s6); border-radius: 16px; background: var(--dusk); border: 1px solid var(--line); color: var(--starlight); text-decoration: none; transition: border-color 0.25s var(--ease-ui), transform 0.25s var(--ease-ui), background-color 0.25s var(--ease-ui); }
+.hub-card h2, .hub-card h3 { font-size: 1.5rem; margin: 0; }
+.hub-card p { margin: 0; color: var(--haze); }
+.hub-card .hub-go { margin-top: auto; padding-top: var(--s2); color: var(--accent); font-weight: 700; display: inline-flex; align-items: center; gap: var(--s2); }
+.hub-card .hub-go svg { transition: transform 0.25s var(--ease-ui); }
+.hub-icon { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+.hub-icon svg { width: 28px; height: 28px; }
+.hub-preview { border-top: 1px solid var(--line); padding-top: var(--s3); display: flex; gap: var(--s3); align-items: center; font-size: 0.9375rem; color: var(--haze); }
+.hub-preview strong { color: var(--starlight); font-weight: 700; display: block; }
+.hub-preview img { width: 56px; height: 56px; border-radius: 10px; object-fit: cover; flex: none; background: var(--deep); }
+.hub-card:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+@media (hover: hover) and (pointer: fine) {
+  .hub-card:hover { border-color: color-mix(in srgb, var(--accent) 60%, transparent); transform: translateY(-3px); background: color-mix(in srgb, var(--dusk) 88%, var(--accent)); }
+  .hub-card:hover .hub-go svg { transform: translateX(4px); }
+}
+.hub-card:active { transform: scale(0.99); }
+.accent-events { --accent: #8fd3a6; }
+.accent-facts { --accent: #f2c27b; }
+.accent-teams { --accent: #9db8ff; }
+.accent-pubs { --accent: #e9a6c8; }
+.accent-interstellar { --accent: #9db8ff; }
+.accent-terrestrial { --accent: #d9b37c; }
+.accent-helix { --accent: #8fd3a6; }
+@media (prefers-reduced-motion: reduce) { .hub-card, .hub-card .hub-go svg { transition: border-color 0.2s ease; } .hub-card:hover, .hub-card:active { transform: none; } }
+
+/* FactsFriday archive */
+.ff-tools { display: flex; flex-wrap: wrap; gap: var(--s3); align-items: center; margin-bottom: var(--s5); }
+.ff-tools input[type="search"] { flex: 1 1 18rem; min-height: 48px; padding: 0 var(--s4); border-radius: 12px; border: 1px solid var(--edge); background: var(--deep); color: var(--starlight); font: inherit; }
+.ff-tools select { min-height: 48px; padding: 0 var(--s3); border-radius: 12px; border: 1px solid var(--edge); background: var(--deep); color: var(--starlight); font: inherit; }
+.ff-tools input:focus-visible, .ff-tools select:focus-visible { outline: 3px solid var(--sprout); outline-offset: 2px; }
+.ff-count { font-size: 0.9375rem; color: var(--haze); margin-bottom: var(--s4); }
+.ff-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr)); gap: var(--s5); list-style: none; padding: 0; margin: 0; }
+.ff-card { display: flex; flex-direction: column; gap: var(--s2); height: 100%; color: var(--starlight); text-decoration: none; border-radius: 14px; }
+.ff-card img { width: 100%; aspect-ratio: 1; height: auto; object-fit: cover; border-radius: 14px; background: var(--deep); border: 1px solid var(--line); transition: transform 0.3s var(--ease-ui); }
+.ff-card h3 { font-size: 1.125rem; margin: var(--s1) 0 0; }
+.ff-meta { font-size: 0.8125rem; color: var(--haze); display: flex; gap: var(--s2); flex-wrap: wrap; }
+.ff-card p { font-size: 0.9375rem; color: var(--haze); margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.ff-card:focus-visible { outline: 3px solid var(--sprout); outline-offset: 4px; }
+@media (hover: hover) and (pointer: fine) { .ff-card:hover h3 { color: var(--sprout); } .ff-card:hover img { transform: scale(1.015); } }
+@media (prefers-reduced-motion: reduce) { .ff-card img { transition: none; } .ff-card:hover img { transform: none; } }
+
+/* FactsFriday article */
+.ff-article { display: grid; gap: var(--s7); grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 960px) { .ff-article { grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); align-items: start; } .ff-article figure { position: sticky; top: 96px; } }
+.ff-article figure { margin: 0; }
+.ff-article figure img { width: 100%; height: auto; aspect-ratio: 1; border-radius: 16px; border: 1px solid var(--line); background: var(--deep); display: block; }
+.ff-article figcaption { font-size: 0.8125rem; color: var(--haze); margin-top: var(--s2); }
+.ff-body { max-width: 68ch; display: flex; flex-direction: column; gap: var(--s4); font-size: 1.0625rem; line-height: 1.75; }
+.ff-body .ff-summary { font-size: 1.25rem; line-height: 1.6; color: var(--starlight); }
+.ff-refs { border-top: 1px solid var(--line); padding-top: var(--s4); }
+.ff-refs h2 { font-size: 1.125rem; margin-bottom: var(--s2); }
+.ff-refs ol { padding-left: 1.25rem; margin: 0; display: grid; gap: var(--s1); font-size: 0.9375rem; }
+.ff-foot { display: flex; flex-wrap: wrap; gap: var(--s3); margin-top: var(--s3); }
+
+/* Olympiad team page */
+.team-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(14rem, 100%), 1fr)); gap: var(--s4); margin: 0; }
+.team-facts > div { border-top: 1px solid var(--line); padding-top: var(--s3); }
+.team-facts dt { font-size: 0.875rem; color: var(--haze); }
+.team-facts dd { margin: var(--s1) 0 0; font-weight: 700; }
+.tick-list { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--s3); }
+.tick-list li { display: flex; gap: var(--s3); align-items: flex-start; }
+.tick-list li::before { content: ""; flex: none; width: 8px; height: 8px; margin-top: 0.6em; border-radius: 50%; background: var(--accent, var(--sprout)); }
+/* Explore's four cards sit two by two on wider screens. */
+@media (min-width: 760px) { .hub-grid.hub-2x2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .hub-card { padding: var(--s5); } }

@@ -10,11 +10,11 @@ import { Logo } from "./bits";
 import IceButton from "./IceButton";
 
 // Gallery and Resources left the header on 20 Nov 2026 (the pages still exist).
-// News was taken off the site on 23 Nov 2026.
+// News was taken off the site on 23 Nov 2026. Events moved into Explore on 23 Nov 2026 (the page stays).
 const navItems = [
   { key: "nessX", to: "/ness" },
   { key: "photosphere", to: "/ness/photosphere" },
-  { key: "events", to: "/events" },
+  { key: "explore", to: "/explore" },
   { key: "executives", to: "/executives" },
   { key: "about", to: "/about" },
 ] as const;
@@ -101,7 +101,13 @@ export default function Header({ lang }: { lang: Locale }) {
 
   // The longest matching item wins, so /ness/photosphere marks Photosphere, not NESS X.
   const matches = (to: string) => sub === to || sub.startsWith(`${to}/`);
-  const best = [...navItems.map((i) => i.to as string), "/contact"].filter(matches).sort((a, b) => b.length - a.length)[0];
+  // Explore stays lit on the sections it leads to (Events, FactsFriday, Olympiad Teams, Publications, Resources).
+  const sections: [string, string][] = [
+    ...navItems.map((i) => [i.to, i.to] as [string, string]),
+    ["/contact", "/contact"],
+    ...["/events", "/factsfriday", "/olympiad-teams", "/publications", "/resources"].map((p) => [p, "/explore"] as [string, string]),
+  ];
+  const best = sections.filter(([p]) => matches(p)).sort((a, b) => b[0].length - a[0].length)[0]?.[1];
   const isActive = (to: string) => to === best;
 
   return (

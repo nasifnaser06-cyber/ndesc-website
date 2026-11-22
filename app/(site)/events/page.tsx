@@ -4,6 +4,7 @@ import { sortedEvents, eventTypes } from "@/content/events";
 import type { SearchDoc } from "@/lib/eventSearch";
 import { nessx } from "@/content/ness2027";
 import { PageHead } from "@/components/bits";
+import { ui } from "@/content/ui";
 import EventSearch from "@/components/EventSearch";
 
 const title = { en: "Events", bn: "ইভেন্ট" };
@@ -36,7 +37,7 @@ export default async function Events() {
   }));
   return (
     <>
-      <PageHead lang={lang} title={title} lead={lead} />
+      <PageHead lang={lang} title={title} lead={lead} crumbs={[{ label: ui.nav.explore, to: "/explore" }]} />
       <div className="wrap">
         <EventSearch items={items} docs={docs} labels={eventLabels(lang)} />
       </div>
