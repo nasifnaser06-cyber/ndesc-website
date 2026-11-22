@@ -1162,10 +1162,10 @@ body:has(.ness-three) .main-nav a:not([aria-current="page"]):is(:hover, :focus-v
 /* NESS X and Photosphere (Mahmud, 23 Nov 2026): the header keeps a frosted-glass bar in the page's
    own colour at all times, not only once scrolled, with a soft shadow under it: snowy white on
    NESS X and Register, space blue on Photosphere. The fade-on-scroll and the phone menu stay as they are. */
-/* NESS X: dark shadow again (the page's deep blue), at half the earlier 40%. */
-body:has(.ness-three) .site-header { --header-glass: rgba(235, 245, 249, 0.78); --header-shadow: rgba(10, 74, 112, 0.2); }
-/* Photosphere: teal shadow, the page's accent #3ae3d1. */
-body:has(.ps-four) .site-header { --header-glass: rgba(11, 28, 51, 0.78); --header-shadow: rgba(58, 227, 209, 0.35); }
+/* NESS X: dark shadow (the page's deep blue) at 10% (halved twice, 23 Nov 2026). */
+body:has(.ness-three) .site-header { --header-glass: rgba(235, 245, 249, 0.78); --header-shadow: rgba(10, 74, 112, 0.1); }
+/* Photosphere: teal shadow, the page's accent #3ae3d1, at 17.5% (halved, 23 Nov 2026). */
+body:has(.ps-four) .site-header { --header-glass: rgba(11, 28, 51, 0.78); --header-shadow: rgba(58, 227, 209, 0.175); }
 body:has(.ness-three) .site-header,
 body:has(.ps-four) .site-header {
   background: var(--header-glass);
