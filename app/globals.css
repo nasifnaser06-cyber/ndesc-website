@@ -1284,3 +1284,6 @@ body:has(.ps-four) .site-header {
   .footer-about { padding-top: 0.25rem; }
 }
 
+
+/* A small outline button inside a card (NESS X programmes: Check out Photosphere 7.0). */
+.btn.btn-mini { min-height: 36px; padding: 0.25rem 0.875rem; font-size: 0.8125rem; border-width: 1.5px; }
