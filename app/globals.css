@@ -146,6 +146,9 @@ main:focus { outline: none; }
    for wider font rendering. */
 @media (max-width: 1160px) {
   .header-row { flex-wrap: wrap; }
+  /* The top row keeps its full 72px height when the menu opens below it. Without this the row
+     shrank to its tallest item and the logo slid up to the screen edge (Mahmud, 23 Nov 2026). */
+  .header-row > .brand, .header-row > .header-tools { min-height: 72px; }
   /* Without JavaScript the menu stays visible as a wrapped row. */
   .main-nav { order: 3; width: 100%; padding-bottom: var(--s3); }
   .main-nav ul { flex-wrap: wrap; }
