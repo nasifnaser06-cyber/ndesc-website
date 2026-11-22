@@ -46,7 +46,6 @@ export default async function Home() {
         <Stars />
         <div className="wrap sky-inner">
           <div className="sky-copy">
-            <p className="label">{en ? "At Notre Dame College, Dhaka, since 1992" : "নটর ডেম কলেজ, ঢাকা, ১৯৯২ থেকে"}</p>
             <h1 id="hero-title">
               {en ? "Somewhere something incredible is waiting to be discovered." : "আকাশের দিকে তাকাও। তারপর পায়ের নিচের মাটির যত্ন নাও।"}
             </h1>
