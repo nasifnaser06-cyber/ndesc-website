@@ -174,10 +174,10 @@ main:focus { outline: none; }
 }
 
 /* Footer */
-.logo-mark { display: block; flex: none; border-radius: 50%; }
+.logo-mark { display: block; flex: none; object-fit: contain; } /* the logo file is already round with clear corners: no clipping (23 Nov 2026) */
 .footer-marks { display: flex; align-items: center; gap: var(--s4); margin-bottom: var(--s2); }
 .crest-tile { display: inline-flex; align-items: center; justify-content: center; background: #F6F3EA; border-radius: 12px; padding: 6px 8px; }
-.crest-tile img { display: block; height: 52px; width: auto; }
+.crest-tile img { display: block; height: 52px; width: auto; object-fit: contain; }
 .site-footer {
   margin-top: var(--s9); padding: var(--s7) 0 var(--s6);
   /* Frosted glass: the page shows through, blurred. */
