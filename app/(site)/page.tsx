@@ -48,11 +48,11 @@ export default async function Home() {
           <div className="sky-copy">
             <p className="label">{en ? "At Notre Dame College, Dhaka, since 1992" : "নটর ডেম কলেজ, ঢাকা, ১৯৯২ থেকে"}</p>
             <h1 id="hero-title">
-              {en ? "Look up. Then look after the ground under your feet." : "আকাশের দিকে তাকাও। তারপর পায়ের নিচের মাটির যত্ন নাও।"}
+              {en ? "Somewhere something incredible is waiting to be discovered." : "আকাশের দিকে তাকাও। তারপর পায়ের নিচের মাটির যত্ন নাও।"}
             </h1>
             <p>
               {en
-                ? "The Eco and Space Club brings students together to study the night sky and protect the living world, through olympiads, workshops, stargazing camps and the National Earth and Space Summit."
+                ? "The Notre Dame Eco and Space Club aims to spread knowledge of Astronomy, Earth Science and Biology and to provide a hub for like-minded students to venture beyond their academic syllabus and explore new realms of science."
                 : "অলিম্পিয়াড, কর্মশালা, তারা দেখার ক্যাম্প আর ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিটের মাধ্যমে ইকো অ্যান্ড স্পেস ক্লাব শিক্ষার্থীদের রাতের আকাশ চেনা আর জীবজগৎ রক্ষার কাজে একসঙ্গে করে।"}
             </p>
             <div className="actions">
@@ -89,7 +89,7 @@ export default async function Home() {
       <section className="wrap section" aria-labelledby="worlds-title">
         <div className="stack" style={{ marginBottom: "var(--s6)" }}>
           <h2 id="worlds-title">{en ? "One club. Two worlds." : "এক ক্লাব। দুই জগৎ।"}</h2>
-          <p className="lead">{en ? "The club began in 1992 to protect wildlife and biodiversity. Today it looks up as well." : "১৯৯২ সালে বন্যপ্রাণী ও জীববৈচিত্র্য রক্ষার লক্ষ্য নিয়ে ক্লাবের যাত্রা। এখন চোখ আকাশেও।"}</p>
+          <p className="lead">{en ? "The club started its journey in 1992 to study and protect life on Earth – its wildlife, ecosystems, and biodiversity. Today, it aims to study and research the cosmos beyond Earth as well." : "১৯৯২ সালে বন্যপ্রাণী ও জীববৈচিত্র্য রক্ষার লক্ষ্য নিয়ে ক্লাবের যাত্রা। এখন চোখ আকাশেও।"}</p>
         </div>
         <div className="two-worlds">
           <div>
