@@ -56,7 +56,7 @@ export type Person = {
   post: L;
   /** The wing or department, e.g. Fieldwork. Members of the current panel are grouped by it. */
   department?: L;
-  /** A portrait photo, e.g. "/executives/name.jpg". */
+  /** A 4:5 portrait, as "/executives/folder/name" with -400.webp and -800.webp files beside it. */
   photo?: string;
   /** A square poster made by the club, as "/executives/2026-27/name" with -480.webp and -960.webp files beside it. */
   poster?: string;
@@ -73,7 +73,7 @@ const ec = (name: string, post: string, wing: string | null, slug: string): Pers
 /** Teachers and college officers who guide the club. */
 export const officers: Person[] = [
   { name: { en: "Dr Fr Hemanto Pius Rozario", bn: "ড. ফা. হেমন্ত পিউস রোজারিও" }, post: { en: "Principal, Notre Dame College", bn: "অধ্যক্ষ, নটর ডেম কলেজ" } },
-  { name: { en: "Md Nazmul Hassan", bn: "মো. নাজমুল হাসান" }, post: { en: "Moderator [since year]", bn: "মডারেটর [কবে থেকে]" } },
+  { name: { en: "Md Nazmul Hassan", bn: "মো. নাজমুল হাসান" }, post: { en: "Moderator [since year]", bn: "মডারেটর [কবে থেকে]" }, photo: "/executives/moderators/md-nazmul-hassan" },
   { name: { en: "[Name]", bn: "[নাম]" }, post: { en: "[Founding moderator, 1992]", bn: "[প্রতিষ্ঠাতা মডারেটর, ১৯৯২]" } },
 ];
 
