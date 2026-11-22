@@ -1172,3 +1172,16 @@ body:has(.ps-four) .site-header {
 @media (prefers-reduced-transparency: reduce) {
   body:has(.ness-three) .site-header, body:has(.ps-four) .site-header { background: var(--header-solid); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
+
+/* Every other page (Mahmud, 23 Nov 2026): the header stands apart from the page by colour alone, no
+   outline. A frosted bar a step lighter than the night background (the theme's --dusk), with the soft
+   night shadow under it, at all times. NESS X, Register and Photosphere keep their own bars above. */
+.site-header {
+  --header-glass: rgba(23, 42, 74, 0.86);
+  background: var(--header-glass);
+  -webkit-backdrop-filter: blur(16px) saturate(160%); backdrop-filter: blur(16px) saturate(160%);
+  box-shadow: 0 6px 20px var(--header-shadow);
+}
+@media (prefers-reduced-transparency: reduce) {
+  .site-header { background: var(--dusk); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
