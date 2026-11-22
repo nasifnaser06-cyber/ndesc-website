@@ -720,7 +720,6 @@ details[open] > summary::after { transform: rotate(45deg); }
 @keyframes ice-twinkle { 0%, 88%, 100% { opacity: 0.95; } 94% { opacity: 0.5; } }
 @keyframes ice-sheen { from { transform: translateX(-120%); } to { transform: translateX(120%); } }
 
-.reg-privacy { margin-top: var(--s3); }
 
 /* Narrow phones: keep the longer label from crowding the logo */
 @media (max-width: 420px) {

@@ -51,7 +51,7 @@ async function call(endpoint: string, body: object) {
 }
 
 export default function RegisterForm({
-  endpoint, trial = false, fallback, googleForm, categories, segments, privacyHref, nessHref,
+  endpoint, trial = false, fallback, googleForm, categories, segments, nessHref,
 }: {
   endpoint: string | null;
   trial?: boolean;
@@ -59,7 +59,6 @@ export default function RegisterForm({
   googleForm: string | null;
   categories: { code: string; name: string; who: string }[];
   segments: SegOption[];
-  privacyHref: string;
   nessHref: string;
 }) {
   const [live, setLive] = useState<Live>({ open: true, bkash: fallback.bkash, nagad: fallback.nagad ?? "", prices: fallback.prices });
@@ -104,7 +103,7 @@ export default function RegisterForm({
       wallet: pass === "online" ? "" : wallet,
       trxId: pass === "online" ? "" : normTrx(v("trxId")),
       sender: pass === "online" ? "" : normPhone(v("sender")),
-      // Registering is the agreement; the privacy note sits by the button. Kept for the sheet script.
+      // Kept for the sheet script, which still reads this field.
       consent: true,
     };
 
@@ -303,7 +302,6 @@ export default function RegisterForm({
         <div className="actions">
           <button className="btn" type="submit" disabled={busy || !live.open}>{busy ? "Sending..." : pass === "online" ? "Register" : "Register and confirm payment"}</button>
         </div>
-        <p className="small muted reg-privacy">We use these details only to run NESS X. <a href={privacyHref}>Privacy</a></p>
       </form>
 
       <StatusCheck endpoint={endpoint} />

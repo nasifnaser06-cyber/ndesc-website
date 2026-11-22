@@ -1,5 +1,4 @@
-import Link from "next/link";
-import { type Locale, tr, path } from "@/lib/i18n";
+import { type Locale, tr } from "@/lib/i18n";
 import { ui } from "@/content/ui";
 import { site } from "@/content/site";
 import { CollegeCrest, ContactLink, Logo } from "./bits";
@@ -60,7 +59,6 @@ export default function Footer({ lang }: { lang: Locale }) {
       </div>
       <div className="wrap footer-base">
         <p className="small muted">© {year} {tr(site.name, lang)}</p>
-        <p className="small"><Link href={path(lang, "/privacy")}>{tr(ui.nav.privacy, lang)}</Link></p>
       </div>
     </footer>
   );

@@ -78,7 +78,6 @@ export default async function Register() {
           googleForm={site.registerWith === "form" ? site.forms.nessRegister : null}
           categories={categories.filter((c) => c.code !== "C")}
           segments={segments}
-          privacyHref={path(lang, "/privacy")}
           nessHref={path(lang, "/ness")}
         />
       </div>

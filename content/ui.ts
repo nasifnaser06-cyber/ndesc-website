@@ -15,7 +15,6 @@ export const ui = {
     executives: { en: "Executives", bn: "কার্যনির্বাহী" },
     join: { en: "Join the club", bn: "ক্লাবে যোগ দিন" },
     contact: { en: "Contact", bn: "যোগাযোগ" },
-    privacy: { en: "Privacy", bn: "গোপনীয়তা" },
     home: { en: "Home", bn: "হোম" },
   },
   skip: { en: "Skip to content", bn: "মূল অংশে যান" },
@@ -52,10 +51,6 @@ export const ui = {
   notFoundTitle: { en: "Lost in space", bn: "পথ হারিয়ে মহাশূন্যে" },
   notFoundText: { en: "We could not find that page. It may have moved.", bn: "পাতাটি খুঁজে পাওয়া যায়নি। হয়তো সরানো হয়েছে।" },
   backHome: { en: "Back to the home page", bn: "হোম পেজে ফিরে যান" },
-  consentNote: {
-    en: "Students appear on this site only with their consent. To ask for a photo or name to be removed, contact us.",
-    bn: "শিক্ষার্থীদের সম্মতি ছাড়া তাদের নাম বা ছবি এই সাইটে দেখানো হয় না। কোনো ছবি বা নাম সরাতে চাইলে আমাদের সঙ্গে যোগাযোগ করুন।",
-  },
   photoSoon: { en: "Photo coming soon", bn: "ছবি শিগগিরই" },
   newTab: { en: "(opens in a new tab)", bn: "(নতুন ট্যাবে খুলবে)" },
 } satisfies Record<string, L | Record<string, L>>;
