@@ -131,7 +131,7 @@ main:focus { outline: none; }
 .main-nav ul { list-style: none; padding: 0; display: flex; gap: var(--s4); }
 .main-nav a { color: var(--starlight); text-decoration: none; padding: var(--s2) var(--s1); display: inline-block; }
 .main-nav a:hover { color: var(--sprout); }
-.main-nav a[aria-current="page"] { color: var(--sprout); text-decoration: underline; text-underline-offset: 8px; text-decoration-thickness: 2px; }
+.main-nav a[aria-current="page"] { color: var(--sprout); text-decoration: none; } /* No underline on the current page (Mahmud, 23 Nov 2026) */
 .only-menu { display: none; }
 .header-tools { display: flex; align-items: center; gap: var(--s3); }
 /* On wide screens the tools hold only the hidden menu button, so take them out of the row and let the menu reach the right edge. */
@@ -1146,3 +1146,8 @@ body:has(.ps-four) .site-header { --header-shadow: rgba(11, 28, 51, 0.4); }
 /* Phone menu button: no box around the three bars */
 .menu-btn { border: 0; }
 .menu-btn:focus-visible { outline: 2px solid var(--sprout); outline-offset: 2px; }
+
+/* NESS X: every header link is the same blue, so the other links are dimmed to 75% and the current
+   page stays at full strength (Mahmud, 23 Nov 2026). 75% keeps them readable on the ice background. */
+body:has(.ness-three) .main-nav a:not([aria-current="page"]) { opacity: 0.75; transition: opacity 0.2s var(--ease-ui); }
+body:has(.ness-three) .main-nav a:not([aria-current="page"]):is(:hover, :focus-visible) { opacity: 1; }
