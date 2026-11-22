@@ -193,7 +193,7 @@ export default async function Ness() {
             </p>
           </div>
           <div className="actions">
-            <Link className="btn btn-secondary" href={path(lang, "/contact")}>{en ? "Ask the NESS team" : "NESS টিমকে জিজ্ঞেস করুন"}</Link>
+            <Link className="btn btn-secondary" href={path(lang, "/contact")}>{en ? "Contact for Exhibition" : "প্রদর্শনীর জন্য যোগাযোগ"}</Link>
           </div>
         </section>
 
