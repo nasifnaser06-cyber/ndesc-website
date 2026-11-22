@@ -1149,11 +1149,14 @@ body:has(.ps-four) .site-header { --header-shadow: rgba(11, 28, 51, 0.4); }
 body:has(.ness-three) .main-nav a:not([aria-current="page"]) { opacity: 0.75; transition: opacity 0.2s var(--ease-ui); }
 body:has(.ness-three) .main-nav a:not([aria-current="page"]):is(:hover, :focus-visible) { opacity: 1; }
 
-/* At the very end of every page only the footer shows, with no page text above it in the window
+/* At the very end of every page (on phones) only the footer shows, with no page text above it in the window
    (Mahmud, 23 Nov 2026). The footer sits at the bottom of a zone at least one screen tall, so the
    space above it at the bottom of the page is empty background. lvh: the tallest screen, when the
    phone's browser bars have slid away. */
-.footer-zone { display: flex; flex-direction: column; justify-content: flex-end; min-height: calc(100vh + var(--s7)); min-height: calc(100lvh + var(--s7)); } /* +3rem covers content that spills a few px past the end of the page */
+/* Phones only (Mahmud, 23 Nov 2026): tablets and desktops keep the footer straight after the content. */
+@media (max-width: 599px) {
+  .footer-zone { display: flex; flex-direction: column; justify-content: flex-end; min-height: calc(100vh + var(--s7)); min-height: calc(100lvh + var(--s7)); } /* +3rem covers content that spills a few px past the end of the page */
+}
 
 /* NESS X and Photosphere (Mahmud, 23 Nov 2026): the header keeps a frosted-glass bar in the page's
    own colour at all times, not only once scrolled, with a soft shadow under it: snowy white on
