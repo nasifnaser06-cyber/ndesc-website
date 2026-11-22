@@ -1123,7 +1123,8 @@ body:has(.ps-bg) .footer-map-pin::before {
 .footer-grid ul { margin-top: var(--s1); }
 .footer-grid .contact-link { min-height: 2.25rem; }
 .footer-visit { gap: var(--s1); }
-.footer-map { margin-top: var(--s1); height: 7.5rem; }
+/* 208px: Google shows its zoom and move buttons once the map inside the border is at least 200px tall (23 Nov 2026). */
+.footer-map { margin-top: var(--s1); height: 13rem; }
 .footer-base { margin-top: var(--s3); }
 /* Phones: logos on top, the club name and founding line under them (Mahmud, 23 Nov 2026) */
 
@@ -1262,3 +1263,24 @@ body:has(.ps-four) .site-header {
   .ev-suggest { animation: none; }
   .ev-search-box, .ev-suggest-item, .ev-search-clear { transition: none; }
 }
+
+/* Footer balanced against the taller map (23 Nov 2026), second try. The text stays grouped
+   (no stretched gaps) but is set larger, so the logo, name and link columns come close to the map's
+   height and their tops line up with it. Screens 1000px and wider, where the columns sit side by side. */
+@media (min-width: 1000px) {
+  .footer-marks { gap: var(--s4); margin-bottom: var(--s3); }
+  .footer-marks .logo-mark { width: 80px; height: 80px; }
+  .crest-tile img { height: 80px; }
+  .footer-name { font-size: 1.25rem; line-height: 1.3; }
+  .footer-about p.small { font-size: 1rem; line-height: 1.55; max-width: 26ch; }
+  /* Social links closer together (23 Nov 2026), the first one level with the map's top edge. */
+  .footer-follow ul.contact-links { gap: var(--s1); margin-top: calc(var(--s1) + var(--s3)); }
+  .footer-grid .contact-link { min-height: 2.5rem; font-size: 1.1875rem; gap: var(--s3); }
+  .footer-grid .contact-link .contact-icon { width: 24px; height: 24px; }
+  .footer-visit .footer-map { margin-top: var(--s3); }
+  .footer-grid .label { font-size: 1rem; line-height: 1.5; }
+  /* Logos (80px, 100px was too big) start level with the top of the "Follow us" / "Visit us" headings
+     (23 Nov 2026). The small top pad matches the space above the heading letters inside their line. */
+  .footer-about { padding-top: 0.25rem; }
+}
+
