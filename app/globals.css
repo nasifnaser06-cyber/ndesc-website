@@ -936,7 +936,6 @@ body:has(.ness-three) .ice-btn::after { background: linear-gradient(105deg, tran
 /* Last pieces on this page: placeholders, the skip link and the college crest tile */
 body:has(.ness-three) .todo { color: #0a4a70; border-bottom-color: #0a4a70; }
 body:has(.ness-three) .skip-link { background: #0a4a70; color: #ebf5f9; }
-body:has(.ness-three) .crest-tile { background: #ebf5f9; }
 
 /* Register page form in the same three colours (Mahmud, 20 Nov 2026, trial) */
 body:has(.ness-three) main .form :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
@@ -1029,7 +1028,6 @@ body:has(.ps-four) .todo { color: #3ae3d1; border-bottom-color: #3ae3d1; }
 body:has(.ps-four) .site-header { --line: rgba(29, 95, 138, 0.6); --header-glass: rgba(11, 28, 51, 0.82); --header-menu: rgba(11, 28, 51, 0.5); --header-solid: #0b1c33; }
 body:has(.ps-four) .site-footer { background: rgba(11, 28, 51, 0.6); border-top-color: #1d5f8a; }
 @media (prefers-reduced-transparency: reduce) { body:has(.ps-four) .site-footer { background: #0b1c33; } }
-body:has(.ps-four) .crest-tile { background: #e2f2fc; }
 body:has(.ps-four) .skip-link { background: #3ae3d1; color: #0b1c33; }
 body:has(.ps-four) .ice-btn {
   background: linear-gradient(135deg, #e2f2fc 0%, #3ae3d1 50%, #e2f2fc 100%);
@@ -1105,3 +1103,46 @@ body:has(.ps-bg) .footer-map-pin::before {
   0% { transform: scale(0.6); opacity: 0.9; }
   100% { transform: scale(1.8); opacity: 0; }
 }
+
+/* ---------------------------------------------------------------------------------------------
+   23 Nov 2026 (Mahmud): footer at about 60% of its old height, college crest without its tile,
+   dark maps on every page except NESS X and Photosphere, a soft page-coloured shadow under the
+   header once you scroll, and a phone menu button without a box.
+   --------------------------------------------------------------------------------------------- */
+.site-footer { padding: var(--s5) 0 var(--s3); }
+.footer-grid { gap: var(--s4); }
+@media (min-width: 1000px) { .footer-grid { column-gap: var(--s7); } }
+.footer-about { gap: var(--s1); }
+.footer-marks { gap: var(--s3); margin-bottom: var(--s1); }
+.footer-marks .logo-mark { width: 40px; height: 40px; }
+.crest-tile { background: none; padding: 0; border-radius: 0; }
+.crest-tile img { height: 40px; }
+.footer-name { font-size: 0.9375rem; }
+.footer-grid ul { margin-top: var(--s1); }
+.footer-grid .contact-link { min-height: 2.25rem; }
+.footer-visit { gap: var(--s1); }
+.footer-map { margin-top: var(--s1); height: 7.5rem; }
+.footer-base { margin-top: var(--s3); }
+/* Phones: logos beside the club name, then the links, then the map */
+@media (max-width: 599px) {
+  .footer-about { grid-template-columns: auto 1fr; column-gap: var(--s3); align-items: center; }
+  .footer-about .footer-marks { grid-row: span 2; margin: 0; }
+  .footer-about p { margin: 0; }
+}
+
+/* Dark map by default; NESS X (.ness-three) and Photosphere (.ps-bg) keep their own tints. */
+.footer-map { background: #0f1e36; }
+.footer-map iframe { filter: invert(0.9) hue-rotate(180deg) brightness(0.9) contrast(0.95); }
+.footer-grid a.footer-map-open { background: #0f1e36; color: var(--sprout); border: 1px solid rgba(233, 238, 246, 0.2); box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4); }
+.footer-grid a.footer-map-open:hover { background: #1b2d4a; color: var(--starlight); }
+
+/* Header shadow once scrolled: 40% of each page's own dark colour. */
+.site-header { --header-shadow: rgba(4, 10, 22, 0.4); }
+body:has(.ness-three) .site-header { --header-shadow: rgba(10, 74, 112, 0.4); }
+body:has(.ps-four) .site-header { --header-shadow: rgba(11, 28, 51, 0.4); }
+.site-header[data-solid="true"] { box-shadow: 0 6px 20px var(--header-shadow); }
+.site-header { transition: opacity 0.35s ease, background-color 0.3s ease, box-shadow 0.3s ease; }
+
+/* Phone menu button: no box around the three bars */
+.menu-btn { border: 0; }
+.menu-btn:focus-visible { outline: 2px solid var(--sprout); outline-offset: 2px; }

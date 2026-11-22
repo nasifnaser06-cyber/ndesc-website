@@ -4,7 +4,7 @@ import { meta } from "@/lib/view";
 import { site } from "@/content/site";
 import { ui } from "@/content/ui";
 import { getEvent, ness2027Banner } from "@/content/events";
-import { nessSchedule, showNessSchedule, nessFaq } from "@/content/club";
+import { nessSchedule, showNessSchedule } from "@/content/club";
 import { nessx, passes, passNote, registerWays, categories, categoryNote, winnersNote, soloSegments, teamSegments, specialSegments, programmes, organizers, type Segment } from "@/content/ness2027";
 import { ContactLink, ExternalLink, FormButton, Stars, T, RegisterButton } from "@/components/bits";
 
@@ -214,18 +214,6 @@ export default async function Ness() {
           </div>
         </section>
 
-        <section aria-labelledby="faq">
-          <h2 id="faq" style={{ marginBottom: "var(--s3)" }}>{en ? "Questions" : "প্রশ্নোত্তর"}</h2>
-          {nessFaq.map((f) => (
-            <details key={f.q.en}>
-              <summary>{tr(f.q, lang)}</summary>
-              <p><T text={f.a} lang={lang} /></p>
-            </details>
-          ))}
-          <p className="small muted" style={{ marginTop: "var(--s4)" }}>
-            {en ? "Still stuck? " : "আরও জানতে "}<Link href={path(lang, "/contact")}>{en ? "Contact the NESS team" : "NESS টিমের সঙ্গে যোগাযোগ করুন"}</Link>.
-          </p>
-        </section>
       </div>
     </>
   );

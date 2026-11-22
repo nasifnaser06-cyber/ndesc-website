@@ -4,18 +4,16 @@ import { site } from "@/content/site";
 import { CollegeCrest, ContactLink, Logo } from "./bits";
 
 export default function Footer({ lang }: { lang: Locale }) {
-  const year = new Date().getFullYear();
   return (
     <footer className="site-footer">
       <div className="wrap footer-grid">
         <div className="footer-about">
           <div className="footer-marks">
-            <Logo size={64} alt={lang === "en" ? "Notre Dame Eco and Space Club logo" : "নটর ডেম ইকো অ্যান্ড স্পেস ক্লাবের লোগো"} />
+            <Logo size={40} alt={lang === "en" ? "Notre Dame Eco and Space Club logo" : "নটর ডেম ইকো অ্যান্ড স্পেস ক্লাবের লোগো"} />
             <CollegeCrest alt={lang === "en" ? "Notre Dame College, Dhaka crest" : "নটর ডেম কলেজ, ঢাকার প্রতীক"} />
           </div>
           <p className="footer-name">{tr(site.name, lang)}</p>
           <p className="small muted">{tr(ui.founded, lang)}</p>
-          <p className="small muted">{tr(site.address, lang)}</p>
         </div>
         <div>
           <p className="label">{tr(ui.follow, lang)}</p>
@@ -58,7 +56,7 @@ export default function Footer({ lang }: { lang: Locale }) {
         </div>
       </div>
       <div className="wrap footer-base">
-        <p className="small muted">© {year} {tr(site.name, lang)}</p>
+        <p className="small muted">© {tr(site.name, lang)}</p>
       </div>
     </footer>
   );
