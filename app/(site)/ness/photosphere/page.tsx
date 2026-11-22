@@ -34,7 +34,6 @@ export default async function Photosphere() {
       <section className="sky sky-clear" aria-labelledby="ps-h1">
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>
           <div className="sky-copy">
-            <p className="label">Visual art competition and exhibition of NESS X</p>
             <h1 id="ps-h1" className="ps-logo-h1">
               {/* The Photosphere 7.0 logo stands in for the heading; its alt text is the heading's name. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -47,6 +46,8 @@ export default async function Photosphere() {
                 fetchPriority="high"
               />
             </h1>
+            {/* Logo first, its line underneath (Mahmud, 23 Nov 2026). */}
+            <p className="label logo-caption">Visual art competition and exhibition</p>
             <p>{p.brief}</p>
             <dl className="facts">
               <div><dt>Exhibition</dt><dd>28–30 January 2027</dd></div>

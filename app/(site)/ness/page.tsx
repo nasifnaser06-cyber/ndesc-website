@@ -68,7 +68,6 @@ export default async function Ness() {
         <Stars />
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>
           <div className="sky-copy">
-            <p className="label">{nessx.fullName}</p>
             <h1 id="ness-h1" className="ness-logo-h1">
               {/* The NESS logo stands in for the "NESS X" heading; its alt text is the heading's name. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -81,6 +80,8 @@ export default async function Ness() {
                 fetchPriority="high"
               />
             </h1>
+            {/* Logo first, its line underneath (Mahmud, 23 Nov 2026). */}
+            <p className="label logo-caption">{nessx.fullName}</p>
             <p>{nessx.intro}</p>
             <dl className="facts">
               <div><dt>{tr(ui.dates, lang)}</dt><dd>{formatDateRange(ness.start, ness.end, lang, "long")}</dd></div>

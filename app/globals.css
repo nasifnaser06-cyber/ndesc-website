@@ -760,6 +760,8 @@ details[open] > summary::after { transform: rotate(45deg); }
 /* Photosphere page: the PS 7.0 logo in place of the heading */
 .ps-logo-h1 { margin: var(--s2) 0 var(--s3); line-height: 0; }
 .ps-logo-h1 img { display: block; width: min(60%, 21.6rem); height: auto; }
+/* The line under the NESS X and Photosphere logos sits close to the logo, like a caption. */
+.sky-copy > .logo-caption { margin-top: calc(var(--s4) * -1); }
 
 /* Photosphere page (trial, 20 Nov 2026): picture background, Veroland titles, Montserrat SemiBold text. */
 @font-face { font-family: "Veroland"; src: url("./fonts/veroland.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
