@@ -1473,9 +1473,12 @@ html.ff-flying .page-head > * { animation: none; }
    baseline; depth comes from scroll-driven animations where supported (each card's distance from the
    centre drives its scale, stacking and dimming), or from FactsCarousel.tsx elsewhere. Scale only:
    cards always face the reader. */
-.fc { --fc-card: clamp(240px, 30vw, 380px); --fc-step: calc(var(--fc-card) * 0.62); --fc-radius: 18px; position: relative; }
+/* Card size: about 31% of the window on desktop (capped at 560px, reached around 1810px wide), never taller than 56% of the window so
+   the arrows and caption stay reachable on short laptop screens; 80% of a phone's width. The scroll-linked
+   depth then shows neighbours at 80% and the next cards at 64% of this. */
+.fc { --fc-card: clamp(280px, min(31vw, 56vh), 560px); --fc-step: calc(var(--fc-card) * 0.62); --fc-radius: 18px; position: relative; }
 .fc-compact { --fc-card: clamp(170px, 20vw, 240px); --fc-radius: 14px; }
-@media (max-width: 600px) { .fc { --fc-card: 64vw; } .fc-compact { --fc-card: 52vw; } }
+@media (max-width: 600px) { .fc { --fc-card: 80vw; } .fc-compact { --fc-card: 52vw; } }
 @media (prefers-reduced-motion: reduce) { .fc { --fc-step: calc(var(--fc-card) + 16px); } }
 
 .fc-track { position: relative; display: flex; list-style: none; margin: 0; padding: 20px calc(50% - var(--fc-step) / 2) 28px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; }

@@ -286,7 +286,7 @@ export default function FactsCarousel({ items, activeSlug, onActiveChange, onOpe
                   <img
                     src={f.img}
                     srcSet={f.img2x ? `${f.img} 400w, ${f.img2x} 800w` : undefined}
-                    sizes={compact ? "(max-width: 600px) 52vw, 240px" : "(max-width: 600px) 64vw, 380px"}
+                    sizes={compact ? "(max-width: 600px) 52vw, 240px" : "(max-width: 600px) 80vw, 560px"}
                     alt=""
                     width={400}
                     height={400}
