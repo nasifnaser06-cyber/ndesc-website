@@ -94,8 +94,8 @@ export const events: ClubEvent[] = [
   {
     slug: "ness-2026",
     type: "ness",
-    start: "2026-04-08",
-    end: "2026-04-10",
+    start: "2026-04-09",
+    end: "2026-04-11",
     title: { en: "9th National Earth and Space Summit", bn: "৯ম ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট" },
     venue: ndc,
     summary: {
