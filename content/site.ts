@@ -49,6 +49,9 @@ export const site = {
    * notice. Set false (live) on 20 Nov 2026, using the sheet in nasifnaser06@gmail.com.
    */
   registration: {
+    /** true: the Register page shows "Registration is paused" and nothing on it can be typed in or sent
+        (Mahmud, 23 Nov 2026). Set back to false to reopen. */
+    paused: true,
     endpoint: "https://script.google.com/macros/s/AKfycbyhTlfcbUwn186jl-Goo1y9r-nAiWNg277Ekx3V1ti4ccyViFdw4xGsLg4LJqFK2qk/exec" as string | null,
     trial: false,
     bkash: "[club bKash number]",

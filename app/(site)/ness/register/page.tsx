@@ -72,6 +72,7 @@ export default async function Register() {
         <RegisterForm
           endpoint={site.registration.endpoint}
           trial={site.registration.trial}
+          paused={site.registration.paused}
           fallback={{ bkash: site.registration.bkash, nagad: site.registration.nagad, prices: site.registration.prices }}
           googleForm={site.registerWith === "form" ? site.forms.nessRegister : null}
           categories={categories.filter((c) => c.code !== "C")}
