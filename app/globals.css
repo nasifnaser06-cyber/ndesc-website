@@ -1543,3 +1543,8 @@ html.ff-flying .page-head > * { animation: none; }
 .ff-more { padding-block: var(--s8) var(--s4); }
 .ff-more h2 { font-size: 1.5rem; margin: 0 0 var(--s2); }
 .ff-restoring .fc-track, .ff-restoring .fc-caption, .ff-restoring .fc-controls { visibility: hidden; }
+
+/* Register page paused (site.registration.paused): the form stays visible but greyed out and locked */
+.reg-lock { display: contents; border: 0; padding: 0; margin: 0; min-width: 0; }
+.reg-lock:disabled :is(input, select, textarea, button, label) { cursor: not-allowed; }
+form[aria-disabled="true"] { opacity: 0.55; }
