@@ -93,13 +93,13 @@ export default async function Home() {
         <div className="two-worlds">
           <div>
             <PhotoSlot lang={lang} label={{ en: "a telescope session or a member's astrophotography", bn: "টেলিস্কোপ সেশন বা সদস্যের অ্যাস্ট্রোফটোগ্রাফি" }} />
-            <h3>{en ? "The sky" : "আকাশ"}</h3>
-            <p className="muted">{en ? "Astronomy olympiads, stargazing camps, astrophotography, the Astral Hunt and talks from olympiad medallists." : "জ্যোতির্বিজ্ঞান অলিম্পিয়াড, তারা দেখার ক্যাম্প, অ্যাস্ট্রোফটোগ্রাফি, অ্যাস্ট্রাল হান্ট আর অলিম্পিয়াড পদকজয়ীদের আলোচনা।"}</p>
+            <h3>{en ? "Beyond Earth" : "পৃথিবীর বাইরে"}</h3>
+            <p className="muted">{en ? "Astronomy Olympiads and the road to IOAA through NDESC Interstellar, stargazing and solar observation sessions, astrophotography and workshops on astronomical research." : "জ্যোতির্বিজ্ঞান অলিম্পিয়াড ও NDESC Interstellar হয়ে IOAA-এর পথে যাত্রা, তারা দেখা ও সূর্য পর্যবেক্ষণ সেশন, অ্যাস্ট্রোফটোগ্রাফি আর জ্যোতির্বিজ্ঞান গবেষণা নিয়ে কর্মশালা।"}</p>
           </div>
           <div>
             <PhotoSlot lang={lang} label={{ en: "a field tour or an eco project display", bn: "ফিল্ড ট্যুর বা ইকো প্রজেক্ট প্রদর্শনী" }} />
-            <h3>{en ? "The ground" : "মাটি"}</h3>
-            <p className="muted">{en ? "Earth science, biology and climate olympiads, eco project displays, field tours and work on biodiversity." : "ভূবিজ্ঞান, জীববিজ্ঞান ও জলবায়ু অলিম্পিয়াড, ইকো প্রজেক্ট প্রদর্শনী, ফিল্ড ট্যুর আর জীববৈচিত্র্য নিয়ে কাজ।"}</p>
+            <h3>{en ? "Within Earth" : "পৃথিবীর ভেতরে"}</h3>
+            <p className="muted">{en ? "Olympiads in Earth Science, Biology and Climate with the road to IESO and IBO through NDESC Terrestrial and NDESC Helix, eco-research projects, field tours and workshops on biological and Earth sciences." : "ভূবিজ্ঞান, জীববিজ্ঞান ও জলবায়ু অলিম্পিয়াড, NDESC Terrestrial ও NDESC Helix হয়ে IESO ও IBO-এর পথে যাত্রা, ইকো-গবেষণা প্রকল্প, ফিল্ড ট্যুর আর জীববিজ্ঞান ও ভূবিজ্ঞান নিয়ে কর্মশালা।"}</p>
           </div>
         </div>
       </section>
