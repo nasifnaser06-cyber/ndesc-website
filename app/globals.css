@@ -1386,19 +1386,21 @@ body:has(.ps-four) .site-header {
 .ff-count { font-size: 0.9375rem; color: var(--haze); margin-bottom: var(--s4); }
 .ff-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr)); gap: var(--s5); list-style: none; padding: 0; margin: 0; }
 .ff-card { display: flex; flex-direction: column; gap: var(--s2); height: 100%; color: var(--starlight); text-decoration: none; border-radius: 14px; }
-.ff-card img { width: 100%; aspect-ratio: 1; height: auto; object-fit: cover; border-radius: 14px; background: var(--deep); border: 1px solid var(--line); transition: transform 0.3s var(--ease-ui); }
+.ff-pic { display: block; position: relative; overflow: hidden; aspect-ratio: 1; border-radius: 14px; background: var(--deep); border: 1px solid var(--line); }
+.ff-card img { display: block; width: 100%; height: 100%; aspect-ratio: 1; object-fit: cover; }
+.ff-text { display: flex; flex-direction: column; gap: var(--s2); }
 .ff-card h3 { font-size: 1.125rem; margin: var(--s1) 0 0; }
 .ff-meta { font-size: 0.8125rem; color: var(--haze); display: flex; gap: var(--s2); flex-wrap: wrap; }
 .ff-card p { font-size: 0.9375rem; color: var(--haze); margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .ff-card:focus-visible { outline: 3px solid var(--sprout); outline-offset: 4px; }
-@media (hover: hover) and (pointer: fine) { .ff-card:hover h3 { color: var(--sprout); } .ff-card:hover img { transform: scale(1.015); } }
-@media (prefers-reduced-motion: reduce) { .ff-card img { transition: none; } .ff-card:hover img { transform: none; } }
+/* Hover and press: see "FactsFriday motion" below. */
 
 /* FactsFriday article */
 .ff-article { display: grid; gap: var(--s7); grid-template-columns: minmax(0, 1fr); }
 @media (min-width: 960px) { .ff-article { grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); align-items: start; } .ff-article figure { position: sticky; top: 96px; } }
 .ff-article figure { margin: 0; }
-.ff-article figure img { width: 100%; height: auto; aspect-ratio: 1; border-radius: 16px; border: 1px solid var(--line); background: var(--deep); display: block; }
+.ff-pic-lg { border-radius: 16px; }
+.ff-article figure img { width: 100%; height: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
 .ff-article figcaption { font-size: 0.8125rem; color: var(--haze); margin-top: var(--s2); }
 .ff-body { max-width: 68ch; display: flex; flex-direction: column; gap: var(--s4); font-size: 1.0625rem; line-height: 1.75; }
 .ff-body .ff-summary { font-size: 1.25rem; line-height: 1.6; color: var(--starlight); }
@@ -1418,3 +1420,72 @@ body:has(.ps-four) .site-header {
 /* Explore's four cards sit two by two on wider screens. */
 @media (min-width: 760px) { .hub-grid.hub-2x2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 600px) { .hub-card { padding: var(--s5); } }
+
+/* ---------------------------------------------------------------- FactsFriday motion, Apple style
+   rion-motion-web Part 2, measured from apple.com. Mahmud picked this package on 23 Nov 2026.
+   Script: components/FactsFridayMotion.tsx and the flight in FactsFridayArchive.tsx. */
+:root { --ease-apple: cubic-bezier(0.4, 0, 0.6, 1); }
+
+/* Quiet hover and press: colour and brightness only, the card shrinks a little when pressed */
+.ff-card { transition: scale 0.1s ease-out; }
+.ff-card h3, .ff-card .ff-cat { transition: color 0.32s var(--ease-apple); }
+.ff-card img { transition: filter 0.24s var(--ease-apple); }
+@media (hover: hover) and (pointer: fine) {
+  .ff-card:hover h3, .ff-card:hover .ff-cat { color: var(--sprout); }
+  .ff-card:hover img { filter: brightness(1.12); }
+}
+.ff-card:active { scale: 0.97; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Cards rise 30px and fade in (0.9s fade, 0.7s move), 0.15s apart in each row. Only hidden when the
+     site script runs (html.motion), so without JavaScript every card simply shows. */
+  html.motion .ff-grid > li { transition: opacity 0.9s var(--ease-reveal) var(--ff-d, 0ms), translate 0.7s var(--ease-reveal) var(--ff-d, 0ms); }
+  html.motion .ff-grid > li:not(.in) { opacity: 0; translate: 0 30px; }
+
+  /* Scroll-linked heading: drifts up 48px and fades over the first 70% of a screen, and comes back on
+     the way up; a post's picture settles from 108% to 100% over the first 90% */
+  @supports (animation-timeline: scroll()) {
+    main:has(.ff-grid-wrap, .ff-article) .page-head { animation: ff-head-out linear both; animation-timeline: scroll(root); animation-range: 0 70vh; }
+    .ff-article .ff-pic img { animation: ff-pic-settle linear both; animation-timeline: scroll(root); animation-range: 0 90vh; }
+  }
+}
+@keyframes ff-head-out { to { opacity: 0; translate: 0 -48px; } }
+@keyframes ff-pic-settle { from { scale: 1.08; } to { scale: 1; } }
+@media (prefers-reduced-motion: reduce) { .ff-card:active { scale: none; } }
+
+/* Card-to-post flight (view transitions): the picture and title travel, the rest crossfades */
+::view-transition-group(ff-cover), ::view-transition-group(ff-title) { animation-duration: 0.6s; animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1); }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 0.35s; }
+.ff-article .ff-pic img { view-transition-name: ff-cover; }
+main:has(.ff-article) .page-head > h1 { view-transition-name: ff-title; width: fit-content; }
+html.ff-flying .page-head > * { animation: none; }
+
+/* Slide-down bar once the page title has left the screen (sits under the site header) */
+.ff-subnav { position: fixed; inset: 0 0 auto; z-index: 19; height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 max(20px, calc((100vw - 1152px) / 2)); background: rgba(15, 30, 54, 0.8); -webkit-backdrop-filter: blur(16px) saturate(160%); backdrop-filter: blur(16px) saturate(160%); border-bottom: 1px solid var(--line); transform: translateY(-100%); transition: transform 0.23s var(--ease-apple); }
+.ff-subnav.is-shown { transform: none; }
+.ff-subnav-title { font-weight: 800; font-size: 1.0625rem; color: var(--starlight); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ff-subnav-btn { flex: none; font: inherit; font-size: 0.875rem; font-weight: 700; color: var(--night); background: var(--sprout); border: 0; border-radius: 999px; padding: 6px 16px; text-decoration: none; cursor: pointer; }
+@media (prefers-reduced-transparency: reduce) { .ff-subnav { background: var(--night); -webkit-backdrop-filter: none; backdrop-filter: none; } }
+@media (prefers-reduced-motion: reduce) { .ff-subnav { transform: none; opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s; } .ff-subnav.is-shown { opacity: 1; visibility: visible; } }
+
+/* Pinned story: the paragraph in the middle of the screen is full strength, the rest at 35% */
+.ff-story > p { opacity: 0.35; transition: opacity 0.32s var(--ease-apple); }
+.ff-story > p.is-active { opacity: 1; }
+
+/* More FactsFriday: a swipe row with arrow buttons that grey out at each end */
+.ff-more { padding-block: var(--s8) var(--s6); }
+.ff-more-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--s4); }
+.ff-more-head h2 { font-size: 1.5rem; margin: 0; }
+.ff-paddles { display: none; gap: 10px; }
+.ff-more.has-paddles .ff-paddles { display: flex; }
+.ff-paddles button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--edge); background: var(--deep); color: var(--starlight); font-size: 1.4rem; line-height: 1; cursor: pointer; transition: opacity 0.24s var(--ease-apple), background-color 0.24s var(--ease-apple); }
+.ff-paddles button:disabled { opacity: 0.35; cursor: default; }
+.ff-paddles button:focus-visible { outline: 3px solid var(--sprout); outline-offset: 2px; }
+.ff-more-row { display: grid; grid-auto-flow: column; grid-auto-columns: min(70%, 240px); gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; list-style: none; margin: 0 calc(50% - 50vw) 0 0; padding: 0 24px 8px 0; }
+.ff-more-row::-webkit-scrollbar { display: none; }
+.ff-more-row > li { scroll-snap-align: start; }
+.ff-more-card { display: flex; flex-direction: column; gap: 6px; color: var(--starlight); text-decoration: none; border-radius: 14px; }
+.ff-more-card img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 14px; border: 1px solid var(--line); transition: filter 0.24s var(--ease-apple); }
+.ff-more-card span { font-size: 0.8125rem; color: var(--haze); }
+.ff-more-card:focus-visible { outline: 3px solid var(--sprout); outline-offset: 4px; }
+@media (hover: hover) and (pointer: fine) { .ff-more-card:hover img { filter: brightness(1.12); } .ff-more-card:hover b { color: var(--sprout); } }
