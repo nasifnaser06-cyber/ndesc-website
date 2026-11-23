@@ -60,6 +60,34 @@ export default async function EventPage({ params }: Props) {
           </div>
         </div>
 
+        {e.about && (
+          <section aria-labelledby="about-event" style={{ maxWidth: "70ch" }}>
+            <h2 id="about-event" style={{ marginBottom: "var(--s4)" }}>{"About the event"}</h2>
+            {e.about.map((p, i) => <p key={i} className="muted" style={{ marginTop: i ? "var(--s4)" : 0 }}>{p}</p>)}
+          </section>
+        )}
+
+        {e.segments && (
+          <section aria-labelledby="segments">
+            <h2 id="segments" style={{ marginBottom: "var(--s4)" }}>{e.segmentsTitle ?? "Segments"}</h2>
+            <ol className="seg-list">
+              {e.segments.map((g) => (
+                <li key={g.title} className="seg surface">
+                  {g.when && <p className="seg-when">{g.when}</p>}
+                  <h3>{g.title}</h3>
+                  {g.text && <p className="muted">{g.text}</p>}
+                  {g.items && (
+                    <ul className="tick-list">
+                      {g.items.map((it) => <li key={it.title}><span><strong>{it.title}.</strong> {it.text}</span></li>)}
+                    </ul>
+                  )}
+                </li>
+              ))}
+            </ol>
+            {e.closing && <p className="muted" style={{ maxWidth: "70ch", marginTop: "var(--s5)" }}>{e.closing}</p>}
+          </section>
+        )}
+
         {e.highlights && (
           <section aria-labelledby="hl">
             <h2 id="hl" style={{ marginBottom: "var(--s4)" }}>{"Highlights"}</h2>
