@@ -6,14 +6,20 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { FactsCard } from "@/lib/factsCards";
 
 /*
- * FactsFriday carousel: one horizontal strip, newest first, centred card in front.
+ * FactsFriday carousel: one horizontal strip, newest first, centred card in front, looping in both
+ * directions.
  *
  * Baseline: native horizontal scrolling with CSS scroll snapping, so swipes, trackpads and links work
  * even before (or without) this script. Depth: where the browser has scroll-driven animations, CSS
  * scales and stacks each card from its distance to the centre (globals.css, "FactsFriday carousel");
  * elsewhere this script does the same on scroll. Cards are only ever scaled, never rotated.
- * This script adds: the settled active post and its caption, mouse dragging, previous/next buttons,
- * arrow keys, click-to-centre, and an announcement once a card settles.
+ *
+ * Looping: the posts are drawn as several identical copies side by side ("virtual" slides). The strip
+ * starts in the middle copy, so the last post already sits to the left of the first. Once a move
+ * settles in another copy, the strip is moved without animation to the same post in the middle copy.
+ * The copies look identical and the depth follows the scroll position, so nothing visibly changes.
+ * Only the middle copy is exposed to screen readers; the counter, caption and announcements always
+ * name the real post (slug), counted once.
  */
 
 // Was the last navigation a browser Back/Forward? (Set before Next renders the new page.)
@@ -27,6 +33,13 @@ const reducedMotion = () => typeof window !== "undefined" && window.matchMedia("
 const cssDepth = () =>
   typeof CSS !== "undefined" && CSS.supports("animation-timeline: view()") && document.documentElement.dataset.fcJs !== "1";
 
+/** How many copies of the list to draw: an odd number, with about 20 or more cards on each side of the middle copy. */
+const copiesFor = (n: number) => {
+  if (n < 2) return 1;
+  const c = Math.max(3, Math.ceil(40 / n));
+  return c % 2 ? c : c + 1;
+};
+
 /** Resolves once a selector exists. setTimeout, not requestAnimationFrame: frames pause while a view transition waits. */
 function waitFor(sel: string, ms = 3000): Promise<void> {
   return new Promise((resolve) => {
@@ -35,6 +48,11 @@ function waitFor(sel: string, ms = 3000): Promise<void> {
     tick();
   });
 }
+
+// Runs while the page HTML is still loading, straight after the strip: centres the starting card (in the
+// middle copy) before the first paint, so both sides are already filled. Client-side visits do the same
+// in a layout effect.
+const startScript = `(function(){try{var t=document.currentScript.previousElementSibling;var s=t&&t.querySelector('[data-fc-start]');if(s){t.scrollLeft=s.offsetLeft+s.offsetWidth/2-t.clientWidth/2}}catch(e){}})()`;
 
 type Props = {
   items: FactsCard[];
@@ -56,30 +74,41 @@ export default function FactsCarousel({ items, activeSlug, onActiveChange, onOpe
   const track = useRef<HTMLUListElement>(null);
   const slideEls = useRef<(HTMLLIElement | null)[]>([]);
   const titleEl = useRef<HTMLHeadingElement>(null);
+  const n = items.length;
+  const copies = copiesFor(n);
+  const mid = (copies - 1) / 2;
+  const total = n * copies;
+  const home = (r: number) => mid * n + r; // the virtual slide for real post r in the middle copy
   const wanted = Math.max(0, items.findIndex((x) => x.slug === activeSlug));
-  const [active, setActive] = useState(wanted);
+  const [active, setActive] = useState(wanted); // real post index
+  const [vActive, setVActive] = useState(home(wanted)); // virtual slide in the centre
   const [enhanced, setEnhanced] = useState(false);
   const [announce, setAnnounce] = useState("");
   const s = useRef({
-    pos: [] as number[], width: 0, step: 1, active: wanted, target: -1, scrolling: false, raf: 0, timer: 0,
+    pos: [] as number[], width: 0, step: 1, active: wanted, v: home(wanted), target: -1, scrolling: false, raf: 0, timer: 0,
     jsDepth: false, reduce: false, down: false, dragging: false, suppress: false, startX: 0, startLeft: 0,
-    samples: [] as { x: number; t: number }[], items: null as FactsCard[] | null,
+    samples: [] as { x: number; t: number }[], items: null as FactsCard[] | null, n, mid,
   });
+  s.current.n = n;
+  s.current.mid = mid;
+  const list = useRef(items); // the current list, for handlers registered on mount
+  list.current = items;
   const cb = useRef({ onActiveChange, onOpen });
   cb.current = { onActiveChange, onOpen };
 
   const measure = () => {
     const t = track.current;
     if (!t) return;
-    s.current.pos = slideEls.current.slice(0, items.length).map((el) => (el ? el.offsetLeft + el.offsetWidth / 2 : 0));
+    s.current.pos = slideEls.current.slice(0, total).map((el) => (el ? el.offsetLeft + el.offsetWidth / 2 : 0));
     s.current.width = t.clientWidth;
     s.current.step = s.current.pos.length > 1 ? s.current.pos[1] - s.current.pos[0] : 1;
   };
-  const leftFor = (i: number) => (s.current.pos[i] ?? 0) - s.current.width / 2;
+  const leftFor = (v: number) => (s.current.pos[v] ?? 0) - s.current.width / 2;
   const nearest = (center: number) => {
-    let best = 0, d = Infinity;
-    s.current.pos.forEach((p, i) => { const k = Math.abs(p - center); if (k < d) { d = k; best = i; } });
-    return best;
+    const p = s.current.pos;
+    if (!p.length) return 0;
+    const v = Math.round((center - p[0]) / s.current.step); // evenly spaced, so no search needed
+    return Math.max(0, Math.min(p.length - 1, v));
   };
 
   /** JS depth for browsers without scroll-driven animations: same curve as the CSS keyframes. */
@@ -88,48 +117,70 @@ export default function FactsCarousel({ items, activeSlug, onActiveChange, onOpe
     const t = track.current;
     if (!t || !s.current.jsDepth) return;
     const center = t.scrollLeft + s.current.width / 2;
-    slideEls.current.slice(0, items.length).forEach((el, i) => {
-      if (!el) return;
-      const d = Math.abs((s.current.pos[i] ?? 0) - center) / s.current.step;
+    const near = nearest(center);
+    const span = Math.ceil(s.current.width / s.current.step / 2) + 3;
+    for (let v = Math.max(0, near - span); v <= Math.min(total - 1, near + span); v++) {
+      const el = slideEls.current[v];
+      if (!el) continue;
+      const d = Math.abs((s.current.pos[v] ?? 0) - center) / s.current.step;
       const scale = d <= 1 ? 1 - 0.2 * d : d <= 2 ? 0.8 - 0.16 * (d - 1) : 0.64;
       const dim = d <= 1 ? 0.3 * d : d <= 2 ? 0.3 + 0.25 * (d - 1) : 0.55;
       const card = el.firstElementChild as HTMLElement | null;
       if (card) { card.style.transform = `scale(${scale.toFixed(4)})`; card.style.setProperty("--fc-dim", dim.toFixed(3)); }
       el.style.zIndex = String(100 - Math.round(Math.min(d, 3) * 33));
-    });
+    }
+  };
+
+  /** Moves, without animation, to the same post in the middle copy. Identical copies, so nothing visibly changes. */
+  const recentre = () => {
+    const st = s.current, t = track.current;
+    if (!t || st.n < 2) return;
+    const r = ((st.v % st.n) + st.n) % st.n;
+    const h = st.mid * st.n + r;
+    if (h === st.v) return;
+    t.scrollTo({ left: t.scrollLeft + (st.pos[h] - st.pos[st.v]), behavior: "instant" });
+    st.v = h;
+    setVActive(h);
+    if (st.jsDepth) paint();
   };
 
   const settle = () => {
     const st = s.current, t = track.current;
     if (!t || st.dragging || st.down) return;
+    measure(); // a resize can re-snap the strip and end a scroll before the resize observer has re-measured
     st.scrolling = false;
     st.target = -1;
     t.classList.remove("is-dragging");
-    const i = nearest(t.scrollLeft + st.width / 2);
-    if (i !== st.active) {
-      st.active = i;
-      setActive(i);
-      const it = items[i];
+    const v = nearest(t.scrollLeft + st.width / 2);
+    const r = st.n ? v % st.n : 0;
+    st.v = v;
+    setVActive(v);
+    if (r !== st.active) {
+      st.active = r;
+      setActive(r);
+      const it = list.current[r];
       if (it) {
-        setAnnounce(`${it.title}, post ${i + 1} of ${items.length}`);
+        setAnnounce(`${it.title}, post ${r + 1} of ${st.n}`);
         cb.current.onActiveChange?.(it.slug);
       }
     }
+    recentre();
   };
 
-  const go = (i: number, smooth = true) => {
+  /** Smoothly centres virtual slide v (a neighbour across the wrap is just the next slide in the strip). */
+  const go = (v: number, smooth = true) => {
     const t = track.current;
-    if (!t || !items.length) return;
-    const k = Math.max(0, Math.min(items.length - 1, i));
+    if (!t || n < 2) return;
+    const k = Math.max(0, Math.min(total - 1, v));
     s.current.target = k;
     const left = leftFor(k);
     if (Math.abs(t.scrollLeft - left) < 1) { settle(); return; }
     s.current.scrolling = true;
     t.scrollTo({ left, behavior: smooth && !s.current.reduce ? "smooth" : "instant" });
   };
-  const base = () => (s.current.target >= 0 ? s.current.target : s.current.active);
+  const base = () => (s.current.target >= 0 ? s.current.target : s.current.v);
 
-  // Jump (no animation) to the wanted post whenever the list or the wanted post changes from outside.
+  // Jump (no animation) to the wanted post, in the middle copy, whenever the list or the wanted post changes from outside.
   useLayoutEffect(() => {
     const t = track.current;
     if (!t) return;
@@ -137,10 +188,13 @@ export default function FactsCarousel({ items, activeSlug, onActiveChange, onOpe
     const listChanged = s.current.items !== items;
     s.current.items = items;
     if (listChanged || wanted !== s.current.active) {
-      t.scrollTo({ left: leftFor(wanted), behavior: "instant" });
+      const h = home(wanted);
+      t.scrollTo({ left: leftFor(h), behavior: "instant" });
       s.current.active = wanted;
+      s.current.v = h;
       s.current.target = -1;
       setActive(wanted);
+      setVActive(h);
     }
     if (s.current.jsDepth) paint();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -166,12 +220,12 @@ export default function FactsCarousel({ items, activeSlug, onActiveChange, onOpe
     // Keep the active post centred when the window or the strip changes size.
     const ro = new ResizeObserver(() => {
       measure();
-      t.scrollTo({ left: leftFor(st.active), behavior: "instant" });
+      t.scrollTo({ left: leftFor(st.v), behavior: "instant" });
       if (st.jsDepth) paint();
     });
     ro.observe(t);
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const onMq = () => { st.reduce = mq.matches; t.classList.toggle("fc-jsdepth", st.jsDepth && !st.reduce); measure(); t.scrollTo({ left: leftFor(st.active), behavior: "instant" }); };
+    const onMq = () => { st.reduce = mq.matches; t.classList.toggle("fc-jsdepth", st.jsDepth && !st.reduce); measure(); t.scrollTo({ left: leftFor(st.v), behavior: "instant" }); };
     mq.addEventListener("change", onMq);
     if (st.jsDepth) paint();
     return () => {
@@ -221,12 +275,14 @@ export default function FactsCarousel({ items, activeSlug, onActiveChange, onOpe
     go(nearest(projected));
   };
 
-  const onCardClick = (e: React.MouseEvent<HTMLAnchorElement>, i: number) => {
+  const onCardClick = (e: React.MouseEvent<HTMLAnchorElement>, v: number) => {
     const st = s.current;
     if (st.suppress) { e.preventDefault(); return; }
     if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return; // new tab or window: normal link
-    if (i !== st.active || st.scrolling) { e.preventDefault(); go(i); return; }
-    const it = items[i];
+    const t = track.current;
+    const moving = st.scrolling && !!t && Math.abs(t.scrollLeft - leftFor(v)) >= 2; // the flag can be stale when a scroll ends without scrollend
+    if (v !== st.v || moving) { e.preventDefault(); go(v); return; }
+    const it = items[v % n];
     cb.current.onOpen?.(it.slug);
     const doc = document as Document & { startViewTransition?: (cb: () => Promise<void>) => { finished: Promise<void> } };
     if (flight && e.detail > 0 && doc.startViewTransition && !st.reduce) {
@@ -251,9 +307,10 @@ export default function FactsCarousel({ items, activeSlug, onActiveChange, onOpe
     else if (e.key === "ArrowLeft") { e.preventDefault(); go(base() - 1); }
   };
 
-  const cur = items[Math.min(active, items.length - 1)];
+  const cur = items[Math.min(active, n - 1)];
   const H = headingLevel === 3 ? "h3" : "h2";
   if (!cur) return null;
+  const startV = home(wanted);
 
   return (
     <div className={`fc${compact ? " fc-compact" : ""}${enhanced ? " is-enhanced" : ""}`} role="region" aria-roledescription="carousel" aria-label={label} onKeyDown={onKeyDown}>
@@ -269,47 +326,64 @@ export default function FactsCarousel({ items, activeSlug, onActiveChange, onOpe
         onClickCapture={(e) => { if (s.current.suppress) { e.preventDefault(); e.stopPropagation(); } }}
         onDragStart={(e) => e.preventDefault()}
       >
-        {items.map((f, i) => (
-          <li key={f.slug} ref={(el) => { slideEls.current[i] = el; }} className={`fc-slide${i === active ? " is-active" : ""}`}>
-            <Link
-              href={f.href}
-              className="fc-card"
-              prefetch={false}
-              draggable={false}
-              tabIndex={enhanced ? -1 : undefined}
-              aria-label={i === active || !enhanced ? f.title : `Show ${f.title}`}
-              onClick={(e) => onCardClick(e, i)}
+        {Array.from({ length: total }, (_, v) => {
+          const r = v % n;
+          const f = items[r];
+          const copy = Math.floor(v / n);
+          const clone = copy !== mid;
+          return (
+            <li
+              key={`${copy}-${f.slug}`}
+              ref={(el) => { slideEls.current[v] = el; }}
+              className={`fc-slide${v === vActive ? " is-active" : ""}`}
+              aria-hidden={clone || undefined}
+              data-fc-start={v === startV ? "" : undefined}
             >
-              <span className="fc-frame">
-                {f.img ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={f.img}
-                    srcSet={f.img2x ? `${f.img} 400w, ${f.img2x} 800w` : undefined}
-                    sizes={compact ? "(max-width: 600px) 52vw, 240px" : "(max-width: 600px) 80vw, 560px"}
-                    alt=""
-                    width={400}
-                    height={400}
-                    draggable={false}
-                    loading={Math.abs(i - wanted) <= 3 ? "eager" : "lazy"}
-                    decoding="async"
-                  />
-                ) : (
-                  <span className="fc-fallback">{f.title}</span>
-                )}
-              </span>
-            </Link>
-          </li>
-        ))}
+              <Link
+                href={f.href}
+                className="fc-card"
+                prefetch={false}
+                draggable={false}
+                tabIndex={enhanced || clone ? -1 : undefined}
+                aria-label={r === active || !enhanced ? f.title : `Show ${f.title}`}
+                onClick={(e) => onCardClick(e, v)}
+              >
+                <span className="fc-frame">
+                  {f.img ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={f.img}
+                      srcSet={f.img2x ? `${f.img} 400w, ${f.img2x} 800w` : undefined}
+                      sizes={compact ? "(max-width: 600px) 52vw, 240px" : "(max-width: 600px) 80vw, 560px"}
+                      alt=""
+                      width={400}
+                      height={400}
+                      draggable={false}
+                      loading={Math.abs(v - startV) <= 3 ? "eager" : "lazy"}
+                      decoding="async"
+                    />
+                  ) : (
+                    <span className="fc-fallback">{f.title}</span>
+                  )}
+                </span>
+              </Link>
+            </li>
+          );
+        })}
       </ul>
+      <script dangerouslySetInnerHTML={{ __html: startScript }} />
+      {n > 1 && (
+        // Without JavaScript there is no loop: show each post once.
+        <noscript><style>{`.fc-slide[aria-hidden]{display:none}`}</style></noscript>
+      )}
 
-      {items.length > 1 && (
+      {n > 1 && (
         <div className="fc-controls">
-          <button type="button" className="fc-btn" aria-label="Newer post" disabled={active <= 0} onClick={() => go(base() - 1)}>
+          <button type="button" className="fc-btn" aria-label="Previous post" onClick={() => go(base() - 1)}>
             <span aria-hidden="true">‹</span>
           </button>
-          <span className="fc-pos" aria-hidden="true">{active + 1} / {items.length}</span>
-          <button type="button" className="fc-btn" aria-label="Older post" disabled={active >= items.length - 1} onClick={() => go(base() + 1)}>
+          <span className="fc-pos" aria-hidden="true">{active + 1} / {n}</span>
+          <button type="button" className="fc-btn" aria-label="Next post" onClick={() => go(base() + 1)}>
             <span aria-hidden="true">›</span>
           </button>
         </div>
