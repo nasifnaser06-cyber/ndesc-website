@@ -90,7 +90,7 @@ export default async function About() {
               <tr><th scope="row">{"Renamed"}</th><td>{"23 May 2018"}</td></tr>
               <tr><th scope="row">{"Home"}</th><td>{"Notre Dame College, Dhaka"}</td></tr>
               <tr><th scope="row">{"Signature event"}</th><td><Link href={path(lang, "/ness")}>{"National Earth and Space Summit"}</Link></td></tr>
-              <tr><th scope="row">{"Other events"}</th><td>{"Cosmoterrium, Fruits Fiesta, Botalinnaeus, National Space Camp, workshops"}</td></tr>
+              <tr><th scope="row">{"Other events"}</th><td><Link href={path(lang, "/events/cosmoterrium-2026")}>{"Cosmoterrium"}</Link>, <Link href={path(lang, "/events/fruits-fiesta-2025")}>{"Fruits Fiesta"}</Link>, <Link href={path(lang, "/events/botalinnaeus-2025")}>{"Botalinnaeus"}</Link>, <Link href={path(lang, "/events/stargazing-night-camp-2024")}>{"Stargazing Night Camp"}</Link>, <Link href={path(lang, "/events/space-camp-2018")}>{"National Space Camp"}</Link>, {"workshops"}</td></tr>
               <tr><th scope="row">{"Publications"}</th><td>{"DURBIN magazine (annual), FactsFriday (weekly, online)"}</td></tr>
             </tbody>
           </table>
