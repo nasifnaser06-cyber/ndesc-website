@@ -4,6 +4,12 @@ import { ui } from "@/content/ui";
 import { sortedFacts, factsCategories, type FactsCategory } from "@/content/factsFriday";
 import { PageHead } from "@/components/bits";
 import FactsFridayArchive, { type FactsCard } from "@/components/FactsFridayArchive";
+import FFMotionLab from "@/components/FFMotionLab";
+
+// Motion lab (preview only): sets html[data-fx] before the first paint so hidden-until-revealed
+// effects do not flash. Does nothing unless ?fx=... was used in this tab.
+const fxBoot = `(function(){try{var q=new URLSearchParams(location.search).get("fx");var v=q!==null?(q==="none"?"":q):(sessionStorage.getItem("ndesc-ff-fx")||"");if(q!==null)sessionStorage.setItem("ndesc-ff-fx",v);document.documentElement.dataset.fx=v.split(",").join(" ")}catch(e){}})()`;
+
 
 const title = { en: "FactsFriday", bn: "FactsFriday" };
 const lead = {
@@ -45,6 +51,7 @@ export default async function FactsFridayPage() {
 
   return (
     <>
+      <script dangerouslySetInnerHTML={{ __html: fxBoot }} />
       <PageHead lang={lang} title={title} lead={lead} crumbs={[{ label: ui.nav.explore, to: "/explore" }]} />
       <div className="wrap">
         {items.length === 0 ? (
@@ -53,6 +60,7 @@ export default async function FactsFridayPage() {
           <FactsFridayArchive items={items} categories={categories} years={years} />
         )}
       </div>
+      <FFMotionLab page="archive" />
     </>
   );
 }

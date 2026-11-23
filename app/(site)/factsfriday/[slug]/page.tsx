@@ -5,6 +5,12 @@ import { meta } from "@/lib/view";
 import { ui } from "@/content/ui";
 import { factsFriday, getFact, sortedFacts, factsCategories } from "@/content/factsFriday";
 import { ExternalLink, PageHead } from "@/components/bits";
+import FFMotionLab from "@/components/FFMotionLab";
+
+// Motion lab (preview only): sets html[data-fx] before the first paint so hidden-until-revealed
+// effects do not flash. Does nothing unless ?fx=... was used in this tab.
+const fxBoot = `(function(){try{var q=new URLSearchParams(location.search).get("fx");var v=q!==null?(q==="none"?"":q):(sessionStorage.getItem("ndesc-ff-fx")||"");if(q!==null)sessionStorage.setItem("ndesc-ff-fx",v);document.documentElement.dataset.fx=v.split(",").join(" ")}catch(e){}})()`;
+
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -43,6 +49,7 @@ export default async function FactPage({ params }: Props) {
 
   return (
     <>
+      <script dangerouslySetInnerHTML={{ __html: fxBoot }} />
       <PageHead
         lang={lang}
         kicker={{ en: `${factsCategories[f.category]} · ${formatDateRange(f.date, undefined, lang, "long")}`, bn: factsCategories[f.category] }}
@@ -50,8 +57,9 @@ export default async function FactPage({ params }: Props) {
         crumbs={[{ label: ui.nav.explore, to: "/explore" }, { label: ui.nav.factsFriday, to: "/factsfriday" }]}
       />
       <div className="wrap">
-        <article className="ff-article">
+        <article className="ff-article" data-cat={f.category}>
           <figure>
+            <span className="ff-pic ff-pic-lg">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`${bp}${f.cover.base}-${small}.webp`}
@@ -62,6 +70,7 @@ export default async function FactPage({ params }: Props) {
               height={large}
               decoding="async"
             />
+            </span>
             <figcaption>The post as published{f.facebook ? " on Facebook" : ""}.</figcaption>
           </figure>
           <div className="ff-body">
@@ -88,13 +97,14 @@ export default async function FactPage({ params }: Props) {
             </div>
             {(newer || older) && (
               <nav aria-label="More FactsFriday" className="ff-refs" style={{ display: "flex", justifyContent: "space-between", gap: "var(--s4)", flexWrap: "wrap" }}>
-                {older ? <Link href={path(lang, `/factsfriday/${older.slug}`)}>← {older.title}</Link> : <span />}
-                {newer ? <Link href={path(lang, `/factsfriday/${newer.slug}`)}>{newer.title} →</Link> : <span />}
+                {older ? <Link href={path(lang, `/factsfriday/${older.slug}`)} data-dir="older">← {older.title}</Link> : <span />}
+                {newer ? <Link href={path(lang, `/factsfriday/${newer.slug}`)} data-dir="newer">{newer.title} →</Link> : <span />}
               </nav>
             )}
           </div>
         </article>
       </div>
+      <FFMotionLab page="post" />
     </>
   );
 }
