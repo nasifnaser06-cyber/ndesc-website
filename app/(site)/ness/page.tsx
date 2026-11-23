@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { type Locale, tr, path, formatDateRange } from "@/lib/i18n";
+import { type Locale, path, formatDateRange } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { site } from "@/content/site";
 import { ui } from "@/content/ui";
@@ -9,12 +9,8 @@ import { nessx, passes, passNote, registerWays, categories, categoryNote, winner
 import { ContactLink, ExternalLink, Stars, T, RegisterButton } from "@/components/bits";
 import BgDrift from "@/components/BgDrift";
 
-const title = { en: "NESS X", bn: "NESS X" };
-const description = {
-  en: "NESS X, the 10th National Earth and Space Summit: 28–30 January 2027 at Notre Dame College, Dhaka. Olympiads, quizzes, team contests, exhibitions and talks. Register now.",
-  bn: "ন্যাশনাল আর্থ অ্যান্ড স্পেস সামিট ২০২৭, ২৮–৩০ জানুয়ারি, নটর ডেম কলেজ, ঢাকা। অলিম্পিয়াড, কুইজ, দলীয় প্রতিযোগিতা, আলোচনা ও প্রদর্শনী।",
-};
-
+const title = "NESS X";
+const description = "NESS X, the 10th National Earth and Space Summit: 28–30 January 2027 at Notre Dame College, Dhaka. Olympiads, quizzes, team contests, exhibitions and talks. Register now.";
 export async function generateMetadata() {
   const lang: Locale = "en";
   return meta(lang, "/ness", title, description, { src: ness2027Banner.social, alt: ness2027Banner.alt });
@@ -29,7 +25,7 @@ function SegmentList({ items, lang }: { items: Segment[]; lang: Locale }) {
             <span className="segment-name">{g.name}</span>
             <span className="segment-tags">
               {g.cats.map((c) => <span key={c} className="tag">{c}</span>)}
-              {g.online && <span className="tag tag-up">{lang === "en" ? "Online" : "অনলাইন"}</span>}
+              {g.online && <span className="tag tag-up">{"Online"}</span>}
             </span>
           </summary>
           {g.desc.map((d) => <p key={d}>{d}</p>)}
@@ -41,7 +37,7 @@ function SegmentList({ items, lang }: { items: Segment[]; lang: Locale }) {
             </ul>
           )}
           {g.page && (
-            <p><Link href={path(lang, g.page)}>{lang === "en" ? `Rules, renaming and submission links: ${g.name} page` : `${g.name}: নিয়ম ও জমার লিংক`}</Link></p>
+            <p><Link href={path(lang, g.page)}>{`Rules, renaming and submission links: ${g.name} page`}</Link></p>
           )}
         </details>
       ))}
@@ -51,7 +47,6 @@ function SegmentList({ items, lang }: { items: Segment[]; lang: Locale }) {
 
 export default async function Ness() {
   const lang: Locale = "en";
-  const en = lang === "en";
   const ness = getEvent("ness-x")!;
 
   return (
@@ -86,12 +81,12 @@ export default async function Ness() {
             <p className="label logo-caption">{nessx.fullName}</p>
             <p>{nessx.intro}</p>
             <dl className="facts">
-              <div><dt>{tr(ui.dates, lang)}</dt><dd>{formatDateRange(ness.start, ness.end, lang, "long")}</dd></div>
-              <div><dt>{tr(ui.venue, lang)}</dt><dd>{en ? "Notre Dame College, Motijheel, Dhaka" : "নটর ডেম কলেজ, মতিঝিল, ঢাকা"}</dd></div>
+              <div><dt>{ui.dates}</dt><dd>{formatDateRange(ness.start, ness.end, lang, "long")}</dd></div>
+              <div><dt>{ui.venue}</dt><dd>{"Notre Dame College, Motijheel, Dhaka"}</dd></div>
             </dl>
             <div className="actions">
-              <RegisterButton lang={lang}>{en ? "Register now" : "এখনই নিবন্ধন করুন"}</RegisterButton>
-              <a className="btn btn-secondary" href="#segments">{en ? "See all segments" : "সব সেগমেন্ট দেখুন"}</a>
+              <RegisterButton lang={lang}>{"Register now"}</RegisterButton>
+              <a className="btn btn-secondary" href="#segments">{"See all segments"}</a>
             </div>
           </div>
         </div>
@@ -99,7 +94,7 @@ export default async function Ness() {
 
       <div className="wrap" style={{ display: "flex", flexDirection: "column", gap: "var(--s9)", paddingTop: "var(--s8)" }}>
         <section aria-labelledby="passes-h">
-          <h2 id="passes-h" style={{ marginBottom: "var(--s5)" }}>{en ? "Passes" : "পাস"}</h2>
+          <h2 id="passes-h" style={{ marginBottom: "var(--s5)" }}>{"Passes"}</h2>
           <div className="cards-3">
             {passes.map((p) => (
               <div className="surface pass" key={p.name}>
@@ -113,7 +108,7 @@ export default async function Ness() {
         </section>
 
         <section id="register" aria-labelledby="reg">
-          <h2 id="reg" style={{ marginBottom: "var(--s5)" }}>{en ? "How to register" : "যেভাবে নিবন্ধন করবেন"}</h2>
+          <h2 id="reg" style={{ marginBottom: "var(--s5)" }}>{"How to register"}</h2>
           <ol className="steps">
             {registerWays.map((w) => (
               <li key={w.who}><p><strong>{w.who}</strong></p><p className="muted small">{w.how}</p></li>
@@ -122,11 +117,11 @@ export default async function Ness() {
         </section>
 
         <section aria-labelledby="cats">
-          <h2 id="cats" style={{ marginBottom: "var(--s4)" }}>{en ? "Categories" : "বিভাগ"}</h2>
+          <h2 id="cats" style={{ marginBottom: "var(--s4)" }}>{"Categories"}</h2>
           <p className="muted" style={{ marginBottom: "var(--s4)", maxWidth: "70ch" }}>{categoryNote}</p>
           <div className="table-scroll">
             <table>
-              <thead><tr><th scope="col">{en ? "Code" : "কোড"}</th><th scope="col">{en ? "Category" : "বিভাগ"}</th><th scope="col">{en ? "Class" : "শ্রেণি"}</th></tr></thead>
+              <thead><tr><th scope="col">{"Code"}</th><th scope="col">{"Category"}</th><th scope="col">{"Class"}</th></tr></thead>
               <tbody>
                 {categories.map((c) => (
                   <tr key={c.code}><td style={{ fontFamily: "var(--font-head)", fontWeight: "var(--weight-head)" }}>{c.code}</td><td>{c.name}</td><td>{c.who}</td></tr>
@@ -134,32 +129,32 @@ export default async function Ness() {
               </tbody>
             </table>
           </div>
-          <p className="small muted" style={{ marginTop: "var(--s4)", maxWidth: "70ch" }}><strong>{en ? "Winner details: " : "বিজয়ীদের বিবরণ: "}</strong>{winnersNote}</p>
+          <p className="small muted" style={{ marginTop: "var(--s4)", maxWidth: "70ch" }}><strong>{"Winner details: "}</strong>{winnersNote}</p>
         </section>
 
         <section id="segments" aria-labelledby="seg-h">
-          <h2 id="seg-h" style={{ marginBottom: "var(--s3)" }}>{en ? "Segments" : "সেগমেন্ট"}</h2>
+          <h2 id="seg-h" style={{ marginBottom: "var(--s3)" }}>{"Segments"}</h2>
           <p className="muted" style={{ maxWidth: "70ch" }}>
-            {en ? "Open a segment to read what it involves. The letters show which categories can enter. Full rules for each segment come in its own post on " : "প্রতিটি সেগমেন্টের বিস্তারিত দেখতে খুলুন। "}
-            {en ? "the club's " : ""}<ExternalLink href={site.social.facebook} lang={lang}>{en ? "facebook page" : "ফেসবুক পেজ"}</ExternalLink>.
+            {"Open a segment to read what it involves. The letters show which categories can enter. Full rules for each segment come in its own post on "}
+            {"the club's "}<ExternalLink href={site.social.facebook} lang={lang}>{"facebook page"}</ExternalLink>.
           </p>
           <div className="segment-groups">
             <div>
-              <h3>{en ? "Solo" : "একক"}</h3>
+              <h3>{"Solo"}</h3>
               <SegmentList items={soloSegments} lang={lang} />
             </div>
             <div>
-              <h3>{en ? "Team (up to 3 members)" : "দলীয় (সর্বোচ্চ ৩ জন)"}</h3>
+              <h3>{"Team (up to 3 members)"}</h3>
               <SegmentList items={teamSegments} lang={lang} />
-              <h3 style={{ marginTop: "var(--s6)" }}>{en ? "Special" : "বিশেষ"}</h3>
+              <h3 style={{ marginTop: "var(--s6)" }}>{"Special"}</h3>
               <SegmentList items={specialSegments} lang={lang} />
             </div>
           </div>
         </section>
 
         <section aria-labelledby="prog-h">
-          <h2 id="prog-h" style={{ marginBottom: "var(--s3)" }}>{en ? "Exhibitions and programmes" : "প্রদর্শনী ও অনুষ্ঠান"}</h2>
-          <p className="muted" style={{ marginBottom: "var(--s5)" }}>{en ? "Open to everyone with a solo or team pass." : "একক বা দলীয় পাস থাকলেই সবার জন্য খোলা।"}</p>
+          <h2 id="prog-h" style={{ marginBottom: "var(--s3)" }}>{"Exhibitions and programmes"}</h2>
+          <p className="muted" style={{ marginBottom: "var(--s5)" }}>{"Open to everyone with a solo or team pass."}</p>
           <div className="groups">
             {programmes.map((g) => (
               <div key={g.name}>
@@ -167,7 +162,7 @@ export default async function Ness() {
                 <p className="muted small">{g.desc}</p>
                 {g.name.includes("Photosphere") && (
                   <Link className="btn btn-secondary btn-mini" href={path(lang, "/ness/photosphere")} style={{ marginTop: "var(--s2)", alignSelf: "flex-start" }}>
-                    {en ? "Check out Photosphere 7.0" : "ফটোস্ফিয়ার ৭.০ দেখুন"}
+                    {"Check out Photosphere 7.0"}
                   </Link>
                 )}
               </div>
@@ -177,11 +172,11 @@ export default async function Ness() {
 
         {showNessSchedule && (
         <section aria-labelledby="schedule">
-          <h2 id="schedule" style={{ marginBottom: "var(--s5)" }}>{en ? "Schedule" : "সময়সূচি"}</h2>
+          <h2 id="schedule" style={{ marginBottom: "var(--s5)" }}>{"Schedule"}</h2>
           <div className="cards-3">
             {nessSchedule.map((d) => (
-              <div className="surface" key={d.day.en}>
-                <h3>{tr(d.day, lang)}</h3>
+              <div className="surface" key={d.day}>
+                <h3>{d.day}</h3>
                 <p className="muted small"><T text={d.plan} lang={lang} /></p>
               </div>
             ))}
@@ -191,21 +186,19 @@ export default async function Ness() {
 
         <section id="exhibit" className="surface panel-band" aria-labelledby="exh">
           <div>
-            <p className="label">{en ? "For External Organizations" : "বাইরের প্রতিষ্ঠানের জন্য"}</p>
-            <h2 id="exh">{en ? "Showcase Your Project or Organization at NESS" : "NESS-এ আপনার প্রকল্প বা প্রতিষ্ঠান তুলে ধরুন"}</h2>
+            <p className="label">{"For External Organizations"}</p>
+            <h2 id="exh">{"Showcase Your Project or Organization at NESS"}</h2>
             <p className="muted">
-              {en
-                ? "Academic institutions, research teams, external student clubs and companies can book an exhibition stall on our event premises and partner with NESS to showcase their projects, products, programs and innovations or host dedicated seminars and workshops for thousands of attending students and families."
-                : "শিক্ষাপ্রতিষ্ঠান, গবেষণা দল, বাইরের শিক্ষার্থী ক্লাব ও প্রতিষ্ঠান আমাদের আয়োজনস্থলে প্রদর্শনী স্টল নিয়ে NESS-এর সঙ্গে অংশীদার হয়ে তাদের প্রকল্প, পণ্য, কার্যক্রম ও উদ্ভাবন তুলে ধরতে পারে, অথবা হাজারো শিক্ষার্থী ও পরিবারের জন্য সেমিনার ও কর্মশালা আয়োজন করতে পারে।"}
+              {"Academic institutions, research teams, external student clubs and companies can book an exhibition stall on our event premises and partner with NESS to showcase their projects, products, programs and innovations or host dedicated seminars and workshops for thousands of attending students and families."}
             </p>
           </div>
           <div className="actions">
-            <Link className="btn btn-secondary" href={path(lang, "/contact")}>{en ? "Contact for Exhibition" : "প্রদর্শনীর জন্য যোগাযোগ"}</Link>
+            <Link className="btn btn-secondary" href={path(lang, "/contact")}>{"Contact for Exhibition"}</Link>
           </div>
         </section>
 
         <section id="contacts" aria-labelledby="contacts-h">
-          <h2 id="contacts-h" style={{ marginBottom: "var(--s5)" }}>{en ? "Questions? Contact us" : "প্রশ্ন? আমাদের সঙ্গে যোগাযোগ করুন"}</h2>
+          <h2 id="contacts-h" style={{ marginBottom: "var(--s5)" }}>{"Questions? Contact us"}</h2>
           <div className="cards-3">
             {organizers.map((o) => (
               <div className="surface organizer" key={o.name}>

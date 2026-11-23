@@ -4,10 +4,9 @@ import "../globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Motion from "@/components/Motion";
-import { type Locale, tr } from "@/lib/i18n";
+import { type Locale } from "@/lib/i18n";
 import { site } from "@/content/site";
 import { ui } from "@/content/ui";
-
 // Runs before the first paint. `js` lets the phone menu hide; `motion` lets sections wait for
 // their scroll intro. If the site's script has not started within 2.5s, show everything.
 const motionBoot =
@@ -17,14 +16,13 @@ const motionBoot =
 const siteUrl = process.env.NEXT_PUBLIC_SITE_ORIGIN ?? "http://localhost:3000";
 
 // The site is English only, served without a language prefix (ndesc.com/ness/, not /en/ness/).
-// The Bangla text is kept in content/; see lib/i18n.ts for how it could come back.
 const lang: Locale = "en";
 
 export async function generateMetadata(): Promise<Metadata> {
   const l = lang;
   return {
     metadataBase: new URL(siteUrl),
-    title: { default: tr(site.name, l), template: `%s | ${tr(site.name, l)}` },
+    title: { default: site.name, template: `%s | ${site.name}` },
     icons: {
       icon: [
         { url: `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/favicon.ico`, sizes: "16x16 32x32 48x48" },
@@ -48,7 +46,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <a className="skip-link" href="#main">
-          {tr(ui.skip, lang)}
+          {ui.skip}
         </a>
         <Header lang={lang} />
         <main id="main" tabIndex={-1}>

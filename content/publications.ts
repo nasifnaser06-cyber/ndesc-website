@@ -1,4 +1,3 @@
-import type { L } from "@/lib/i18n";
 
 // NDESC publications for /publications/. Educational resources are NOT kept here: they stay in
 // `resources` (content/club.ts), which /resources/ also reads, so a file added there shows on both.
@@ -8,7 +7,7 @@ import type { L } from "@/lib/i18n";
 export type DurbinIssue = {
   title: string;
   year: string;
-  description?: L;
+  description?: string;
   /** Cover in public/publications/, e.g. "/publications/durbin-2025.webp". */
   cover?: string;
   /** PDF in public/publications/, e.g. "/publications/durbin-2025.pdf". */
@@ -22,16 +21,13 @@ export type Article = {
   title: string;
   date: string;
   author?: string;
-  summary: L;
+  summary: string;
   url: string;
 };
 
 export const durbin = {
   name: "DURBIN",
-  about: {
-    en: "DURBIN is NDESC's own annual magazine.",
-    bn: "দুরবীন NDESC-এর নিজস্ব বার্ষিক ম্যাগাজিন।",
-  } as L,
+  about: "DURBIN is NDESC's own annual magazine." as string,
   issues: [] as DurbinIssue[],
 };
 
