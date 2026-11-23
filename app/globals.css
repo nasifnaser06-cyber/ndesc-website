@@ -1484,6 +1484,8 @@ html.ff-flying .page-head > * { animation: none; }
 @media (hover: hover) and (pointer: fine) { .fc.is-enhanced .fc-track { cursor: grab; } }
 .fc-track:focus-visible { outline: 3px solid var(--sprout); outline-offset: -3px; border-radius: 12px; }
 .fc-slide { position: relative; flex: 0 0 var(--fc-step); min-width: 0; display: flex; justify-content: center; scroll-snap-align: center; z-index: 1; }
+/* Looping strip: open on the starting card in the middle copy, even before the inline start script runs. */
+.fc-slide[data-fc-start] { scroll-initial-target: nearest; }
 .fc-slide.is-active { z-index: 100; }
 .fc-card { flex: none; display: block; width: var(--fc-card); border-radius: var(--fc-radius); color: var(--starlight); text-decoration: none; transform-origin: 50% 50%; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; }
 .fc-frame { position: relative; display: block; aspect-ratio: 1; border-radius: var(--fc-radius); overflow: hidden; background: var(--deep); border: 1px solid var(--line); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45); }
