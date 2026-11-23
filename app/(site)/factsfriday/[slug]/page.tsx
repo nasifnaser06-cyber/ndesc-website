@@ -68,7 +68,6 @@ export default async function FactPage({ params }: Props) {
               decoding="async"
             />
             </span>
-            <figcaption>The post as published{f.facebook ? " on Facebook" : ""}.</figcaption>
           </figure>
           <div className="ff-body">
             <p className="ff-summary">{f.body[0]}</p>

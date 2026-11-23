@@ -1401,7 +1401,6 @@ body:has(.ps-four) .site-header {
 .ff-article figure { margin: 0; }
 .ff-pic-lg { border-radius: 16px; }
 .ff-article figure img { width: 100%; height: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
-.ff-article figcaption { font-size: 0.8125rem; color: var(--haze); margin-top: var(--s2); }
 .ff-body { max-width: 68ch; display: flex; flex-direction: column; gap: var(--s4); font-size: 1.0625rem; line-height: 1.75; }
 .ff-body .ff-summary { font-size: 1.25rem; line-height: 1.6; color: var(--starlight); }
 .ff-refs { border-top: 1px solid var(--line); padding-top: var(--s4); }
@@ -1463,9 +1462,6 @@ html.ff-flying .page-head > * { animation: none; }
 @media (prefers-reduced-transparency: reduce) { .ff-subnav { background: var(--night); -webkit-backdrop-filter: none; backdrop-filter: none; } }
 @media (prefers-reduced-motion: reduce) { .ff-subnav { transform: none; opacity: 0; visibility: hidden; transition: opacity 0.2s ease, visibility 0.2s; } .ff-subnav.is-shown { opacity: 1; visibility: visible; } }
 
-/* Pinned story: the paragraph in the middle of the screen is full strength, the rest at 35% */
-.ff-story > p { opacity: 0.35; transition: opacity 0.32s var(--ease-apple); }
-.ff-story > p.is-active { opacity: 1; }
 
 
 /* ---------------------------------------------------------------- FactsFriday carousel

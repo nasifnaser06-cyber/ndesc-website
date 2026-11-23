@@ -5,8 +5,7 @@ import { useEffect } from "react";
 /**
  * FactsFriday motion, Apple style (rion-motion-web Part 2; Mahmud picked the "Apple style" package, 23 Nov 2026).
  * Archive: a slim bar with a Search button slides down once the page title has left the screen.
- * Post:    the same slide-down bar with the post title and "Next fact"; the paragraph in the middle of
- *          the screen is full strength, the others fade back (pinned story); links back to the archive
+ * Post:    the same slide-down bar with the post title and "Next fact"; links back to the archive
  *          are marked so it can restore the reader's place.
  * The carousel on both pages is components/FactsCarousel.tsx. Styles: "FactsFriday motion" and
  * "FactsFriday carousel" in globals.css.
@@ -49,17 +48,6 @@ function subBar(page: "archive" | "post"): () => void {
   return () => { io.disconnect(); bar.remove(); };
 }
 
-function pinnedStory(): () => void {
-  const steps = Array.from(document.querySelectorAll<HTMLElement>(".ff-body > p"));
-  if (steps.length < 2 || !("IntersectionObserver" in window)) return () => {};
-  document.querySelector(".ff-body")?.classList.add("ff-story");
-  const set = (n: number) => steps.forEach((s, i) => s.classList.toggle("is-active", i === n));
-  set(0);
-  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) set(steps.indexOf(e.target as HTMLElement)); }), { rootMargin: "-45% 0px -45% 0px" });
-  steps.forEach((s) => io.observe(s));
-  return () => { io.disconnect(); document.querySelector(".ff-body")?.classList.remove("ff-story"); };
-}
-
 /** Links from an article back to the archive (the "All FactsFriday posts" button and the breadcrumb)
     mark the visit as a return, so the archive puts back the post and filters the reader left with. */
 function markReturns(): () => void {
@@ -76,7 +64,7 @@ function markReturns(): () => void {
 
 export default function FactsFridayMotion({ page }: { page: "archive" | "post" }) {
   useEffect(() => {
-    const offs = page === "archive" ? [subBar("archive")] : [subBar("post"), pinnedStory(), markReturns()];
+    const offs = page === "archive" ? [subBar("archive")] : [subBar("post"), markReturns()];
     return () => offs.forEach((off) => off());
   }, [page]);
   return null;
