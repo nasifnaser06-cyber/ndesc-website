@@ -1402,7 +1402,8 @@ body:has(.ps-four) .site-header {
 .ff-pic-lg { border-radius: 16px; }
 .ff-article figure img { width: 100%; height: 100%; aspect-ratio: 1; object-fit: cover; display: block; }
 .ff-body { max-width: 68ch; display: flex; flex-direction: column; gap: var(--s4); font-size: 1.0625rem; line-height: 1.75; }
-.ff-body .ff-summary { font-size: 1.25rem; line-height: 1.6; color: var(--starlight); }
+/* Every paragraph of a post in the same type (the opening one used to be larger), at 80% strength */
+.ff-body > p { opacity: 0.8; }
 .ff-refs { border-top: 1px solid var(--line); padding-top: var(--s4); }
 .ff-refs h2 { font-size: 1.125rem; margin-bottom: var(--s2); }
 .ff-refs ol { padding-left: 1.25rem; margin: 0; display: grid; gap: var(--s1); font-size: 0.9375rem; }
