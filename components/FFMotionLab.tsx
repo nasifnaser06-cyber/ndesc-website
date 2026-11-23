@@ -25,7 +25,100 @@ export const FX_LIST: { key: string; label: string; page: "archive" | "post" | "
   { key: "sticky", label: "P5 Sticky picture reacts", page: "post" },
   { key: "direction", label: "P6 Older/newer slide", page: "post" },
   { key: "numbers", label: "P7 Numbers count up", page: "post" },
+  { key: "ap-hero", label: "B1 Apple scroll-linked heading", page: "both" },
+  { key: "ap-reveal", label: "B2 Apple staggered fade-in", page: "archive" },
+  { key: "ap-press", label: "B3 Apple quiet hover and press", page: "archive" },
+  { key: "ap-subnav", label: "B4 Apple slide-down sub-bar", page: "both" },
+  { key: "ap-pin", label: "B5 Apple pinned story", page: "post" },
+  { key: "ap-scrub", label: "B6 Apple words light up", page: "post" },
+  { key: "ap-gallery", label: "B7 Apple swipe gallery", page: "post" },
 ];
+
+/** B4: a slim bar that slides down once the page title has left the screen (Apple sub-navigation). */
+function subnav(page: "archive" | "post"): () => void {
+  const head = document.querySelector(".page-head");
+  if (!head) return () => {};
+  const bar = document.createElement("div");
+  bar.className = "ff-subnav";
+  const title = document.createElement("span");
+  title.className = "ff-subnav-title";
+  title.textContent = page === "post" ? (document.querySelector(".page-head h1")?.textContent || "") : "FactsFriday";
+  bar.appendChild(title);
+  if (page === "post") {
+    const older = document.querySelector<HTMLAnchorElement>('a[data-dir="older"]');
+    const a = document.createElement("a");
+    a.className = "ff-subnav-btn";
+    a.href = older ? older.href : "/factsfriday/";
+    a.textContent = older ? "Next fact" : "All posts";
+    bar.appendChild(a);
+  } else {
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "ff-subnav-btn";
+    b.textContent = "Search";
+    b.onclick = () => { const q = document.getElementById("ff-q") as HTMLInputElement | null; q?.scrollIntoView({ behavior: "smooth", block: "center" }); setTimeout(() => q?.focus({ preventScroll: true }), 400); };
+    bar.appendChild(b);
+  }
+  document.body.appendChild(bar);
+  const io = new IntersectionObserver(([e]) => bar.classList.toggle("is-shown", !e.isIntersecting));
+  io.observe(head);
+  return () => { io.disconnect(); bar.remove(); };
+}
+
+/** B6: words in each paragraph go from dim to bright as the paragraph moves up the screen. */
+function wordScrub(body: HTMLElement): () => void {
+  const paras = Array.from(body.querySelectorAll<HTMLElement>(":scope > p"));
+  const groups = paras.map((p) => {
+    const words = (p.textContent || "").split(/(\s+)/);
+    p.textContent = "";
+    const spans: HTMLElement[] = [];
+    words.forEach((w) => {
+      if (/^\s+$/.test(w) || !w) { p.appendChild(document.createTextNode(w)); return; }
+      const s = document.createElement("span"); s.className = "ff-w"; s.textContent = w; spans.push(s); p.appendChild(s);
+    });
+    return { p, spans };
+  });
+  let raf = 0;
+  const update = () => {
+    raf = 0;
+    const vh = window.innerHeight;
+    groups.forEach(({ p, spans }) => {
+      const r = p.getBoundingClientRect();
+      // 0 when the paragraph's top is at 85% of the screen, 1 when its bottom reaches 45%.
+      const k = Math.max(0, Math.min(1, (vh * 0.85 - r.top) / Math.max(1, r.height + vh * 0.4)));
+      const lit = Math.round(k * spans.length);
+      spans.forEach((s, i) => s.classList.toggle("on", i < lit));
+    });
+  };
+  const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+  update();
+  window.addEventListener("scroll", onScroll, { passive: true });
+  return () => window.removeEventListener("scroll", onScroll);
+}
+
+/** B5: the paragraph in the middle of the screen is full strength, the others fade back (Apple pinned story). */
+function pinStory(body: HTMLElement): () => void {
+  const steps = Array.from(body.querySelectorAll<HTMLElement>(":scope > p"));
+  const set = (n: number) => steps.forEach((s, i) => s.classList.toggle("is-active", i === n));
+  set(0);
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) set(steps.indexOf(e.target as HTMLElement)); }), { rootMargin: "-45% 0px -45% 0px" });
+  steps.forEach((s) => io.observe(s));
+  return () => io.disconnect();
+}
+
+/** B7: paddle buttons for the swipe gallery, disabled at each end. */
+function gallery(): () => void {
+  const w = document.querySelector<HTMLElement>("[data-gallery-wrap]");
+  if (!w) return () => {};
+  const g = w.querySelector<HTMLElement>("[data-gallery]")!, prev = w.querySelector<HTMLButtonElement>("[data-prev]")!, next = w.querySelector<HTMLButtonElement>("[data-next]")!;
+  const step = () => (g.firstElementChild as HTMLElement).getBoundingClientRect().width + 16;
+  const upd = () => { prev.disabled = g.scrollLeft < 4; next.disabled = g.scrollLeft + g.clientWidth > g.scrollWidth - 4; };
+  prev.onclick = () => g.scrollBy({ left: -step() * 2, behavior: "smooth" });
+  next.onclick = () => g.scrollBy({ left: step() * 2, behavior: "smooth" });
+  g.addEventListener("scroll", upd, { passive: true });
+  upd();
+  return () => g.removeEventListener("scroll", upd);
+}
 
 const ROW_GAPS = [0, 70, 125, 170, 205, 235]; // uneven: each later card follows a little sooner
 
@@ -42,7 +135,8 @@ function archiveEffects(fx: Set<string>): () => void {
   const cleanups: (() => void)[] = [];
   const wrap = document.querySelector(".ff-grid-wrap");
   if (!wrap) return () => {};
-  const reveal = fx.has("cascade") || fx.has("settle") || fx.has("wipe") || fx.has("blur") || fx.has("featured");
+  const reveal = fx.has("cascade") || fx.has("settle") || fx.has("wipe") || fx.has("blur") || fx.has("featured") || fx.has("ap-reveal");
+  const gaps = fx.has("ap-reveal") && !fx.has("cascade") ? [0, 150, 300, 450, 600, 750] : ROW_GAPS;
 
   if (reveal) {
     const cards = () => Array.from(wrap.querySelectorAll<HTMLElement>(".ff-grid > li:not(.in)"));
@@ -50,9 +144,9 @@ function archiveEffects(fx: Set<string>): () => void {
       // Delay by position in its row, so each row arrives as one wave.
       const row = Array.from(el.parentElement!.children).filter((c) => (c as HTMLElement).offsetTop === el.offsetTop);
       const col = row.indexOf(el);
-      el.style.setProperty("--fx-d", `${ROW_GAPS[Math.min(col, ROW_GAPS.length - 1)]}ms`);
+      el.style.setProperty("--fx-d", `${gaps[Math.min(col, gaps.length - 1)]}ms`);
       el.classList.add("in");
-    });
+    }, fx.has("ap-reveal") ? "0px 0px -15% 0px" : undefined);
     // Cards that appear later (after a filter change) are shown at once; the glide handles them.
     const mo = new MutationObserver((muts) => {
       muts.forEach((m) => m.addedNodes.forEach((n) => {
@@ -81,6 +175,7 @@ function archiveEffects(fx: Set<string>): () => void {
     window.addEventListener("scroll", onScroll, { passive: true });
     cleanups.push(() => window.removeEventListener("scroll", onScroll));
   }
+  if (fx.has("ap-subnav")) cleanups.push(subnav("archive"));
   return () => cleanups.forEach((c) => c());
 }
 
@@ -149,6 +244,11 @@ function postEffects(fx: Set<string>): () => void {
     document.addEventListener("click", onClick);
     cleanups.push(() => document.removeEventListener("click", onClick));
   }
+
+  if (fx.has("ap-subnav")) cleanups.push(subnav("post"));
+  if (fx.has("ap-pin")) cleanups.push(pinStory(body));
+  if (fx.has("ap-scrub")) cleanups.push(wordScrub(body));
+  if (fx.has("ap-gallery")) cleanups.push(gallery());
 
   if (fx.has("numbers")) {
     // Wrap figures (not years) in the post text so they can count up when they come into view.

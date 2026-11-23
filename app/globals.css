@@ -1526,3 +1526,62 @@ html[data-fx~="flight"] main:has(.ff-article) .page-head > h1 { view-transition-
 .ff-lab-other { opacity: 0.55; }
 .ff-lab-actions { display: flex; gap: 8px; margin: 10px 0 0 !important; }
 .ff-lab button { font: inherit; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--sprout); background: transparent; color: var(--sprout); cursor: pointer; }
+
+/* ---------------------------------------------------------------- Motion lab: Apple-style options (rion-motion-web Part 2) */
+:root { --ease-apple: cubic-bezier(0.4, 0, 0.6, 1); }
+@media (prefers-reduced-motion: no-preference) {
+  /* B2 staggered fade-in: rise 30px, fade 0.9s, move 0.7s, even 0.15s gaps, starts at 85% of the screen */
+  html[data-fx~="ap-reveal"] .ff-grid > li { transition: opacity 0.9s var(--ease-reveal) var(--fx-d, 0ms), translate 0.7s var(--ease-reveal) var(--fx-d, 0ms); }
+  html[data-fx~="ap-reveal"] .ff-grid > li:not(.in) { opacity: 0; translate: 0 30px; }
+
+  /* B1 scroll-linked heading: drifts up 48px and fades over the first 70% of a screen, reverses on the way back */
+  @supports (animation-timeline: scroll()) {
+    html[data-fx~="ap-hero"] main .page-head { animation: ap-hero-out linear both; animation-timeline: scroll(root); animation-range: 0 70vh; }
+    html[data-fx~="ap-hero"] .ff-article .ff-pic img { animation: ap-settle linear both; animation-timeline: scroll(root); animation-range: 0 90vh; }
+    html[data-fx~="ap-hero"] .ff-featured .ff-pic img { animation: ap-settle linear both; animation-timeline: scroll(root); animation-range: 0 90vh; }
+  }
+}
+@keyframes ap-hero-out { to { opacity: 0; translate: 0 -48px; } }
+@keyframes ap-settle { from { scale: 1.08; } to { scale: 1; } }
+
+/* B3 quiet hover and press: colour and brightness only (0.16 to 0.32s), press shrinks to 0.97 */
+html[data-fx~="ap-press"] .ff-card h3, html[data-fx~="ap-press"] .ff-card .ff-cat { transition: color 0.32s var(--ease-apple); }
+html[data-fx~="ap-press"] .ff-card img { transition: filter 0.24s var(--ease-apple); }
+html[data-fx~="ap-press"] .ff-card { transition: scale 0.1s ease-out; }
+@media (hover: hover) and (pointer: fine) {
+  html[data-fx~="ap-press"] .ff-card:hover img { scale: none; filter: brightness(1.12); }
+  html[data-fx~="ap-press"] .ff-card:hover .ff-cat { color: var(--sprout); }
+}
+html[data-fx~="ap-press"] .ff-card:active { scale: 0.97; }
+@media (prefers-reduced-motion: reduce) { html[data-fx~="ap-press"] .ff-card:active { scale: none; } }
+
+/* B4 slide-down sub-bar */
+.ff-subnav { position: fixed; inset: 0 0 auto; z-index: 19; height: 52px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 max(20px, calc((100vw - 1152px) / 2)); background: rgba(15, 30, 54, 0.8); -webkit-backdrop-filter: blur(16px) saturate(160%); backdrop-filter: blur(16px) saturate(160%); border-bottom: 1px solid var(--line); transform: translateY(-100%); transition: transform 0.23s var(--ease-apple); }
+.ff-subnav.is-shown { transform: none; }
+.ff-subnav-title { font-weight: 800; font-size: 1.0625rem; color: var(--starlight); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ff-subnav-btn { flex: none; font: inherit; font-size: 0.875rem; font-weight: 700; color: var(--night); background: var(--sprout); border: 0; border-radius: 999px; padding: 6px 16px; text-decoration: none; cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .ff-subnav { transform: none; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; } .ff-subnav.is-shown { opacity: 1; pointer-events: auto; } }
+
+/* B5 pinned story: the paragraph in the middle of the screen is full strength, the rest at 35% */
+html[data-fx~="ap-pin"] .ff-body > p { opacity: 0.35; transition: opacity 0.32s var(--ease-apple); }
+html[data-fx~="ap-pin"] .ff-body > p.is-active { opacity: 1; }
+
+/* B6 words light up as you read */
+html[data-fx~="ap-scrub"] .ff-w { opacity: 0.22; transition: opacity 0.35s var(--ease-apple); }
+html[data-fx~="ap-scrub"] .ff-w.on { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { html[data-fx~="ap-scrub"] .ff-w { opacity: 1; } }
+
+/* B7 swipe gallery (only shown in the lab) */
+.ff-more { display: none; }
+html[data-fx~="ap-gallery"] .ff-more { display: block; padding-block: var(--s8) var(--s6); }
+.ff-more-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--s4); }
+.ff-more-head h2 { font-size: 1.5rem; margin: 0; }
+.ff-paddles { display: flex; gap: 10px; }
+.ff-paddles button { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--edge); background: var(--deep); color: var(--starlight); font-size: 1.4rem; line-height: 1; cursor: pointer; transition: opacity 0.24s var(--ease-apple), background-color 0.24s var(--ease-apple); }
+.ff-paddles button:disabled { opacity: 0.35; cursor: default; }
+.ff-more-row { display: grid; grid-auto-flow: column; grid-auto-columns: min(70%, 240px); gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; list-style: none; margin: 0 calc(50% - 50vw) 0 0; padding: 0 24px 8px 0; }
+.ff-more-row::-webkit-scrollbar { display: none; }
+.ff-more-row > li { scroll-snap-align: start; }
+.ff-more-card { display: flex; flex-direction: column; gap: 6px; color: var(--starlight); text-decoration: none; }
+.ff-more-card img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 14px; border: 1px solid var(--line); }
+.ff-more-card span { font-size: 0.8125rem; color: var(--haze); }

@@ -104,6 +104,28 @@ export default async function FactPage({ params }: Props) {
           </div>
         </article>
       </div>
+      {/* Motion lab only: Apple-style "More FactsFriday" swipe gallery, hidden unless ?fx=ap-gallery. */}
+      <section className="ff-more wrap" aria-labelledby="ff-more-h" data-gallery-wrap="">
+        <div className="ff-more-head">
+          <h2 id="ff-more-h">More FactsFriday</h2>
+          <div className="ff-paddles">
+            <button type="button" data-prev="" aria-label="Previous posts">‹</button>
+            <button type="button" data-next="" aria-label="Next posts">›</button>
+          </div>
+        </div>
+        <ul className="ff-more-row" data-gallery="">
+          {all.filter((x) => x.slug !== f.slug).slice(0, 10).map((x) => (
+            <li key={x.slug}>
+              <Link href={path(lang, `/factsfriday/${x.slug}`)} className="ff-more-card">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`${bp}${x.cover.base}-${x.cover.sizes[0]}.webp`} alt="" width={400} height={400} loading="lazy" decoding="async" />
+                <span>{factsCategories[x.category]}</span>
+                <b>{x.title}</b>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
       <FFMotionLab page="post" />
     </>
   );
