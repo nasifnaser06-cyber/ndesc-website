@@ -2,7 +2,7 @@ import Link from "next/link";
 import { type Locale, path, tr } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { ui } from "@/content/ui";
-import { olympiadTeams, olympiadIntro } from "@/content/olympiad";
+import { olympiadTeams, olympiadIntro, olympiadHistory, olympiadWhyJoin, olympiadHowToJoin } from "@/content/olympiad";
 import { PageHead } from "@/components/bits";
 import { TeamIcon } from "@/components/TeamIcon";
 import { IconArrow } from "@/components/HubIcons";
@@ -45,6 +45,29 @@ export default async function OlympiadTeams() {
             </Link>
           ))}
         </div>
+
+        <section aria-labelledby="began" style={{ maxWidth: "62ch" }}>
+          <h2 id="began" style={{ marginBottom: "var(--s4)" }}>{en ? "How the teams began" : "দলগুলো যেভাবে শুরু হলো"}</h2>
+          {olympiadHistory.map((p, i) => <p key={i} className="muted" style={{ marginTop: i ? "var(--s4)" : 0 }}>{tr(p, lang)}</p>)}
+        </section>
+
+        <section aria-labelledby="why" style={{ maxWidth: "62ch" }}>
+          <h2 id="why" style={{ marginBottom: "var(--s4)" }}>{en ? "Why join an Olympiad team?" : "কেন অলিম্পিয়াড দলে যোগ দেবেন?"}</h2>
+          <p className="muted" style={{ marginBottom: "var(--s4)" }}>{tr(olympiadWhyJoin.intro, lang)}</p>
+          <ul className="tick-list">
+            {olympiadWhyJoin.items.map((it, i) => <li key={i}><span><strong>{tr(it.title, lang)}.</strong> {tr(it.text, lang)}</span></li>)}
+          </ul>
+        </section>
+
+        <section aria-labelledby="howjoin" className="surface panel-band">
+          <div>
+            <h2 id="howjoin">{en ? "How to join" : "যেভাবে যোগ দেবেন"}</h2>
+            <p className="muted">{tr(olympiadHowToJoin, lang)}</p>
+          </div>
+          <div className="actions">
+            <Link className="btn btn-secondary" href={path(lang, "/contact")}>{en ? "Contact the club" : "ক্লাবে যোগাযোগ"}</Link>
+          </div>
+        </section>
       </div>
     </>
   );

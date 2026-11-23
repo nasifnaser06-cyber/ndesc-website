@@ -30,7 +30,8 @@ export default async function TeamPage({ params }: Props) {
   if (!t) notFound();
   const en = lang === "en";
   const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
-  const achievements = [...t.achievements].sort((a, b) => b.year.localeCompare(a.year));
+  // Newest first; items without a year go last, in the club's order.
+  const achievements = [...t.achievements].sort((a, b) => (b.year ?? "").localeCompare(a.year ?? ""));
   const others = olympiadTeams.filter((x) => x.slug !== t.slug);
 
   return (
@@ -68,10 +69,28 @@ export default async function TeamPage({ params }: Props) {
           </section>
         )}
 
-        {t.mentors.length > 0 && (
-          <section aria-labelledby="mentors">
-            <h2 id="mentors" style={{ marginBottom: "var(--s4)" }}>{en ? "Mentors and coordinators" : "মেন্টর ও সমন্বয়ক"}</h2>
-            <ul className="tick-list">{t.mentors.map((m) => <li key={m.name}><span><strong>{m.name}</strong>, {m.role}</span></li>)}</ul>
+        {t.cohorts.length > 0 && (
+          <section aria-labelledby="people">
+            <h2 id="people" style={{ marginBottom: "var(--s4)" }}>{en ? "Mentors and members" : "মেন্টর ও সদস্য"}</h2>
+            <div className="cohorts">
+              {t.cohorts.map((c) => (
+                <article className="cohort surface" key={c.year} aria-labelledby={`cohort-${c.year}`}>
+                  <h3 id={`cohort-${c.year}`}>{t.name} {c.year}</h3>
+                  <p className="cohort-label">{en ? (c.mentors.length > 1 ? "Mentors" : "Mentor") : "মেন্টর"}</p>
+                  <ul className="cohort-list">
+                    {c.mentors.map((m) => <li key={m.name}><strong>{m.name}</strong><span>{m.role}</span></li>)}
+                  </ul>
+                  {c.advisors && c.advisors.length > 0 && (
+                    <>
+                      <p className="cohort-label">{en ? "Advisors" : "উপদেষ্টা"}</p>
+                      <ul className="cohort-names">{c.advisors.map((n) => <li key={n}>{n}</li>)}</ul>
+                    </>
+                  )}
+                  <p className="cohort-label">{en ? `Members (${c.members.length})` : `সদস্য (${c.members.length})`}</p>
+                  <ul className="cohort-names">{c.members.map((n) => <li key={n}>{n}</li>)}</ul>
+                </article>
+              ))}
+            </div>
           </section>
         )}
 
@@ -81,7 +100,7 @@ export default async function TeamPage({ params }: Props) {
             <ul className="event-list">
               {achievements.map((a, i) => (
                 <li className="event-row" key={i}>
-                  <p className="event-date">{a.year}</p>
+                  <p className="event-date">{a.year ?? ""}</p>
                   <div className="event-main">
                     <h3 style={{ fontSize: "1.125rem" }}>{a.award}</h3>
                     <p className="small muted">{a.competition}{a.credit ? ` · ${a.credit}` : ""}</p>
