@@ -53,6 +53,9 @@ export default function Header({ lang }: { lang: Locale }) {
     setOpen(false);
     if (firstRender.current) { firstRender.current = false; return; }
     if (historyNav.current) { historyNav.current = false; return; }
+    // A page that restores its own scroll position (the FactsFriday archive on return) asks to be left alone.
+    const w = window as unknown as { __ndescKeepScroll?: boolean };
+    if (w.__ndescKeepScroll) { w.__ndescKeepScroll = false; return; }
     if (window.location.hash) return;
     const toTop = () => window.scrollTo({ top: 0, left: 0, behavior: "instant" });
     toTop();

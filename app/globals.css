@@ -1437,15 +1437,10 @@ body:has(.ps-four) .site-header {
 .ff-card:active { scale: 0.97; }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* Cards rise 30px and fade in (0.9s fade, 0.7s move), 0.15s apart in each row. Only hidden when the
-     site script runs (html.motion), so without JavaScript every card simply shows. */
-  html.motion .ff-grid > li { transition: opacity 0.9s var(--ease-reveal) var(--ff-d, 0ms), translate 0.7s var(--ease-reveal) var(--ff-d, 0ms); }
-  html.motion .ff-grid > li:not(.in) { opacity: 0; translate: 0 30px; }
-
   /* Scroll-linked heading: drifts up 48px and fades over the first 70% of a screen, and comes back on
      the way up; a post's picture settles from 108% to 100% over the first 90% */
   @supports (animation-timeline: scroll()) {
-    main:has(.ff-grid-wrap, .ff-article) .page-head { animation: ff-head-out linear both; animation-timeline: scroll(root); animation-range: 0 70vh; }
+    main:has(.fc, .ff-article) .page-head { animation: ff-head-out linear both; animation-timeline: scroll(root); animation-range: 0 70vh; }
     .ff-article .ff-pic img { animation: ff-pic-settle linear both; animation-timeline: scroll(root); animation-range: 0 90vh; }
   }
 }
@@ -1472,20 +1467,79 @@ html.ff-flying .page-head > * { animation: none; }
 .ff-story > p { opacity: 0.35; transition: opacity 0.32s var(--ease-apple); }
 .ff-story > p.is-active { opacity: 1; }
 
-/* More FactsFriday: a swipe row with arrow buttons that grey out at each end */
-.ff-more { padding-block: var(--s8) var(--s6); }
-.ff-more-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--s4); }
-.ff-more-head h2 { font-size: 1.5rem; margin: 0; }
-.ff-paddles { display: none; gap: 10px; }
-.ff-more.has-paddles .ff-paddles { display: flex; }
-.ff-paddles button { width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--edge); background: var(--deep); color: var(--starlight); font-size: 1.4rem; line-height: 1; cursor: pointer; transition: opacity 0.24s var(--ease-apple), background-color 0.24s var(--ease-apple); }
-.ff-paddles button:disabled { opacity: 0.35; cursor: default; }
-.ff-paddles button:focus-visible { outline: 3px solid var(--sprout); outline-offset: 2px; }
-.ff-more-row { display: grid; grid-auto-flow: column; grid-auto-columns: min(70%, 240px); gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; list-style: none; margin: 0 calc(50% - 50vw) 0 0; padding: 0 24px 8px 0; }
-.ff-more-row::-webkit-scrollbar { display: none; }
-.ff-more-row > li { scroll-snap-align: start; }
-.ff-more-card { display: flex; flex-direction: column; gap: 6px; color: var(--starlight); text-decoration: none; border-radius: 14px; }
-.ff-more-card img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 14px; border: 1px solid var(--line); transition: filter 0.24s var(--ease-apple); }
-.ff-more-card span { font-size: 0.8125rem; color: var(--haze); }
-.ff-more-card:focus-visible { outline: 3px solid var(--sprout); outline-offset: 4px; }
-@media (hover: hover) and (pointer: fine) { .ff-more-card:hover img { filter: brightness(1.12); } .ff-more-card:hover b { color: var(--sprout); } }
+
+/* ---------------------------------------------------------------- FactsFriday carousel
+   One strip, newest first, the centred card in front. Native scrolling and scroll snapping are the
+   baseline; depth comes from scroll-driven animations where supported (each card's distance from the
+   centre drives its scale, stacking and dimming), or from FactsCarousel.tsx elsewhere. Scale only:
+   cards always face the reader. */
+.fc { --fc-card: clamp(240px, 30vw, 380px); --fc-step: calc(var(--fc-card) * 0.62); --fc-radius: 18px; position: relative; }
+.fc-compact { --fc-card: clamp(170px, 20vw, 240px); --fc-radius: 14px; }
+@media (max-width: 600px) { .fc { --fc-card: 64vw; } .fc-compact { --fc-card: 52vw; } }
+@media (prefers-reduced-motion: reduce) { .fc { --fc-step: calc(var(--fc-card) + 16px); } }
+
+.fc-track { position: relative; display: flex; list-style: none; margin: 0; padding: 20px calc(50% - var(--fc-step) / 2) 28px; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.fc-track::-webkit-scrollbar { display: none; }
+.fc-track.is-dragging { scroll-snap-type: none; cursor: grabbing; }
+@media (hover: hover) and (pointer: fine) { .fc.is-enhanced .fc-track { cursor: grab; } }
+.fc-track:focus-visible { outline: 3px solid var(--sprout); outline-offset: -3px; border-radius: 12px; }
+.fc-slide { position: relative; flex: 0 0 var(--fc-step); min-width: 0; display: flex; justify-content: center; scroll-snap-align: center; z-index: 1; }
+.fc-slide.is-active { z-index: 100; }
+.fc-card { flex: none; display: block; width: var(--fc-card); border-radius: var(--fc-radius); color: var(--starlight); text-decoration: none; transform-origin: 50% 50%; -webkit-user-drag: none; -webkit-tap-highlight-color: transparent; }
+.fc-frame { position: relative; display: block; aspect-ratio: 1; border-radius: var(--fc-radius); overflow: hidden; background: var(--deep); border: 1px solid var(--line); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45); }
+/* contain, not cover: the posts carry lettering right up to their edges */
+.fc-frame img { display: block; width: 100%; height: 100%; object-fit: contain; -webkit-user-drag: none; user-select: none; }
+.fc-frame::after { content: ""; position: absolute; inset: 0; background: #0a1529; opacity: var(--fc-dim, 0); pointer-events: none; }
+.fc-slide:not(.is-active) .fc-frame::after { --fc-dim: 0.35; }
+.fc-fallback { position: absolute; inset: 0; display: grid; place-items: center; padding: 1.25rem; text-align: center; font-weight: 800; font-size: 1.375rem; line-height: 1.25; background: linear-gradient(160deg, #1d3a63, #0f1e36); }
+.fc-card:focus-visible { outline: 3px solid var(--sprout); outline-offset: 4px; }
+
+/* Depth: centre 100%, neighbours 80% and a little darker, the next ones 64%; the centre sits on top */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .fc-slide { view-timeline: --fc-slide inline; view-timeline-inset: calc(50% - var(--fc-step) * 1.5); animation: fc-depth-z linear both; animation-timeline: --fc-slide; }
+    .fc-card { animation: fc-depth-scale linear both; animation-timeline: --fc-slide; }
+    .fc-frame::after { animation: fc-depth-dim linear both; animation-timeline: --fc-slide; }
+    html[data-fc-js="1"] .fc-slide, html[data-fc-js="1"] .fc-card, html[data-fc-js="1"] .fc-frame::after { animation: none; }
+  }
+  /* Script-driven depth (browsers without scroll-driven animations): FactsCarousel sets transform and stacking */
+  .fc-track.fc-jsdepth .fc-slide:not(.is-active) .fc-frame::after { --fc-dim: unset; }
+  .fc-caption-inner { animation: fc-caption-in 0.3s var(--ease) both; }
+}
+@keyframes fc-depth-scale { 0%, 100% { scale: 0.64; } 25%, 75% { scale: 0.8; } 50% { scale: 1; } }
+@keyframes fc-depth-z { 0%, 100% { z-index: 1; } 25%, 75% { z-index: 50; } 50% { z-index: 100; } }
+@keyframes fc-depth-dim { 0%, 100% { opacity: 0.55; } 25%, 75% { opacity: 0.3; } 50% { opacity: 0; } }
+@keyframes fc-caption-in { from { opacity: 0; translate: 0 6px; } }
+/* Reduced motion: no scaling or fading, the active card is marked instead */
+@media (prefers-reduced-motion: reduce) {
+  .fc-slide.is-active .fc-frame { outline: 3px solid var(--sprout); outline-offset: 3px; }
+}
+
+/* Centred card on mouse: brightens; pressing it shrinks it a touch */
+@media (hover: hover) and (pointer: fine) { .fc-slide.is-active .fc-card:hover img { filter: brightness(1.1); } }
+.fc-frame img { transition: filter 0.24s var(--ease-apple); }
+
+.fc-controls { display: flex; justify-content: center; align-items: center; gap: var(--s4); }
+.fc-btn { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--edge); background: var(--deep); color: var(--starlight); font: inherit; font-size: 1.5rem; line-height: 1; cursor: pointer; transition: opacity 0.24s var(--ease-apple), background-color 0.24s var(--ease-apple); }
+.fc-btn:hover:not(:disabled) { background: var(--dusk, #1a2f52); }
+.fc-btn:disabled { opacity: 0.35; cursor: default; }
+.fc-btn:focus-visible { outline: 3px solid var(--sprout); outline-offset: 2px; }
+.fc-pos { min-width: 6ch; text-align: center; font-variant-numeric: tabular-nums; color: var(--haze); font-size: 0.9375rem; }
+
+/* The caption has a fixed height, so the page never moves when the centred post changes */
+.fc-caption { max-width: 40rem; height: 15rem; margin: var(--s4) auto 0; padding-inline: var(--s5); text-align: center; overflow: hidden; }
+.fc-caption-inner { display: flex; flex-direction: column; align-items: center; gap: var(--s2); }
+.fc-meta { margin: 0; font-size: 0.875rem; color: var(--haze); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.fc-title { margin: 0; font-size: clamp(1.375rem, 2.4vw, 1.875rem); line-height: 1.2; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.fc-teaser { margin: 0; color: var(--haze); font-size: 1rem; line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.fc-read { margin-top: var(--s2); }
+.fc-compact .fc-caption { height: 12.5rem; }
+.fc-compact .fc-title { font-size: 1.25rem; }
+.fc-compact .fc-teaser { -webkit-line-clamp: 2; }
+@media (max-width: 600px) { .fc-caption { height: 16rem; } .fc-compact .fc-caption { height: 13.5rem; } }
+
+.ff-none { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s3); padding-block: var(--s6) var(--s8); }
+.ff-none p { margin: 0; color: var(--haze); }
+.ff-more { padding-block: var(--s8) var(--s4); }
+.ff-more h2 { font-size: 1.5rem; margin: 0 0 var(--s2); }
+.ff-restoring .fc-track, .ff-restoring .fc-caption, .ff-restoring .fc-controls { visibility: hidden; }

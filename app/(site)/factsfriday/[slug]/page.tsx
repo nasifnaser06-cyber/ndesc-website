@@ -6,6 +6,8 @@ import { ui } from "@/content/ui";
 import { factsFriday, getFact, sortedFacts, factsCategories } from "@/content/factsFriday";
 import { ExternalLink, PageHead } from "@/components/bits";
 import FactsFridayMotion from "@/components/FactsFridayMotion";
+import FactsCarousel from "@/components/FactsCarousel";
+import { toFactsCard } from "@/lib/factsCards";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -41,6 +43,8 @@ export default async function FactPage({ params }: Props) {
   const i = all.findIndex((x) => x.slug === f.slug);
   const newer = i > 0 ? all[i - 1] : undefined;
   const older = i < all.length - 1 ? all[i + 1] : undefined;
+  // "More FactsFriday": every other post, newest first. With this post left out, index i is the next older one.
+  const more = all.filter((x) => x.slug !== f.slug).map((x) => toFactsCard(x, lang, bp));
 
   return (
     <>
@@ -98,26 +102,11 @@ export default async function FactPage({ params }: Props) {
           </div>
         </article>
       </div>
-      <section className="ff-more wrap" aria-labelledby="ff-more-h">
-        <div className="ff-more-head">
-          <h2 id="ff-more-h">More FactsFriday</h2>
-          <div className="ff-paddles">
-            <button type="button" data-prev="" aria-label="Previous posts">‹</button>
-            <button type="button" data-next="" aria-label="More posts">›</button>
-          </div>
-        </div>
-        <ul className="ff-more-row">
-          {all.filter((x) => x.slug !== f.slug).slice(0, 10).map((x) => (
-            <li key={x.slug}>
-              <Link href={path(lang, `/factsfriday/${x.slug}`)} className="ff-more-card">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={`${bp}${x.cover.base}-${x.cover.sizes[0]}.webp`} alt="" width={400} height={400} loading="lazy" decoding="async" />
-                <span>{factsCategories[x.category]}</span>
-                <b>{x.title}</b>
-              </Link>
-            </li>
-          ))}
-        </ul>
+      <section className="ff-more" aria-labelledby="ff-more-h">
+        <div className="wrap"><h2 id="ff-more-h">More FactsFriday</h2></div>
+        {/* Same carousel as the archive, without this post, starting on the next older post (or the
+            nearest one when this is the oldest). */}
+        <FactsCarousel items={more} activeSlug={more[Math.min(i, more.length - 1)]?.slug} label="More FactsFriday" compact headingLevel={3} />
       </section>
       <FactsFridayMotion page="post" />
     </>
