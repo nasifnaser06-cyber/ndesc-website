@@ -3,13 +3,10 @@
 
 export const site = {
   shortName: "NDESC",
-  name: { en: "Notre Dame Eco and Space Club", bn: "নটর ডেম ইকো অ্যান্ড স্পেস ক্লাব" },
+  name: "Notre Dame Eco and Space Club",
   founded: "1992-10-28",
-  college: { en: "Notre Dame College, Dhaka", bn: "নটর ডেম কলেজ, ঢাকা" },
-  address: {
-    en: "Notre Dame College, Toyenbee Circular Road, Motijheel, Dhaka 1000",
-    bn: "নটর ডেম কলেজ, টয়েনবি সার্কুলার রোড, মতিঝিল, ঢাকা ১০০০",
-  },
+  college: "Notre Dame College, Dhaka",
+  address: "Notre Dame College, Toyenbee Circular Road, Motijheel, Dhaka 1000",
   mapUrl: "https://maps.app.goo.gl/N4N3Rvg5j3EB2ua16",
   /** Google map of the college shown in the footer ("Visit us"): a pin on the campus (23.7304 N, 90.4207 E). No API key needed. */
   mapEmbed: "https://maps.google.com/maps?q=23.7304,90.4207&z=16&output=embed",

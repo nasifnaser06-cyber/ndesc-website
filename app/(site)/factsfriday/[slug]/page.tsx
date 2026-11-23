@@ -22,9 +22,9 @@ export async function generateMetadata({ params }: Props) {
   const f = getFact(slug);
   if (!f) return {};
   const big = f.cover.sizes[f.cover.sizes.length - 1];
-  return meta(lang, `/factsfriday/${slug}`, { en: `${f.title} · FactsFriday`, bn: `${f.title} · FactsFriday` }, { en: f.summary, bn: f.summary }, {
+  return meta(lang, `/factsfriday/${slug}`, `${f.title} · FactsFriday`, f.summary, {
     src: `${f.cover.base}-${big}.webp`,
-    alt: { en: `FactsFriday: ${f.title}`, bn: `FactsFriday: ${f.title}` },
+    alt: `FactsFriday: ${f.title}`,
     width: big,
     height: big,
   });
@@ -49,8 +49,8 @@ export default async function FactPage({ params }: Props) {
     <>
       <PageHead
         lang={lang}
-        kicker={{ en: `${factsCategories[f.category]} · ${formatDateRange(f.date, undefined, lang, "long")}`, bn: factsCategories[f.category] }}
-        title={{ en: f.title, bn: f.title }}
+        kicker={`${factsCategories[f.category]} · ${formatDateRange(f.date, undefined, lang, "long")}`}
+        title={f.title}
         crumbs={[{ label: ui.nav.explore, to: "/explore" }, { label: ui.nav.factsFriday, to: "/factsfriday" }]}
       />
       <div className="wrap">

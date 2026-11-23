@@ -7,11 +7,8 @@ import FactsFridayArchive from "@/components/FactsFridayArchive";
 import FactsFridayMotion from "@/components/FactsFridayMotion";
 import { toFactsCard } from "@/lib/factsCards";
 
-const title = { en: "FactsFriday", bn: "FactsFriday" };
-const lead = {
-  en: "Explore fascinating scientific facts, discoveries, and explanations from NDESC's weekly science series.",
-  bn: "NDESC-এর সাপ্তাহিক বিজ্ঞান সিরিজের চমকপ্রদ বৈজ্ঞানিক তথ্য, আবিষ্কার আর ব্যাখ্যা।",
-};
+const title = "FactsFriday";
+const lead = "Explore fascinating scientific facts, discoveries, and explanations from NDESC's weekly science series.";
 
 // Coming back to the archive with the browser's Back button after a full page load: hide the carousel
 // for the moment it takes the script to put the reader's post back in the centre, so the latest post

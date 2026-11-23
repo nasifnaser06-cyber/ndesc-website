@@ -1,9 +1,8 @@
 "use client";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { type Locale, tr, path } from "@/lib/i18n";
+import { type Locale, path } from "@/lib/i18n";
 import { ui } from "@/content/ui";
 import { site } from "@/content/site";
 import { Logo } from "./bits";
@@ -119,34 +118,28 @@ export default function Header({ lang }: { lang: Locale }) {
         <Link href={path(lang)} className="brand">
           <Logo />
           <span className="brand-name">
-            {lang === "en" ? (
+            {(
               <>
                 Notre Dame
                 <br />
                 Eco and Space Club
               </>
-            ) : (
-              <>
-                নটর ডেম
-                <br />
-                ইকো অ্যান্ড স্পেস ক্লাব
-              </>
             )}
           </span>
         </Link>
 
-        <nav aria-label={tr(ui.mainNav, lang)} className="main-nav" id="main-nav" data-open={open}>
+        <nav aria-label={ui.mainNav} className="main-nav" id="main-nav" data-open={open}>
           <ul>
             {navItems.map((item) => (
               <li key={item.key}>
                 <Link href={path(lang, item.to)} aria-current={isActive(item.to) ? "page" : undefined}>
-                  {tr(ui.nav[item.key], lang)}
+                  {ui.nav[item.key]}
                 </Link>
               </li>
             ))}
             <li className="only-menu">
               <Link href={path(lang, "/contact")} aria-current={isActive("/contact") ? "page" : undefined}>
-                {tr(ui.nav.contact, lang)}
+                {ui.nav.contact}
               </Link>
             </li>
           </ul>
@@ -158,7 +151,7 @@ export default function Header({ lang }: { lang: Locale }) {
               Register now button (Mahmud, 21 Nov 2026). */}
           {sub !== "/ness/register" && sub !== "/ness" &&
             (site.registerWith === "form" && site.forms.nessRegister ? (
-              <IceButton href={site.forms.nessRegister} external note={tr(ui.newTab, lang)} />
+              <IceButton href={site.forms.nessRegister} external note={ui.newTab} />
             ) : (
               <IceButton href={path(lang, "/ness/register")} />
             ))}
@@ -168,7 +161,7 @@ export default function Header({ lang }: { lang: Locale }) {
             className="menu-btn"
             aria-expanded={open}
             aria-controls="main-nav"
-            aria-label={tr(open ? ui.menuClose : ui.menuOpen, lang)}
+            aria-label={open ? ui.menuClose : ui.menuOpen}
             onClick={() => setOpen((v) => !v)}
           >
             <svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true">
@@ -182,7 +175,7 @@ export default function Header({ lang }: { lang: Locale }) {
       </div>
       {site.draft && (
         <p className="draft-ribbon">
-          <span className="wrap">{tr(ui.draft, lang)}</span>
+          <span className="wrap">{ui.draft}</span>
         </p>
       )}
     </header>

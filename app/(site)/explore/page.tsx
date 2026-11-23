@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { type Locale, path, tr, formatDateRange } from "@/lib/i18n";
+import { type Locale, path, formatDateRange } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { sortedEvents, isUpcoming } from "@/content/events";
 import { sortedFacts, factsCategories } from "@/content/factsFriday";
@@ -8,12 +8,8 @@ import { durbin } from "@/content/publications";
 import { PageHead } from "@/components/bits";
 import { IconArrow, IconEvents, IconFacts, IconPublications, IconTeams } from "@/components/HubIcons";
 
-const title = { en: "Explore NDESC", bn: "NDESC এক্সপ্লোর করুন" };
-const lead = {
-  en: "Discover our events, scientific discoveries, Olympiad teams, and publications.",
-  bn: "আমাদের আয়োজন, বৈজ্ঞানিক আবিষ্কার, অলিম্পিয়াড দল আর প্রকাশনা ঘুরে দেখুন।",
-};
-
+const title = "Explore NDESC";
+const lead = "Discover our events, scientific discoveries, Olympiad teams, and publications.";
 export async function generateMetadata() {
   const lang: Locale = "en";
   return meta(lang, "/explore", title, lead);
@@ -41,7 +37,7 @@ export default async function Explore() {
               <div className="hub-preview">
                 <div>
                   <span>Next up</span>
-                  <strong>{tr(next.title, lang)}</strong>
+                  <strong>{next.title}</strong>
                   <span>{formatDateRange(next.start, next.end, lang, "long")}</span>
                 </div>
               </div>
