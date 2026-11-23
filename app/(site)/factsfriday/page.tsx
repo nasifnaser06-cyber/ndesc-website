@@ -4,6 +4,7 @@ import { ui } from "@/content/ui";
 import { sortedFacts, factsCategories, type FactsCategory } from "@/content/factsFriday";
 import { PageHead } from "@/components/bits";
 import FactsFridayArchive, { type FactsCard } from "@/components/FactsFridayArchive";
+import FactsFridayMotion from "@/components/FactsFridayMotion";
 
 const title = { en: "FactsFriday", bn: "FactsFriday" };
 const lead = {
@@ -53,6 +54,7 @@ export default async function FactsFridayPage() {
           <FactsFridayArchive items={items} categories={categories} years={years} />
         )}
       </div>
+      <FactsFridayMotion page="archive" />
     </>
   );
 }

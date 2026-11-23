@@ -5,6 +5,7 @@ import { meta } from "@/lib/view";
 import { ui } from "@/content/ui";
 import { factsFriday, getFact, sortedFacts, factsCategories } from "@/content/factsFriday";
 import { ExternalLink, PageHead } from "@/components/bits";
+import FactsFridayMotion from "@/components/FactsFridayMotion";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -52,6 +53,7 @@ export default async function FactPage({ params }: Props) {
       <div className="wrap">
         <article className="ff-article">
           <figure>
+            <span className="ff-pic ff-pic-lg">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={`${bp}${f.cover.base}-${small}.webp`}
@@ -62,6 +64,7 @@ export default async function FactPage({ params }: Props) {
               height={large}
               decoding="async"
             />
+            </span>
             <figcaption>The post as published{f.facebook ? " on Facebook" : ""}.</figcaption>
           </figure>
           <div className="ff-body">
@@ -84,17 +87,39 @@ export default async function FactPage({ params }: Props) {
               {f.facebook && (
                 <ExternalLink className="btn btn-secondary btn-small" href={f.facebook} lang={lang}>See the original post</ExternalLink>
               )}
-              <Link className="btn btn-secondary btn-small" href={path(lang, "/factsfriday")}>All FactsFriday posts</Link>
+              <Link className="btn btn-secondary btn-small" href={path(lang, "/factsfriday")} data-all-posts="">All FactsFriday posts</Link>
             </div>
             {(newer || older) && (
               <nav aria-label="More FactsFriday" className="ff-refs" style={{ display: "flex", justifyContent: "space-between", gap: "var(--s4)", flexWrap: "wrap" }}>
-                {older ? <Link href={path(lang, `/factsfriday/${older.slug}`)}>← {older.title}</Link> : <span />}
+                {older ? <Link href={path(lang, `/factsfriday/${older.slug}`)} data-older="">← {older.title}</Link> : <span />}
                 {newer ? <Link href={path(lang, `/factsfriday/${newer.slug}`)}>{newer.title} →</Link> : <span />}
               </nav>
             )}
           </div>
         </article>
       </div>
+      <section className="ff-more wrap" aria-labelledby="ff-more-h">
+        <div className="ff-more-head">
+          <h2 id="ff-more-h">More FactsFriday</h2>
+          <div className="ff-paddles">
+            <button type="button" data-prev="" aria-label="Previous posts">‹</button>
+            <button type="button" data-next="" aria-label="More posts">›</button>
+          </div>
+        </div>
+        <ul className="ff-more-row">
+          {all.filter((x) => x.slug !== f.slug).slice(0, 10).map((x) => (
+            <li key={x.slug}>
+              <Link href={path(lang, `/factsfriday/${x.slug}`)} className="ff-more-card">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`${bp}${x.cover.base}-${x.cover.sizes[0]}.webp`} alt="" width={400} height={400} loading="lazy" decoding="async" />
+                <span>{factsCategories[x.category]}</span>
+                <b>{x.title}</b>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </section>
+      <FactsFridayMotion page="post" />
     </>
   );
 }
