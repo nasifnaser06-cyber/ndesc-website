@@ -21,10 +21,10 @@ function subBar(page: "archive" | "post"): () => void {
   title.textContent = page === "post" ? (document.querySelector(".page-head h1")?.textContent || "FactsFriday") : "FactsFriday";
   bar.appendChild(title);
   if (page === "post") {
-    const older = document.querySelector<HTMLAnchorElement>('a[data-older]');
+    const older = document.querySelector<HTMLElement>(".ff-article[data-older]")?.dataset.older;
     const a = document.createElement("a");
     a.className = "ff-subnav-btn";
-    a.href = older ? older.href : (document.querySelector<HTMLAnchorElement>("a[data-all-posts]")?.href || "/factsfriday/");
+    a.href = older || document.querySelector<HTMLAnchorElement>("a[data-all-posts]")?.href || "/factsfriday/";
     a.textContent = older ? "Next fact" : "All posts";
     a.tabIndex = -1;
     bar.appendChild(a);

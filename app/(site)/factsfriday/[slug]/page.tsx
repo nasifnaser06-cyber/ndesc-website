@@ -38,10 +38,9 @@ export default async function FactPage({ params }: Props) {
   const bp = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
   const small = f.cover.sizes[0];
   const large = f.cover.sizes[f.cover.sizes.length - 1];
-  // Newer and older posts, for moving through the series.
+  // The next older post, for the "Next fact" button in the slide-down bar.
   const all = sortedFacts();
   const i = all.findIndex((x) => x.slug === f.slug);
-  const newer = i > 0 ? all[i - 1] : undefined;
   const older = i < all.length - 1 ? all[i + 1] : undefined;
   // "More FactsFriday": every other post, newest first. With this post left out, index i is the next older one.
   const more = all.filter((x) => x.slug !== f.slug).map((x) => toFactsCard(x, lang, bp));
@@ -55,7 +54,7 @@ export default async function FactPage({ params }: Props) {
         crumbs={[{ label: ui.nav.explore, to: "/explore" }, { label: ui.nav.factsFriday, to: "/factsfriday" }]}
       />
       <div className="wrap">
-        <article className="ff-article">
+        <article className="ff-article" data-older={older ? path(lang, `/factsfriday/${older.slug}`) : undefined}>
           <figure>
             <span className="ff-pic ff-pic-lg">
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -93,12 +92,6 @@ export default async function FactPage({ params }: Props) {
               )}
               <Link className="btn btn-secondary btn-small" href={path(lang, "/factsfriday")} data-all-posts="">All FactsFriday posts</Link>
             </div>
-            {(newer || older) && (
-              <nav aria-label="More FactsFriday" className="ff-refs" style={{ display: "flex", justifyContent: "space-between", gap: "var(--s4)", flexWrap: "wrap" }}>
-                {older ? <Link href={path(lang, `/factsfriday/${older.slug}`)} data-older="">← {older.title}</Link> : <span />}
-                {newer ? <Link href={path(lang, `/factsfriday/${newer.slug}`)}>{newer.title} →</Link> : <span />}
-              </nav>
-            )}
           </div>
         </article>
       </div>
