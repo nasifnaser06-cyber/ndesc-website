@@ -7,7 +7,7 @@ export const nessx = {
   fullName: "10th National Earth and Space Summit",
   intro:
     "NESS X opens a portal between the terrestrial and the cosmic. From the microscopic wonders of Earth's biology to the mysteries of distant nebulae, it brings dreamers, thinkers and innovators together to redefine the future.",
-  registerUrl: "https://forms.gle/QAYuy9RbyRtvFyzC7",
+  registerUrl: "https://docs.google.com/forms/d/e/1FAIpQLSdodZ963ojsNZQ1HIoSFq_qBtl-7dgccnFdbsj9OGxNVMWiMQ/viewform",
 };
 
 export const passes: { name: string; price: string; detail: string }[] = [

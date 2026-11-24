@@ -20,16 +20,18 @@ export const site = {
   },
 
   /**
-   * Where every "Register" button goes (header, home page, NESS page):
-   *   "page" = the website's own Register page, /en/ness/register/ (since 20 Nov 2026)
-   *   "form" = the NESS X Google Form below (kept so it can come back at any time)
+   * Where every "Register" button goes (the NESS X page's "Register now" and the header's
+   * "Register for NESS X"):
+   *   "page" = the website's own Register page, /ness/register/ (20 to 24 Nov 2026)
+   *   "form" = the NESS X Google Form below (since 24 Nov 2026, Mahmud: the Register page stays
+   *            paused and the NESS X page's Register now goes to the Google Form)
    */
-  registerWith: "page" as "page" | "form",
+  registerWith: "form" as "page" | "form",
 
   /** Links to the club's forms (Google Forms or similar). */
   forms: {
-    /** NESS X Google Form. Not linked anywhere while registerWith is "page", but kept here. */
-    nessRegister: "https://forms.gle/QAYuy9RbyRtvFyzC7" as string | null,
+    /** NESS X Google Form (link from Mahmud, 24 Nov 2026). Used by every Register button while registerWith is "form". */
+    nessRegister: "https://docs.google.com/forms/d/e/1FAIpQLSdodZ963ojsNZQ1HIoSFq_qBtl-7dgccnFdbsj9OGxNVMWiMQ/viewform" as string | null,
     nessExhibit: null as string | null,
     join: null as string | null,
     /** A form endpoint that accepts POST (e.g. Formspree). Leave null to hide the form. */
