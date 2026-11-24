@@ -110,6 +110,13 @@ export const olympiadTeams: OlympiadTeam[] = [
     ],
     achievements: [
       {
+        // From the club's congratulation post, 24 Nov 2026.
+        year: "2026",
+        competition: "Team Selection Test (TST) for the International Olympiad on Astronomy and Astrophysics (IOAA) 2026",
+        award: "Two members selected for Team Bangladesh",
+        credit: "Sajid Aman and Junaed Labeeb Al Waasi, with Abrar Rahman also reaching the TST",
+      },
+      {
         year: "2026",
         competition: "Bangladesh Physics Olympiad (BDPhO) 2026",
         award: "Third place and national winner",
@@ -156,6 +163,10 @@ export const olympiadTeams: OlympiadTeam[] = [
       },
     ],
     milestones: [
+      {
+        year: "2026",
+        text: "Sajid Aman and Junaed Labeeb Al Waasi were selected to represent Bangladesh at IOAA 2026 in Hanoi, Vietnam, after the Regional, National and Team Selection Test rounds. IOAA has a theory exam, a data analysis exam, an observation exam and a team competition.",
+      },
       {
         year: "2025",
         text: "Tasdik Ahmed Tonmay represented Bangladesh at IOAA 2025, and Omor Bin Hayat represented Bangladesh at the Asian Physics Olympiad for the second year running.",
@@ -208,6 +219,13 @@ export const olympiadTeams: OlympiadTeam[] = [
     ],
     achievements: [
       {
+        // From the club's congratulation post, 24 Nov 2026.
+        year: "2026",
+        competition: "Team Selection Test (TST) for the International Earth Science Olympiad (IESO) 2026",
+        award: "Three members selected for Team Bangladesh",
+        credit: "Team Terrestrial",
+      },
+      {
         year: "2025",
         competition: "International Earth Science Olympiad (IESO) 2025",
         award: "Bronze medal in the individual test (ITT) and an honourable mention",
@@ -256,6 +274,10 @@ export const olympiadTeams: OlympiadTeam[] = [
       },
     ],
     milestones: [
+      {
+        year: "2026",
+        text: "Three members were selected to represent Bangladesh at IESO 2026 in Turin, Italy, after the Preliminary, Divisional, National, pre-TST and TST rounds. IESO has a written test, a practical test, an international team investigation and an Earth science project.",
+      },
       {
         // The club's document also names Abrar Nafis Sadeque, but the published four-member team was
         // Mohammad Tahmid Rahman, Sheikh Fahim Mahmud, Omar Bin Arif and Faaris Ahmed Aayan (The Prestige).
