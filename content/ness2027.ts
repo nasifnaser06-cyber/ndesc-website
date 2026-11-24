@@ -2,6 +2,11 @@
 // From the club's official announcement (sent by Mahmud, 18 Nov 2026).
 // The site is English only for now, so these are plain English strings.
 
+import { photosphere } from "./photosphere";
+
+/** A Photosphere segment's submission form, kept once in photosphere.ts. */
+const psForm = (name: string) => photosphere.segments.find((s) => s.name === name)?.form;
+
 export const nessx = {
   name: "NESS X",
   fullName: "10th National Earth and Space Summit",
@@ -62,7 +67,9 @@ export const winnersNote =
   "Each category has three winners: Champion, 1st Runner-Up and 2nd Runner-Up. A segment open to P, J, S and HS has three winners in each of those categories. A Combined segment picks three winners from everyone. In team segments, all three members of a winning team get their own certificate and crest.";
 
 export type Segment = {
-  page?: string; name: string; cats: string[]; online?: boolean; desc: string[]; parts?: { name: string; cats: string[]; desc: string }[] };
+  page?: string; name: string; cats: string[]; online?: boolean; desc: string[];
+  /** `form`: the part's own submission form, shown as a Submit link. */
+  parts?: { name: string; cats: string[]; desc: string; form?: string }[] };
 
 export const soloSegments: Segment[] = [
   // First in the list so younger children see their segment straight away (Mahmud, 20 Nov 2026).
@@ -171,10 +178,10 @@ export const soloSegments: Segment[] = [
       "The visual art competition and exhibition of NESS X. Free to submit, up to 5 works per segment, through each segment's Google Form. PS-J is Class 6 to 10, PS-S is Class 11, 12 and university, and PS-C is everyone competing together. Selected work is shown at the summit.",
     ],
     parts: [
-      { name: "Astro Photography", cats: ["PS-J", "PS-S"], desc: "Star trails, constellations, galaxies, nebulae: whatever in the night sky has mesmerised you most." },
-      { name: "Eco Photography", cats: ["PS-J", "PS-S"], desc: "The raw, intricate nature of our Earth from your own perspective." },
-      { name: "Poster Designing", cats: ["PS-C"], desc: "Posters that turn complex scientific or environmental ideas into striking, easy-to-grasp visuals." },
-      { name: "AI Art", cats: ["PS-C"], desc: "Human imagination paired with generative AI, blending science and creativity in a single frame." },
+      { name: "Astro Photography", cats: ["PS-J", "PS-S"], desc: "Star trails, constellations, galaxies, nebulae: whatever in the night sky has mesmerised you most.", form: psForm("Astro Photography") },
+      { name: "Eco Photography", cats: ["PS-J", "PS-S"], desc: "The raw, intricate nature of our Earth from your own perspective.", form: psForm("Eco Photography") },
+      { name: "Poster Designing", cats: ["PS-C"], desc: "Posters that turn complex scientific or environmental ideas into striking, easy-to-grasp visuals.", form: psForm("Poster Designing") },
+      { name: "AI Art", cats: ["PS-C"], desc: "Human imagination paired with generative AI, blending science and creativity in a single frame.", form: psForm("AI Art") },
     ],
   },
 ];

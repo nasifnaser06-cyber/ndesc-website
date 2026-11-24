@@ -32,7 +32,10 @@ function SegmentList({ items, lang }: { items: Segment[]; lang: Locale }) {
           {g.parts && (
             <ul className="segment-parts">
               {g.parts.map((p) => (
-                <li key={p.name}><strong>{p.name}</strong> <span className="small">({p.cats.join(", ")})</span>: {p.desc}</li>
+                <li key={p.name}>
+                  <strong>{p.name}</strong> <span className="small">({p.cats.join(", ")})</span>: {p.desc}
+                  {p.form && <> <ExternalLink href={p.form} lang={lang}>{`Submit ${p.name}`}</ExternalLink></>}
+                </li>
               ))}
             </ul>
           )}
