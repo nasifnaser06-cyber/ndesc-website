@@ -22,11 +22,30 @@ export const passes: { name: string; price: string; detail: string }[] = [
 
 export const passNote = "Either pass also gets you into the exhibitions and programmes.";
 
-export const registerWays: { who: string; how: string }[] = [
+/** `link` turns the given words of `how` into a link (e.g. to the Campus Ambassador section). */
+export const registerWays: { who: string; how: string; link?: { text: string; href: string } }[] = [
   { who: "Notre Dame College students", how: "Register in person at the registration booths in front of the Archbishop Ganguly Building." },
-  { who: "Students from other institutions", how: "Register through our club partners, campus ambassadors, or the NESS X booth at your institution (if there is one)." },
+  {
+    who: "Students from other institutions",
+    how: "Register through our club partners, campus ambassadors, or the NESS X booth at your institution (if there is one).",
+    link: { text: "campus ambassadors", href: "#campus-ambassadors" },
+  },
   { who: "Anyone, online", how: "Fill in the online registration form." },
 ];
+
+/** Campus Ambassador recruitment, from the club's Facebook post on the NESS X event (Mahmud, 24 Nov 2026). */
+export const campusAmbassadors = {
+  label: "For students at other institutions",
+  title: "Become a Campus Ambassador",
+  intro:
+    "Ready to represent your institution at NESS X? The club is recruiting Campus Ambassadors (CAs): the direct link between our organising team and your institution, bringing the summit experience to your campus.",
+  gains: [
+    "Put your leadership, coordination, adaptability and communication skills into real action.",
+    "Gain hands-on experience and official recognition for your contribution to the event.",
+  ],
+  protocol: "Ambassadors are expected to keep a professional manner and help their peers through the registration process.",
+  applyUrl: "https://forms.gle/FjfnMng2HM7xyiKP9",
+};
 
 export const categories: { code: string; name: string; who: string }[] = [
   { code: "P", name: "Primary", who: "Nursery to Class 5" },

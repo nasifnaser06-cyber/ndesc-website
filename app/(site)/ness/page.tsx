@@ -5,8 +5,8 @@ import { site } from "@/content/site";
 import { ui } from "@/content/ui";
 import { getEvent, ness2027Banner } from "@/content/events";
 import { nessSchedule, showNessSchedule } from "@/content/club";
-import { nessx, passes, passNote, registerWays, categories, categoryNote, winnersNote, soloSegments, teamSegments, specialSegments, programmes, organizers, type Segment } from "@/content/ness2027";
-import { ContactLink, ExternalLink, Stars, T, RegisterButton } from "@/components/bits";
+import { nessx, passes, passNote, registerWays, campusAmbassadors, categories, categoryNote, winnersNote, soloSegments, teamSegments, specialSegments, programmes, organizers, type Segment } from "@/content/ness2027";
+import { ContactLink, ExternalLink, FormButton, Stars, T, RegisterButton } from "@/components/bits";
 import BgDrift from "@/components/BgDrift";
 
 const title = "NESS X";
@@ -111,7 +111,14 @@ export default async function Ness() {
           <h2 id="reg" style={{ marginBottom: "var(--s5)" }}>{"How to register"}</h2>
           <ol className="steps">
             {registerWays.map((w) => (
-              <li key={w.who}><p><strong>{w.who}</strong></p><p className="muted small">{w.how}</p></li>
+              <li key={w.who}>
+                <p><strong>{w.who}</strong></p>
+                <p className="muted small">
+                  {w.link && w.how.includes(w.link.text) ? (
+                    <>{w.how.split(w.link.text)[0]}<a href={w.link.href}>{w.link.text}</a>{w.how.split(w.link.text).slice(1).join(w.link.text)}</>
+                  ) : w.how}
+                </p>
+              </li>
             ))}
           </ol>
         </section>
@@ -194,6 +201,21 @@ export default async function Ness() {
           </div>
           <div className="actions">
             <Link className="btn btn-secondary" href={path(lang, "/contact")}>{"Contact for Exhibition"}</Link>
+          </div>
+        </section>
+
+        <section id="campus-ambassadors" className="surface panel-band" aria-labelledby="ca-h">
+          <div>
+            <p className="label">{campusAmbassadors.label}</p>
+            <h2 id="ca-h">{campusAmbassadors.title}</h2>
+            <p className="muted">{campusAmbassadors.intro}</p>
+            <ul className="tick-list">
+              {campusAmbassadors.gains.map((g) => <li key={g}>{g}</li>)}
+            </ul>
+            <p className="small muted"><strong>{"Campus Ambassador protocol: "}</strong>{campusAmbassadors.protocol}</p>
+          </div>
+          <div className="actions">
+            <FormButton href={campusAmbassadors.applyUrl} lang={lang} secondary>{"Apply as a Campus Ambassador"}</FormButton>
           </div>
         </section>
 
