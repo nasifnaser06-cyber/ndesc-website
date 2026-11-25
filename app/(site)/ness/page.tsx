@@ -69,13 +69,14 @@ export default async function Ness() {
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>
           <div className="sky-copy">
             <h1 id="ness-h1" className="ness-logo-h1">
-              {/* The NESS logo stands in for the "NESS X" heading; its alt text is the heading's name. */}
+              {/* The NESS snowflake logo (Mahmud, 25 Nov 2026) stands in for the "NESS X" heading;
+                  its alt text is the heading's name. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-logo-dark-360.webp`}
-                srcSet={[180, 360, 540].map((h) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-logo-dark-${h}.webp ${h}x`.replace(`${h}x`, `${h / 180}x`)).join(", ")}
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-snowflake-360.webp`}
+                srcSet={[180, 360, 540].map((h) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-snowflake-${h}.webp ${h / 180}x`).join(", ")}
                 alt={nessx.name}
-                width={166}
+                width={180}
                 height={180}
                 fetchPriority="high"
               />
