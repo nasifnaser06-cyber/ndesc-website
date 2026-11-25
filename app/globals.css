@@ -1647,3 +1647,35 @@ body:has(.ness-dark) .footer-map { background: #071c2e; border-color: rgba(142, 
 body:has(.ness-dark) .footer-map iframe { filter: invert(0.9) hue-rotate(180deg) brightness(0.9) contrast(0.95); }
 body:has(.ness-dark) .footer-grid a.footer-map-open { background: #071c2e; color: #8ed1e6; border: 1px solid rgba(142, 209, 230, 0.4); box-shadow: 0 1px 6px rgba(0, 0, 0, 0.4); }
 body:has(.ness-dark) .footer-grid a.footer-map-open:hover { background: #0a4a70; color: #ebf5f9; }
+
+/* ---------------------------------------------------------------------------------------------
+   NESS X half light, half dark (Mahmud, 25 Nov 2026), so it no longer looks like Photosphere.
+   The frame stays night (picture veil, header, footer, section titles); every box turns into a
+   light ice card with night text. Photosphere keeps dark boxes on dark.
+   Contrast: #071c2e on #ebf5f9 16:1, #0a4a70 on #ebf5f9 8.5:1, #ebf5f9 on #0a4a70 8.5:1.
+   --------------------------------------------------------------------------------------------- */
+body:has(.ness-dark) main .surface {
+  --starlight: #071c2e;
+  --haze: #2c5873;
+  --sprout: #0a4a70;
+  --sprout-light: #071c2e;
+  --line: rgba(10, 74, 112, 0.22);
+  --edge: rgba(10, 74, 112, 0.45);
+  color: #071c2e;
+  color-scheme: light;
+  background: linear-gradient(145deg, rgba(240, 248, 251, 0.9) 0%, rgba(214, 238, 246, 0.84) 60%, rgba(235, 245, 249, 0.9) 100%);
+  border: 1px solid rgba(142, 209, 230, 0.95);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.75);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  body:has(.ness-dark) main .surface { background: #e6f3f8; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  body:has(.ness-dark) main .surface { background: #ebf5f9; }
+}
+body:has(.ness-dark) main .surface a:hover { color: #071c2e; text-decoration-color: #0a4a70; }
+body:has(.ness-dark) main .surface :focus-visible { outline-color: #0a4a70; }
+body:has(.ness-dark) main .surface .btn { background: #0a4a70; border-color: #0a4a70; color: #ebf5f9; }
+body:has(.ness-dark) main .surface .btn:hover { background: #071c2e; border-color: #071c2e; color: #ebf5f9; }
+body:has(.ness-dark) main .surface .btn-secondary { background: transparent; border-color: #0a4a70; color: #0a4a70; }
+body:has(.ness-dark) main .surface .btn-secondary:hover { background: #0a4a70; border-color: #0a4a70; color: #ebf5f9; }
