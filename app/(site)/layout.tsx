@@ -4,6 +4,7 @@ import "../globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Motion from "@/components/Motion";
+import SiteBg from "@/components/SiteBg";
 import { type Locale } from "@/lib/i18n";
 import { site } from "@/content/site";
 import { ui } from "@/content/ui";
@@ -48,6 +49,7 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
         <a className="skip-link" href="#main">
           {ui.skip}
         </a>
+        <SiteBg />
         <Header lang={lang} />
         <main id="main" tabIndex={-1}>
           {children}
