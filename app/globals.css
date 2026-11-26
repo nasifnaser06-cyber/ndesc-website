@@ -1571,33 +1571,33 @@ form[aria-disabled="true"] { opacity: 0.55; }
    --------------------------------------------------------------------------------------------- */
 .home-bg {
   position: fixed; inset: 0 0 auto 0; z-index: -1; pointer-events: none;
-  /* Dark green veil in front of the photo so text stays legible (Mahmud, 27 Nov 2026). The tiny blurred
+  /* Dark green veil (toned down to a deep blue-green, 27 Nov 2026) in front of the photo so text stays legible (Mahmud, 27 Nov 2026). The tiny blurred
      copy (--bg-ph) sits under the real picture and shows while it loads. */
-  --home-veil: linear-gradient(180deg, rgba(4, 30, 20, 0.62) 0%, rgba(4, 30, 20, 0.5) 45%, rgba(4, 30, 20, 0.86) 100%);
+  --home-veil: linear-gradient(180deg, rgba(8, 24, 28, 0.55) 0%, rgba(8, 24, 28, 0.42) 45%, rgba(8, 24, 28, 0.84) 100%);
   background:
     var(--home-veil),
     var(--bg-lg) center 50% / cover no-repeat,
     var(--bg-ph) center 50% / cover no-repeat,
-    #06261a;
+    #08181c;
 }
 @media (max-width: 1600px) {
-  .home-bg { background: var(--home-veil), var(--bg-md) center 50% / cover no-repeat, var(--bg-ph) center 50% / cover no-repeat, #06261a; }
+  .home-bg { background: var(--home-veil), var(--bg-md) center 50% / cover no-repeat, var(--bg-ph) center 50% / cover no-repeat, #08181c; }
 }
 @media (max-width: 900px) {
-  .home-bg { background: var(--home-veil), var(--bg-sm) center 50% / cover no-repeat, var(--bg-ph) center 50% / cover no-repeat, #06261a; }
+  .home-bg { background: var(--home-veil), var(--bg-sm) center 50% / cover no-repeat, var(--bg-ph) center 50% / cover no-repeat, #08181c; }
 }
-html:has(.home-bg) { background: #06261a; }
+html:has(.home-bg) { background: #08181c; }
 body:has(.home-bg) { background: transparent; }
 body:has(.home-bg) main :is(.surface, .photo-slot) {
-  background: rgba(4, 30, 20, 0.6);
-  border-color: rgba(143, 211, 166, 0.3);
+  background: rgba(8, 24, 28, 0.6);
+  border-color: rgba(143, 211, 166, 0.22);
   -webkit-backdrop-filter: blur(7px) saturate(140%);
   backdrop-filter: blur(7px) saturate(140%);
 }
 body:has(.home-bg) main .photo-slot { border-color: rgba(143, 211, 166, 0.5); }
 @media (prefers-reduced-transparency: reduce) {
-  body:has(.home-bg) main :is(.surface, .photo-slot) { background: #06261a; -webkit-backdrop-filter: none; backdrop-filter: none; }
+  body:has(.home-bg) main :is(.surface, .photo-slot) { background: #08181c; -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
-body:has(.home-bg) .site-header { --header-glass: rgba(4, 30, 20, 0.82); --header-menu: rgba(4, 30, 20, 0.5); --header-solid: #06261a; }
-body:has(.home-bg) .site-footer { background: rgba(4, 30, 20, 0.6); }
-@media (prefers-reduced-transparency: reduce) { body:has(.home-bg) .site-footer { background: #06261a; } }
+body:has(.home-bg) .site-header { --header-glass: rgba(8, 24, 28, 0.82); --header-menu: rgba(8, 24, 28, 0.5); --header-solid: #08181c; }
+body:has(.home-bg) .site-footer { background: rgba(8, 24, 28, 0.6); }
+@media (prefers-reduced-transparency: reduce) { body:has(.home-bg) .site-footer { background: #08181c; } }
