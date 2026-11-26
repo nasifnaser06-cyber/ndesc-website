@@ -4,8 +4,9 @@ import { usePathname } from "next/navigation";
 import BgDrift from "@/components/BgDrift";
 
 /**
- * Site-wide Milky Way background (Mahmud, 27 Nov 2026) on every page except the NESS X section
- * (/ness/..., which includes Photosphere and Register and has its own pictures).
+ * Homepage: the Milky Way background (Mahmud, 27 Nov 2026). Every other page except the NESS X section
+ * (/ness/..., which includes Photosphere and Register and has its own pictures) gets only the same dark
+ * blue-green tint and glass, without the photo.
  * Sized per device (phones 1600px wide, laptops 2560px, big screens the full 3709px) and preloaded so it
  * arrives with the page; a tiny blurred copy underneath shows instantly. The dark blue-green veil and the
  * glass boxes are in globals.css under .home-bg. Same phone drift as NESS X and Photosphere.
@@ -18,6 +19,8 @@ export default function SiteBg() {
   const pathname = usePathname() ?? "/";
   const bare = bp && pathname.startsWith(bp) ? pathname.slice(bp.length) || "/" : pathname;
   if (bare === "/ness" || bare.startsWith("/ness/")) return null;
+  // Every page but the homepage: only the dark blue-green tint, no photo (Mahmud, 27 Nov 2026).
+  if (bare !== "/") return <div className="home-bg site-tint" aria-hidden="true" />;
   return (
     <>
       <link rel="preload" as="image" type="image/webp" href={`${bp}/home/galaxy-bg-1600.webp`} media="(max-width: 900px)" fetchPriority="high" />
