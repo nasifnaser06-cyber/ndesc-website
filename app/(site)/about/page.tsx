@@ -3,7 +3,7 @@ import { type Locale, path } from "@/lib/i18n";
 import { meta } from "@/lib/view";
 import { moderators } from "@/content/club";
 import { olympiadTeams, olympiadIntro } from "@/content/olympiad";
-import { PageHead, PersonCard, PhotoSlot } from "@/components/bits";
+import { PageHead, PersonCard } from "@/components/bits";
 
 const title = "Our story";
 const lead = "Founded on 28 October 1992, Notre Dame Eco and Space Club (NDESC) is Bangladesh's first national astronomical club at the higher secondary level.";
@@ -18,7 +18,21 @@ export default async function About() {
     <>
       <PageHead lang={lang} kicker={"About"} title={title} lead={lead} />
       <div className="wrap" style={{ display: "flex", flexDirection: "column", gap: "var(--s9)" }}>
-        <PhotoSlot tall lang={lang} label={"the club at work, a wide shot"} />
+        {/* Botalinnaeus and World Environment Day 2026 (Mahmud, 27 Nov 2026). */}
+        <figure className="photo-figure">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className="home-photo"
+            src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/about/botalinnaeus-2026-1280.webp`}
+            srcSet={[640, 960, 1280, 2048].map((w) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/about/botalinnaeus-2026-${w}.webp ${w}w`).join(", ")}
+            sizes="(min-width: 1280px) 1216px, 100vw"
+            alt={"A teacher points out the leaves of a tree to a crowd of NDESC members in college uniform on the Notre Dame College campus"}
+            width={2048}
+            height={1536}
+            fetchPriority="high"
+          />
+          <figcaption>{"Botalinnaeus and World Environment Day Celebration 2026"}</figcaption>
+        </figure>
 
         <section className="two-worlds">
           <div>
