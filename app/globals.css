@@ -1602,6 +1602,8 @@ body:has(.home-bg) .site-header { --header-glass: rgba(8, 24, 28, 0.82); --heade
 body:has(.home-bg) .site-footer { background: rgba(8, 24, 28, 0.6); }
 @media (prefers-reduced-transparency: reduce) { body:has(.home-bg) .site-footer { background: #08181c; } }
 /* Site-wide since 27 Nov 2026 (every page but the NESS X section): page heroes drop their own navy sky
-   so the Milky Way shows through, and the drawn star dots step aside for the real ones. */
+   so the backdrop shows through; on the homepage the drawn star dots step aside for the photo's real ones. */
 body:has(.home-bg) .sky { background: transparent; }
-body:has(.home-bg) .sky .stars { display: none; }
+body:has(.home-bg:not(.site-tint)) .sky .stars { display: none; }
+/* Other pages: the homepage's dark blue-green veil colour as a plain backdrop, no photo. */
+.home-bg.site-tint { background: linear-gradient(180deg, #0d2428 0%, #0a1d21 45%, #08181c 100%); }
