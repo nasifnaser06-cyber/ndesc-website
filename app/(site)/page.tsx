@@ -8,6 +8,7 @@ import { timeline } from "@/content/club";
 import { nessx } from "@/content/ness2027";
 import { Banner, PhotoSlot, Stars, T } from "@/components/bits";
 import { EventRows } from "@/components/EventList";
+import BgDrift from "@/components/BgDrift";
 
 
 const description = "The Notre Dame Eco and Space Club at Notre Dame College, Dhaka: astronomy, ecology and the National Earth and Space Summit, since 1992.";
@@ -37,7 +38,15 @@ export default async function Home() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: siteJsonLd() }} />
-      <section className="sky" aria-labelledby="hero-title">
+      {/* Homepage background (Mahmud, 27 Nov 2026): the Milky Way at full resolution, uncompressed, with
+          the same phone drift as NESS X and Photosphere and glass boxes over it. */}
+      <div
+        className="home-bg bg-drift"
+        aria-hidden="true"
+        style={{ ["--bg-lg" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/home/galaxy-bg.png")` }}
+      />
+      <BgDrift />
+      <section className="sky sky-clear" aria-labelledby="hero-title">
         <Stars />
         <div className="wrap sky-inner">
           <div className="sky-copy">
