@@ -132,7 +132,8 @@ export default function Header({ lang }: { lang: Locale }) {
 
         <nav aria-label={ui.mainNav} className="main-nav" id="main-nav" data-open={open}>
           <ul>
-            {navItems.map((item) => (
+            {/* Home is hidden while on the homepage itself (Mahmud, 27 Nov 2026). */}
+            {navItems.filter((item) => !(item.to === "/" && sub === "/")).map((item) => (
               <li key={item.key}>
                 <Link href={path(lang, item.to)} aria-current={isActive(item.to) ? "page" : undefined}>
                   {ui.nav[item.key]}

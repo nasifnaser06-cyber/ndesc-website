@@ -1,12 +1,11 @@
 import Link from "next/link";
-import { type Locale, path, formatDateRange, num } from "@/lib/i18n";
+import { type Locale, path, num } from "@/lib/i18n";
 import { meta, eventRow, eventLabels } from "@/lib/view";
 import { ui } from "@/content/ui";
 import { site } from "@/content/site";
-import { sortedEvents, getEvent, ness2027Banner } from "@/content/events";
+import { sortedEvents } from "@/content/events";
 import { timeline } from "@/content/club";
-import { nessx } from "@/content/ness2027";
-import { Banner, Stars, T } from "@/components/bits";
+import { Stars, T } from "@/components/bits";
 import { EventRows } from "@/components/EventList";
 
 
@@ -31,7 +30,6 @@ function siteJsonLd() {
 
 export default async function Home() {
   const lang: Locale = "en";
-  const ness = getEvent("ness-x")!;
   const latest = sortedEvents().slice(0, 3).map((e) => eventRow(e, lang));
 
   return (
@@ -65,29 +63,8 @@ export default async function Home() {
                 height={2830}
                 fetchPriority="high"
               />
-              <figcaption>{"NDESC Organizers 26-27"}</figcaption>
+              <figcaption>{"NDESC Organizers 2026-27"}</figcaption>
             </figure>
-          </div>
-        </div>
-      </section>
-
-      <section className="wrap section" aria-labelledby="ness-title">
-        <div className="surface panel-band has-banner">
-          <Link href={path(lang, "/ness")} className="band-banner" tabIndex={-1} aria-hidden="true">
-            <Banner lang={lang} {...ness2027Banner} alt={""} sizes="(min-width: 1280px) 1216px, 100vw" />
-          </Link>
-          <div>
-            <p className="label">{"Registration open"}</p>
-            <h2 id="ness-title">{nessx.name}</h2>
-            <p className="muted">{ness.summary}</p>
-            <dl className="facts">
-              <div><dt>{ui.dates}</dt><dd>{formatDateRange(ness.start, ness.end, lang, "long")}</dd></div>
-              <div><dt>{ui.venue}</dt><dd>{"Notre Dame College, Motijheel"}</dd></div>
-              <div><dt>{ui.edition}</dt><dd><T lang={lang} text={"10th"} /></dd></div>
-            </dl>
-          </div>
-          <div className="actions">
-            <Link className="btn" href={path(lang, "/ness")}>{"See NESS X"}</Link>
           </div>
         </div>
       </section>

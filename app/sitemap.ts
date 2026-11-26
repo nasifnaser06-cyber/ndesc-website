@@ -13,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // The register page stays out while it is a draft or a trial (it is noindex then too).
   const registerLive = Boolean(site.registration.endpoint) && !site.registration.trial;
   // "panel" only forwards to Executives, so it stays out too.
-  const pages = sitePages().filter((p) => p !== "panel" && (registerLive || p !== "ness/register"));
+  const pages = sitePages().filter((p) => p !== "panel" && p !== "events/ness-x" && (registerLive || p !== "ness/register"));
   return publishedLocales.flatMap((lang) =>
     pages.map((p) => ({
       url: `${origin}${bp}${path(lang, p ? `/${p}` : "/")}`,
