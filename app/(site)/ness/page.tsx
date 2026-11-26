@@ -69,29 +69,28 @@ export default async function Ness() {
         <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>
           <div className="sky-copy">
             <h1 id="ness-h1" className="ness-logo-h1">
-              {/* The NESS snowflake logo (Mahmud, 25 Nov 2026) stands in for the "NESS X" heading;
+              {/* The NESS snowflake logo with its title beside it (Mahmud, 27 Nov 2026) stands in for the "NESS X" heading;
                   its alt text is the heading's name. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-snowflake-dark-360.webp`}
-                srcSet={[180, 360, 540].map((h) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-snowflake-dark-${h}.webp ${h / 180}x`).join(", ")}
-                alt={nessx.name}
-                width={180}
-                height={180}
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-lockup-960.webp`}
+                srcSet={[480, 960, 1440].map((w) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-lockup-${w}.webp ${w}w`).join(", ")}
+                sizes="(min-width: 1000px) 460px, 310px"
+                alt={`${nessx.name}: 10th National Earth and Space Summit 2027`}
+                width={460}
+                height={135}
                 fetchPriority="high"
               />
             </h1>
-            {/* Logo first, its line underneath (Mahmud, 23 Nov 2026). */}
-            <p className="label logo-caption">{nessx.fullName}</p>
             <p>{nessx.intro}</p>
-            <dl className="facts">
-              <div><dt>{ui.dates}</dt><dd>{formatDateRange(ness.start, ness.end, lang, "long")}</dd></div>
-              <div><dt>{ui.venue}</dt><dd>{"Notre Dame College, Motijheel, Dhaka"}</dd></div>
-            </dl>
-            <div className="actions">
+            <div className="actions ness-hero-actions">
               <RegisterButton lang={lang}>{"Register now"}</RegisterButton>
               <a className="btn btn-secondary" href="#segments">{"See all segments"}</a>
             </div>
+            <dl className="facts ness-hero-facts">
+              <div><dt>{ui.dates}</dt><dd>{formatDateRange(ness.start, ness.end, lang, "long")}</dd></div>
+              <div><dt>{ui.venue}</dt><dd>{"Notre Dame College, Motijheel, Dhaka"}</dd></div>
+            </dl>
           </div>
         </div>
       </section>
