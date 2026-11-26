@@ -194,19 +194,6 @@ export default async function Ness() {
         </section>
         )}
 
-        <section id="exhibit" className="surface panel-band" aria-labelledby="exh">
-          <div>
-            <p className="label">{"For External Organizations"}</p>
-            <h2 id="exh">{"Showcase Your Project or Organization at NESS"}</h2>
-            <p className="muted">
-              {"Academic institutions, research teams, external student clubs and companies can book an exhibition stall on our event premises and partner with NESS to showcase their projects, products, programs and innovations or host dedicated seminars and workshops for thousands of attending students and families."}
-            </p>
-          </div>
-          <div className="actions">
-            <Link className="btn btn-secondary" href={path(lang, "/contact")}>{"Contact for Exhibition"}</Link>
-          </div>
-        </section>
-
         <section id="campus-ambassadors" className="surface panel-band" aria-labelledby="ca-h">
           <div>
             <p className="label">{campusAmbassadors.label}</p>
@@ -218,7 +205,20 @@ export default async function Ness() {
             <p className="small muted"><strong>{"Campus Ambassador protocol: "}</strong>{campusAmbassadors.protocol}</p>
           </div>
           <div className="actions">
-            <FormButton href={campusAmbassadors.applyUrl} lang={lang} secondary>{"Apply as a Campus Ambassador"}</FormButton>
+            <FormButton href={campusAmbassadors.applyUrl} lang={lang} secondary>{"Apply"}</FormButton>
+          </div>
+        </section>
+
+        <section id="exhibit" className="surface panel-band" aria-labelledby="exh">
+          <div>
+            <p className="label">{"For External Organizations"}</p>
+            <h2 id="exh">{"Showcase Your Project or Organization at NESS"}</h2>
+            <p className="muted">
+              {"Academic institutions, research teams, external student clubs and companies can book an exhibition stall on our event premises and partner with NESS to showcase their projects, products, programs and innovations or host dedicated seminars and workshops for thousands of attending students and families."}
+            </p>
+          </div>
+          <div className="actions">
+            <Link className="btn btn-secondary" href={path(lang, "/contact")}>{"Contact for Exhibition"}</Link>
           </div>
         </section>
 
