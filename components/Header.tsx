@@ -11,6 +11,8 @@ import IceButton from "./IceButton";
 // Gallery and Resources left the header on 20 Nov 2026 (the pages still exist).
 // News was taken off the site on 23 Nov 2026. Events moved into Explore on 23 Nov 2026 (the page stays).
 const navItems = [
+  // Home always in the header (Mahmud, 27 Nov 2026).
+  { key: "home", to: "/" },
   { key: "nessX", to: "/ness" },
   { key: "photosphere", to: "/ness/photosphere" },
   { key: "explore", to: "/explore" },
