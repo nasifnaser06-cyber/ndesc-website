@@ -38,12 +38,21 @@ export default async function Home() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: siteJsonLd() }} />
-      {/* Homepage background (Mahmud, 27 Nov 2026): the Milky Way at full resolution, uncompressed, with
-          the same phone drift as NESS X and Photosphere and glass boxes over it. */}
+      {/* Homepage background (Mahmud, 27 Nov 2026): the Milky Way, sized per device (phones 1600px wide,
+          laptops 2560px, big screens the full 3709px), preloaded so it arrives with the page, with a tiny
+          blurred copy underneath that shows instantly. Same phone drift and glass as NESS X and Photosphere. */}
+      <link rel="preload" as="image" type="image/webp" href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/home/galaxy-bg-1600.webp`} media="(max-width: 900px)" fetchPriority="high" />
+      <link rel="preload" as="image" type="image/webp" href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/home/galaxy-bg-2560.webp`} media="(min-width: 901px) and (max-width: 1600px)" fetchPriority="high" />
+      <link rel="preload" as="image" type="image/webp" href={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/home/galaxy-bg-3709.webp`} media="(min-width: 1601px)" fetchPriority="high" />
       <div
         className="home-bg bg-drift"
         aria-hidden="true"
-        style={{ ["--bg-lg" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/home/galaxy-bg.png")` }}
+        style={{
+          ["--bg-sm" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/home/galaxy-bg-1600.webp")`,
+          ["--bg-md" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/home/galaxy-bg-2560.webp")`,
+          ["--bg-lg" as string]: `url("${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/home/galaxy-bg-3709.webp")`,
+          ["--bg-ph" as string]: `url("data:image/webp;base64,UklGRuQAAABXRUJQVlA4INgAAACwBgCdASowABoAPqFCmkmmJCKhNVv8AMAUCUATpmZfDQkUz8YmaK55GoX9x5p0kbus35tirff5Oj6RHBQdAAD++mHfFqijwmHrOIv2yJJPLejX/D9DPAXDx4tpGrDbdKzBHDVmis7B6xEyR33mvzTFVeyDMVsHXfWAi3bvmDGjcU50xG7DJqD0xO7rWGMNt3VhMdfV7vzUTQSJ6uKDJRf3bFCBXA1rDA138w1g0pNZv8Vo/QF90USYxIOQiDXGJPir8vRAB863BnTJ7MZRobkC9oc4zMdOsAA=")`,
+        }}
       />
       <BgDrift />
       <section className="sky sky-clear" aria-labelledby="hero-title">
