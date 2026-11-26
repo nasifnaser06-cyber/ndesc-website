@@ -6,7 +6,7 @@ import { site } from "@/content/site";
 import { sortedEvents, getEvent, ness2027Banner } from "@/content/events";
 import { timeline } from "@/content/club";
 import { nessx } from "@/content/ness2027";
-import { Banner, PhotoSlot, Stars, T } from "@/components/bits";
+import { Banner, Stars, T } from "@/components/bits";
 import { EventRows } from "@/components/EventList";
 
 
@@ -52,7 +52,18 @@ export default async function Home() {
             </div>
           </div>
           <div className="sky-media">
-            <PhotoSlot tall lang={lang} label={"a real club stargazing night or the NESS crowd"} />
+            {/* Club members with their telescope at Notre Dame College (Mahmud, 27 Nov 2026). */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="home-photo"
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/home/club-telescope-1280.webp`}
+              srcSet={[640, 960, 1280, 1920].map((w) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/home/club-telescope-${w}.webp ${w}w`).join(", ")}
+              sizes="(min-width: 1280px) 590px, (min-width: 900px) 45vw, 100vw"
+              alt={"NDESC members in college uniform with a teacher and the club's telescope in the college courtyard"}
+              width={4096}
+              height={2830}
+              fetchPriority="high"
+            />
           </div>
         </div>
       </section>
@@ -85,12 +96,31 @@ export default async function Home() {
         </div>
         <div className="two-worlds">
           <div>
-            <PhotoSlot lang={lang} label={"a telescope session or a member's astrophotography"} />
+            {/* The Sun through a hydrogen-alpha filter, used uncompressed as sent (Mahmud, 27 Nov 2026). */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="world-photo"
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/home/beyond-earth-sun.jpg`}
+              alt={"The Sun in hydrogen-alpha light, an orange disc with dark filaments and bright active regions"}
+              width={720}
+              height={568}
+              loading="lazy"
+            />
             <h3>{"Beyond Earth"}</h3>
             <p className="muted">{"Astronomy Olympiads and the road to IOAA through NDESC Interstellar, stargazing and solar observation sessions, astrophotography and workshops on astronomical research."}</p>
           </div>
           <div>
-            <PhotoSlot lang={lang} label={"a field tour or an eco project display"} />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              className="world-photo"
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/home/within-earth-web-960.webp`}
+              srcSet={[640, 960, 1280].map((w) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/home/within-earth-web-${w}.webp ${w}w`).join(", ")}
+              sizes="(min-width: 1280px) 590px, (min-width: 700px) 45vw, 100vw"
+              alt={"An orb-weaver spider at the centre of its web, the silk lit up against green leaves"}
+              width={4096}
+              height={2737}
+              loading="lazy"
+            />
             <h3>{"Within Earth"}</h3>
             <p className="muted">{"Olympiads in Earth Science, Biology and Climate with the road to IESO and IBO through NDESC Terrestrial and NDESC Helix, eco-research projects, field tours and workshops on biological and Earth sciences."}</p>
           </div>

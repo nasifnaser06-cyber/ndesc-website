@@ -1607,3 +1607,8 @@ body:has(.home-bg) .sky { background: transparent; }
 body:has(.home-bg:not(.site-tint)) .sky .stars { display: none; }
 /* Other pages: the homepage's dark blue-green veil colour as a plain backdrop, no photo. */
 .home-bg.site-tint { background: linear-gradient(180deg, #0f222a 0%, #0c1b23 45%, #0a161d 100%); }
+
+/* Homepage photos (27 Nov 2026): the club group shot in the hero at its own shape, and the two
+   "One club. Two worlds." pictures cropped to the same 4:3 frame so the pair lines up. */
+.home-photo { display: block; width: 100%; height: auto; border-radius: 16px; border: 1px solid rgba(160, 190, 215, 0.22); background: #0a161d; }
+.world-photo { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; border: 1px solid rgba(160, 190, 215, 0.22); background: #0a161d; }
