@@ -73,8 +73,8 @@ export default async function Ness() {
                   its alt text is the heading's name. */}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-snowflake-360.webp`}
-                srcSet={[180, 360, 540].map((h) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-snowflake-${h}.webp ${h / 180}x`).join(", ")}
+                src={`${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-snowflake-dark-360.webp`}
+                srcSet={[180, 360, 540].map((h) => `${process.env.NEXT_PUBLIC_BASE_PATH ?? ""}/ness/nessx-snowflake-dark-${h}.webp ${h / 180}x`).join(", ")}
                 alt={nessx.name}
                 width={180}
                 height={180}
