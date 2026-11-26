@@ -17,6 +17,8 @@ export async function generateMetadata({ params }: Props) {
   const lang: Locale = "en";
   const e = getEvent(slug);
   if (!e) return {};
+  // The NESS X event entry forwards to the NESS X page (Mahmud, 27 Nov 2026).
+  if (slug === "ness-x") return { title: e.title, robots: { index: false }, alternates: { canonical: path(lang, "/ness") } };
   return meta(lang, `/events/${slug}`, e.title, e.summary, e.poster?.social ? { src: e.poster.social, alt: e.poster.alt } : undefined);
 }
 
@@ -25,6 +27,16 @@ export default async function EventPage({ params }: Props) {
   const lang: Locale = "en";
   const e = getEvent(slug);
   if (!e) notFound();
+  if (slug === "ness-x") {
+    const to = path(lang, "/ness");
+    return (
+      <div className="wrap section">
+        <meta httpEquiv="refresh" content={`0;url=${to}`} />
+        <script dangerouslySetInnerHTML={{ __html: `location.replace(${JSON.stringify(to)}+location.search+location.hash)` }} />
+        <p>{"NESS X has its own page: "}<Link href={to}>{"go to NESS X"}</Link>{"."}</p>
+      </div>
+    );
+  }
   const upcoming = isUpcoming(e);
 
   return (
@@ -54,9 +66,6 @@ export default async function EventPage({ params }: Props) {
               )}
             </dl>
             {e.todo && <p className="small"><T lang={lang} text={`[${e.todo}]`} /></p>}
-            {e.slug === "ness-x" && (
-              <div className="actions"><Link className="btn" href={path(lang, "/ness")}>{"Programme and registration"}</Link></div>
-            )}
           </div>
         </div>
 

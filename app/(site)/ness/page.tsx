@@ -66,7 +66,7 @@ export default async function Ness() {
       <BgDrift />
       <section className="sky sky-clear" aria-labelledby="ness-h1">
         <Stars />
-        <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s7)" }}>
+        <div className="wrap sky-inner" style={{ paddingBlock: "var(--s8) var(--s5)" }}>
           <div className="sky-copy">
             <h1 id="ness-h1" className="ness-logo-h1">
               {/* The NESS snowflake logo with its title beside it (Mahmud, 27 Nov 2026) stands in for the "NESS X" heading;
@@ -95,7 +95,7 @@ export default async function Ness() {
         </div>
       </section>
 
-      <div className="wrap" style={{ display: "flex", flexDirection: "column", gap: "var(--s9)", paddingTop: "var(--s8)" }}>
+      <div className="wrap" style={{ display: "flex", flexDirection: "column", gap: "var(--s9)", paddingTop: "var(--s5)" }}>
         <section aria-labelledby="passes-h">
           <h2 id="passes-h" style={{ marginBottom: "var(--s5)" }}>{"Passes"}</h2>
           <div className="cards-3">

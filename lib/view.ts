@@ -7,7 +7,8 @@ import { site } from "@/content/site";
 export function eventRow(e: ClubEvent, lang: Locale): EventRowData {
   return {
     slug: e.slug,
-    href: path(lang, `/events/${e.slug}`),
+    // NESS X has its own page; its event entry goes straight there (Mahmud, 27 Nov 2026).
+    href: e.slug === "ness-x" ? path(lang, "/ness") : path(lang, `/events/${e.slug}`),
     type: e.type,
     typeLabel: eventTypes[e.type],
     date: formatDateRange(e.start, e.end, lang),
