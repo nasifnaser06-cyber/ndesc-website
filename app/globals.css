@@ -272,7 +272,7 @@ body:has(.ness-bg) .site-footer { background: rgba(255, 255, 255, 0.42); border-
    the screen with the browser bars hidden), so it does not resize or leave a gap when the address bar
    slides in and out during fast scrolling. It sits on its own compositing layer, and the page canvas
    behind it takes the picture's colour, so any overscroll edge matches instead of flashing navy. */
-.ness-bg, .ps-bg {
+.ness-bg, .ps-bg, .home-bg {
   inset: 0 0 auto 0;
   height: 100vh;
   height: 100lvh;
@@ -1331,14 +1331,14 @@ body:has(.ps-four) .site-header {
    --------------------------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: no-preference) and (hover: none) and (pointer: coarse) and (max-width: 767px),
        (prefers-reduced-motion: no-preference) and (hover: none) and (pointer: coarse) and (max-height: 500px) {
-  .ness-bg.bg-drift, .ps-bg.bg-drift {
+  .ness-bg.bg-drift, .ps-bg.bg-drift, .home-bg.bg-drift {
     --bar: calc(100lvh - 100svh);
     top: auto; bottom: 0;
     height: calc(100lvh + var(--bar));
     transform: translate3d(0, calc((1 - var(--drift, 0)) * var(--bar)), 0);
   }
   @supports (-webkit-touch-callout: none) {
-    .ness-bg.bg-drift, .ps-bg.bg-drift {
+    .ness-bg.bg-drift, .ps-bg.bg-drift, .home-bg.bg-drift {
       top: 0; bottom: auto;
       transform: translate3d(0, calc(var(--drift, 0) * var(--bar) * -1), 0);
     }
@@ -1563,3 +1563,31 @@ html.ff-flying .page-head > * { animation: none; }
 .reg-lock { display: contents; border: 0; padding: 0; margin: 0; min-width: 0; }
 .reg-lock:disabled :is(input, select, textarea, button, label) { cursor: not-allowed; }
 form[aria-disabled="true"] { opacity: 0.55; }
+
+/* ---------------------------------------------------------------------------------------------
+   Homepage: Milky Way background (Mahmud, 27 Nov 2026). Fixed behind the page like NESS X and
+   Photosphere (same phone drift via .bg-drift), under a light navy veil so text stays readable.
+   Boxes, header and footer use the Photosphere glass: navy at about 60%, blurred, with a blue rim.
+   --------------------------------------------------------------------------------------------- */
+.home-bg {
+  position: fixed; inset: 0 0 auto 0; z-index: -1; pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(11, 28, 51, 0.45) 0%, rgba(11, 28, 51, 0.3) 45%, rgba(11, 28, 51, 0.8) 100%),
+    var(--bg-lg) center 50% / cover no-repeat,
+    #0b1c33;
+}
+html:has(.home-bg) { background: #0b1c33; }
+body:has(.home-bg) { background: transparent; }
+body:has(.home-bg) main :is(.surface, .photo-slot) {
+  background: rgba(11, 28, 51, 0.6);
+  border-color: rgba(142, 189, 230, 0.35);
+  -webkit-backdrop-filter: blur(7px) saturate(140%);
+  backdrop-filter: blur(7px) saturate(140%);
+}
+body:has(.home-bg) main .photo-slot { border-color: rgba(142, 189, 230, 0.55); }
+@media (prefers-reduced-transparency: reduce) {
+  body:has(.home-bg) main :is(.surface, .photo-slot) { background: #0b1c33; -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+body:has(.home-bg) .site-header { --header-glass: rgba(11, 28, 51, 0.82); --header-menu: rgba(11, 28, 51, 0.5); --header-solid: #0b1c33; }
+body:has(.home-bg) .site-footer { background: rgba(11, 28, 51, 0.6); }
+@media (prefers-reduced-transparency: reduce) { body:has(.home-bg) .site-footer { background: #0b1c33; } }
