@@ -1573,7 +1573,7 @@ form[aria-disabled="true"] { opacity: 0.55; }
   position: fixed; inset: 0 0 auto 0; z-index: -1; pointer-events: none;
   /* Dark green veil (toned down to a deep blue-green, 27 Nov 2026) in front of the photo so text stays legible (Mahmud, 27 Nov 2026). The tiny blurred
      copy (--bg-ph) sits under the real picture and shows while it loads. */
-  --home-veil: linear-gradient(180deg, rgba(8, 24, 28, 0.55) 0%, rgba(8, 24, 28, 0.42) 45%, rgba(8, 24, 28, 0.84) 100%);
+  --home-veil: linear-gradient(180deg, rgba(8, 24, 28, 0.68) 0%, rgba(8, 24, 28, 0.58) 45%, rgba(8, 24, 28, 0.9) 100%);
   background:
     var(--home-veil),
     var(--bg-lg) center 50% / cover no-repeat,
