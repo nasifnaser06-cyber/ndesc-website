@@ -564,7 +564,7 @@ details.segment > summary::after { position: absolute; right: 0.25rem; top: 0.1r
 /* 3. Section intros on scroll (Mahmud, 18 Nov 2026: more noticeable, items cascade, replays
       every time). Sections rise from below when scrolling down and drop from above when
       scrolling back up (direction set by components/Motion.tsx as a section leaves). */
-:root { --reveal-item: 0.9s; }
+:root { --reveal-item: 0.25s; } /* 0.25s fade (Mahmud, 28 Nov 2026; was 0.9 to 1s with long staggers). */
 html.motion main section:not(.sky) > * {
   opacity: 0;
   transform: translateY(calc(var(--rise, 28px) * var(--dir, 1)));
@@ -573,13 +573,13 @@ html.motion main section[data-from="top"] { --dir: -1; }
 html.motion main section:not(.sky) > :first-child { --rise: 40px; }
 html.motion main section.is-in > * {
   opacity: 1; transform: none;
-  transition: opacity 1s var(--ease-reveal), transform 0.9s var(--ease-reveal);
+  transition: opacity 0.25s var(--ease-reveal), transform 0.25s var(--ease-reveal);
   transition-delay: var(--d, 0ms);
 }
-html.motion main section > :nth-child(2) { --d: 120ms; }
-html.motion main section > :nth-child(3) { --d: 210ms; }
-html.motion main section > :nth-child(4) { --d: 280ms; }
-html.motion main section > :nth-child(n + 5) { --d: 330ms; }
+html.motion main section > :nth-child(2) { --d: 30ms; }
+html.motion main section > :nth-child(3) { --d: 60ms; }
+html.motion main section > :nth-child(4) { --d: 80ms; }
+html.motion main section > :nth-child(n + 5) { --d: 100ms; }
 
 /* Item cascade: the container stays put and its items come in one after another,
    gaps shrinking (0, 110, 200, 275, 335, 385, then together). */
@@ -596,17 +596,17 @@ html.motion main section.is-in > :is(.event-list, .grid-3, .two-worlds, .timelin
   transition: opacity var(--reveal-item) var(--ease-reveal), transform var(--reveal-item) var(--ease-reveal);
   transition-delay: calc(var(--d, 0ms) + var(--gap, 0ms));
 }
-main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > :nth-child(2) { --gap: 110ms; }
-main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > :nth-child(3) { --gap: 200ms; }
-main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > :nth-child(4) { --gap: 275ms; }
-main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > :nth-child(5) { --gap: 335ms; }
-main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > :nth-child(n + 6) { --gap: 385ms; }
+main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > :nth-child(2) { --gap: 30ms; }
+main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > :nth-child(3) { --gap: 60ms; }
+main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > :nth-child(4) { --gap: 80ms; }
+main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > :nth-child(5) { --gap: 100ms; }
+main section > :is(.event-list, .grid-3, .two-worlds, .timeline, .timeline-v, .groups, .cards-3, .people, .steps, .ps-segments) > :nth-child(n + 6) { --gap: 110ms; }
 
 /* Timeline: each year's line draws in order, a real sequence. */
 .timeline li { border-top: 0; position: relative; }
 .timeline li::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--line); transform-origin: left center; }
 html.motion main section .timeline li::before { transform: scaleX(0); }
-html.motion main section.is-in .timeline li::before { transform: none; transition: transform 0.7s var(--ease); transition-delay: calc(var(--d, 0ms) + var(--gap, 0ms) + 150ms); }
+html.motion main section.is-in .timeline li::before { transform: none; transition: transform 0.25s var(--ease); transition-delay: calc(var(--d, 0ms) + var(--gap, 0ms)); }
 
 /* 4. Phone menu: "corner bloom", see the end of this file. */
 

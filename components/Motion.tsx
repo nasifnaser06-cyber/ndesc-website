@@ -6,7 +6,7 @@ import { useEffect } from "react";
 /**
  * Section intros (rion-motion-web Part 2 and Part 16), replayed every time a section
  * comes back into view (Mahmud, 18 Nov 2026).
- * - `is-in` is added once a section's top passes about 88% of the screen height.
+ * - `is-in` is added once a section's top passes about 96% of the screen height (28 Nov 2026: sooner, with 0.25s fades).
  * - It is removed only when the section has left the screen completely, so nothing
  *   flickers near the edge. On the way out the section records which side it left by,
  *   so it drops in from above when scrolling back up and rises from below going down.
@@ -29,7 +29,7 @@ export default function Motion() {
       (entries) => {
         for (const e of entries) if (e.isIntersecting) e.target.classList.add("is-in");
       },
-      { rootMargin: "0px 0px -12% 0px" },
+      { rootMargin: "0px 0px -4% 0px" },
     );
     const leave = new IntersectionObserver((entries) => {
       for (const e of entries) {
